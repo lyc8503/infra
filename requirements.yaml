@@ -1,0 +1,5 @@
+- src: geerlingguy.docker
+  version: 7.0.2
+
+- src: geerlingguy.pip
+  version: 3.0.1

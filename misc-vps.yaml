@@ -1,0 +1,11 @@
+- name: Setup proxy servers
+  hosts: proxy_servers
+
+  roles:
+    - nginx # nginx server to act as a reverse proxy, without cert (need a CDN)
+    - v2ray # proxy server (websocket mode)
+    - containers # ddddocr, webdis
+
+
+  # Usage: point random domain on Cloudflare to it and it works!
+  # currently use Vercel as reverse proxy to accelerate API access

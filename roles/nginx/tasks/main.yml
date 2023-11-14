@@ -1,0 +1,19 @@
+---
+- name: Install nginx package
+  package:
+    name:
+      - nginx
+    state: present
+
+- name: Update nginx config
+  ansible.builtin.template:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify:
+    - Restart nginx
+
+- name: Start nginx
+  ansible.builtin.systemd_service:
+    name: nginx
+    state: started
+    daemon_reload: true

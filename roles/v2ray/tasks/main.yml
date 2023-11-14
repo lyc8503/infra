@@ -1,0 +1,39 @@
+---
+- name: Ensure directory exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /opt/v2ray
+    - /etc/v2ray
+
+- name: Get v2ray binary package
+  unarchive:
+    src: "https://github.com/v2fly/v2ray-core/releases/download/v{{ app_ver }}/v2ray-linux-{{ app_arch }}.zip"
+    dest: /opt/v2ray
+    remote_src: yes
+
+- name: Symlink binary files
+  file:
+    src: "/opt/v2ray/v2ray"
+    dest: "/usr/bin/v2ray"
+    state: link
+
+- name: Generate v2ray config
+  template:
+    src: config.json.j2
+    dest: /etc/v2ray/config.json
+  notify:
+    - Restart v2ray
+
+- name: Copy systemd config
+  copy:
+    src: v2ray.service
+    dest: /etc/systemd/system/v2ray.service
+
+- name: Start v2ray service
+  systemd:
+    name: v2ray
+    state: started
+    daemon_reload: yes
+    enabled: yes

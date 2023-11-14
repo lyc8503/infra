@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  ddddocr:
+    image: lyc8503/ddddocr:v1
+    ports:
+      - "127.0.0.1:9898:80"
+
+  webdis:
+    image: registry.cn-shanghai.aliyuncs.com/lyc8503/webdis:0.1.21
+    ports:
+      - "127.0.0.1:7379:7379"
