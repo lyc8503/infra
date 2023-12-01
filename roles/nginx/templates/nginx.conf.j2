@@ -30,9 +30,9 @@ server {
 		try_files $uri $uri/ =404;
 	}
 	
-	location /websocket { # 与 V2Ray 配置中的 path 保持一致
+	location /websocket {
 		proxy_redirect off;
-		proxy_pass http://127.0.0.1:1080; # 假设WebSocket监听在环回地址的10000端口上
+		proxy_pass http://127.0.0.1:1080;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection "upgrade";
@@ -48,6 +48,10 @@ server {
 
 	location /webdis/ {
 		proxy_pass http://127.0.0.1:7379/;
+	}
+
+	location /cf/ {
+		proxy_pass http://127.0.0.1:2333/;  # 绝对路径
 	}
 }
 

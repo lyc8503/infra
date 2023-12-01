@@ -17,6 +17,33 @@
           "path": "/websocket"
         }
       }
+    },
+    {
+      "port": 4444,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "{{ app_uuid }}",
+            "alterId": 0
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "grpcSettings": {
+          "serviceName": "v2grpc"
+        },
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "/etc/v2ray/server.crt",
+              "keyFile": "/etc/v2ray/server.key"
+            }
+          ]
+        }
+      }
     }
   ],
   "outbounds": [

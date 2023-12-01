@@ -5,6 +5,7 @@
     - nginx # nginx server to act as a reverse proxy, without cert (need a CDN)
     - v2ray # proxy server (websocket mode)
     - containers # ddddocr, webdis
+    - cloudflared # cloudflared for tunnel (to proxy server)
 
 
   # Usage: point random domain on Cloudflare to it and it works!

@@ -1,0 +1,14 @@
+[Unit]
+Description=Cloudflare Tunnel
+After=network.target
+
+[Service]
+Type=simple
+NoNewPrivileges=yes
+TimeoutStartSec=0
+ExecStart=cloudflared tunnel --edge-ip-version auto --protocol http2 --http2-origin --metrics 127.0.0.1:2333 --no-tls-verify --url https://127.0.0.1:4444
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

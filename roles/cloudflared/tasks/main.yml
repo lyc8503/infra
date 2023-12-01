@@ -1,0 +1,17 @@
+- name: Install cloudflared package
+  apt:
+    deb: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+
+- name: Install systemd service
+  copy:
+    src: cloudflared.service
+    dest: /etc/systemd/system/cloudflared.service
+  notify:
+    - Restart cloudflared
+
+- name: Start cloudflared service
+  systemd:
+    name: cloudflared
+    state: started
+    daemon_reload: yes
+    enabled: yes
