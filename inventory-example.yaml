@@ -6,3 +6,5 @@ proxy_servers:
   vars:
     ansible_user: root
     app_uuid: "b0ac36d9-05d4-eaf2-804d-19dd6edd7911"
+    v2_domain: "example.com"
+    sub_password: "123456"

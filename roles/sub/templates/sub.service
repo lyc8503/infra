@@ -1,0 +1,18 @@
+[Unit]
+Description=My Proxy Subscription
+After=network.target
+
+[Service]
+Type=simple
+NoNewPrivileges=yes
+TimeoutStartSec=0
+WorkingDirectory=/root
+ExecStart=uvicorn sub:app
+Environment="ADMIN_PASSWORD={{ sub_password }}"
+Environment="V2RAY_DOMAIN={{ v2_domain }}"
+Environment="UUID={{ app_uuid }}"
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
