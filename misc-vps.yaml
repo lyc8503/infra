@@ -1,12 +1,15 @@
 - name: Setup proxy servers
   hosts: proxy_servers
 
+  # IPv6 only servers need to setup WARP, refer to https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html
+
   roles:
     - nginx # nginx server to act as a reverse proxy, without cert (need a CDN)
-    - v2ray # proxy server (websocket mode)
+    - v2ray # proxy server (dedicated, grpc mode)
     - containers # ddddocr, webdis
-    - cloudflared # cloudflared for tunnel (to proxy server)
+    - cloudflared # cloudflared for tunnel (not in use now)
 
 
   # Usage: point random domain on Cloudflare to it and it works!
+  # v2ray requires its own domain with grpc enabled
   # currently use Vercel as reverse proxy to accelerate API access

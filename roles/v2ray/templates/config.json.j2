@@ -12,24 +12,6 @@
         ]
       },
       "streamSettings": {
-        "network":"ws",
-        "wsSettings": {
-          "path": "/websocket"
-        }
-      }
-    },
-    {
-      "port": 4444,
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "{{ app_uuid }}",
-            "alterId": 0
-          }
-        ]
-      },
-      "streamSettings": {
         "network": "grpc",
         "grpcSettings": {
           "serviceName": "v2grpc"
