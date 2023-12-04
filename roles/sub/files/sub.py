@@ -75,11 +75,9 @@ proxy-groups:
     <<: *use_proxies
   - name: Proxy
     type: select
-    proxies:
     <<: *use_proxies
   - name: Other
     type: select
-    proxies:
     <<: *use_proxies
 
 rules:
