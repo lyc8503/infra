@@ -4,6 +4,7 @@
     pip_install_packages:
       - name: uvicorn
       - name: fastapi
+      - name: requests
 
 - name: Copy systemd config
   template:

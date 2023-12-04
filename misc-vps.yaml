@@ -5,10 +5,10 @@
 
   roles:
     - nginx # nginx server to act as a reverse proxy, without cert (need a CDN)
-    - v2ray # proxy server (dedicated, grpc mode)
+    - v2ray # proxy server (dedicated, ws and grpc mode)
     - sub # subscription server
     - containers # ddddocr, webdis
-    - cloudflared # cloudflared for tunnel (not in use now)
+    - cloudflared # cloudflared for tunnel ws
 
 
   # Usage: point random domain on Cloudflare to it and it works!

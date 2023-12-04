@@ -1,7 +1,27 @@
 {
   "inbounds": [
     {
-      "port": {{ app_port }},
+      "port": {{ v2_ws_port }},
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "{{ app_uuid }}",
+            "alterId": 0
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/websocket",
+          "maxEarlyData": 2048,
+          "earlyDataHeaderName": "Sec-WebSocket-Protocol"
+        }
+      }
+    },
+    {
+      "port": {{ v2_grpc_port }},
       "protocol": "vmess",
       "settings": {
         "clients": [
