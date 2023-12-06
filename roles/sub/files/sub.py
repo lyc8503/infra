@@ -56,6 +56,8 @@ proxies:
 
 use_proxies: &use_proxies
   proxies:
+    - DIRECT
+    - REJECT
     - GRPC_Default
     - GRPC_优选azhz
     - GRPC_优选whoint
@@ -80,9 +82,33 @@ proxy-groups:
     type: select
     <<: *use_proxies
 
+rule-providers:
+  direct:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+    path: ./ruleset/direct.yaml
+    interval: 86400
+
+  proxy:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+
+  gfw:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+
+
 rules:
-  - GEOSITE,cn,CN
-  - GEOSITE,geolocation-!cn,Proxy
+  - RULE-SET,direct,CN
+  - RULE-SET,proxy,Proxy
+  - RULE-SET,gfw,Proxy
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,CN
   - MATCH,Other
