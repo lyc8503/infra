@@ -7,7 +7,7 @@
     - nginx # nginx server to act as a reverse proxy, without cert (need a CDN)
     - v2ray # proxy server (dedicated, ws and grpc mode)
     - sub # subscription server
-    - containers # ddddocr, webdis, subconverter
+    - containers # ddddocr, webdis, subconverter, netdata
     - cloudflared # cloudflared for tunnel ws
 
 
