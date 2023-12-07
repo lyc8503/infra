@@ -2,14 +2,14 @@
   "inbounds": [
     {
       "port": {{ v2_ws_port }},
-      "protocol": "vless",
+      "protocol": "vmess",
       "settings": {
         "clients": [
           {
-            "id": "{{ app_uuid }}"
+            "id": "{{ app_uuid }}",
+            "alterId": 0
           }
-        ],
-        "decryption": "none"
+        ]
       },
       "streamSettings": {
         "network": "ws",
@@ -22,14 +22,14 @@
     },
     {
       "port": {{ v2_grpc_port }},
-      "protocol": "vless",
+      "protocol": "vmess",
       "settings": {
         "clients": [
           {
-            "id": "{{ app_uuid }}"
+            "id": "{{ app_uuid }}",
+            "alterId": 0
           }
-        ],
-        "decryption": "none"
+        ]
       },
       "streamSettings": {
         "network": "grpc",
