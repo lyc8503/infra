@@ -72,15 +72,27 @@ use_proxies: &use_proxies
     - WS_优选cfnodeEU
 
 proxy-groups:
-  - name: CN
+  - name: 代理选择
     type: select
     <<: *use_proxies
-  - name: Proxy
+  
+  - name: 国内直连
     type: select
-    <<: *use_proxies
-  - name: Other
+    proxies:
+      - DIRECT
+      - 代理选择
+  
+  - name: 海外网站
     type: select
-    <<: *use_proxies
+    proxies:
+      - DIRECT
+      - 代理选择
+
+  - name: 漏网之鱼
+    type: select
+    proxies:
+      - DIRECT
+      - 代理选择
 
 rule-providers:
   direct:
@@ -106,12 +118,12 @@ rule-providers:
 
 
 rules:
-  - RULE-SET,direct,CN
-  - RULE-SET,proxy,Proxy
-  - RULE-SET,gfw,Proxy
+  - RULE-SET,direct,国内直连
+  - RULE-SET,proxy,海外网站
+  - RULE-SET,gfw,海外网站
   - GEOIP,LAN,DIRECT
-  - GEOIP,CN,CN
-  - MATCH,Other
+  - GEOIP,CN,国内直连
+  - MATCH,漏网之鱼
 """.replace("V2RAY_DOMAIN_WS", domain_ws).replace("V2RAY_DOMAIN", domain).replace("UUID", os.environ['UUID'])
 
 
