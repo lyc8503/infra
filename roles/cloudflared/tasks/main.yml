@@ -1,3 +1,10 @@
+- name: Install packages
+  package:
+    name:
+      - jq
+      - curl
+    state: present
+
 - name: Install cloudflared package
   apt:
     deb: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
@@ -15,3 +22,16 @@
     state: started
     daemon_reload: yes
     enabled: yes
+
+- name: Copy monitor script
+  copy:
+    src: monitor.sh
+    dest: /root/monitor.sh
+    mode: "0755"
+
+- name: Cron job for monitor
+  cron:
+    name: monitor
+    minute: "*/5"
+    job: /root/monitor.sh
+    state: present
