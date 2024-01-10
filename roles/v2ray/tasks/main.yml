@@ -1,4 +1,10 @@
 ---
+- name: Install unzip
+  package:
+    name:
+      - unzip
+    state: present
+
 - name: Ensure directory exist
   file:
     path: "{{ item }}"

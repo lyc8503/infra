@@ -1,2 +1,7 @@
 ---
-docker_compose_dir: "compose"
+docker_compose_dir: "/opt/compose"
+
+sub_password: "sub_password"
+register_password: "reg_password"
+v2_uuid: "your-uuid"
+v2_domain: "example.com"

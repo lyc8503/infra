@@ -38,10 +38,6 @@ server {
 		proxy_pass http://127.0.0.1:7379/;
 	}
 
-	location /cf/ {
-		proxy_pass http://127.0.0.1:2333/;
-	}
-
 	location /sub/ {
 		proxy_pass http://127.0.0.1:8000/;
 	}

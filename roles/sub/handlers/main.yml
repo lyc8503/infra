@@ -1,5 +1,0 @@
----
-- name: Restart sub
-  systemd:
-    name: sub
-    state: restarted

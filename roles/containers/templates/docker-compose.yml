@@ -10,6 +10,14 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/lyc8503/webdis:0.1.21
     ports:
       - "127.0.0.1:7379:7379"
+  
+  sub:
+    build: ./sub
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - ADMIN_PASSWORD={{ sub_password }}
+      - REG_PASSWORD={{ register_password }}
 
   subconverter:
     image: tindy2013/subconverter:0.8.1
@@ -21,17 +29,3 @@ services:
         "-c",
         'cd /base && cp pref.example.toml pref.toml && sed -i "s/^api_mode = .*$$/api_mode = true/g" pref.toml && sed -i "s/^api_access_token = .*$$/api_access_token = "\"$$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)\""/g" pref.toml && cat pref.toml && subconverter',
       ]
-
-  netdata:
-    image: netdata/netdata
-    ports:
-      - "127.0.0.1:19999:19999"
-    restart: unless-stopped
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro

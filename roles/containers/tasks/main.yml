@@ -5,7 +5,8 @@
     name: geerlingguy.pip
   vars:
     pip_install_packages:
-      - name: docker
+      # https://github.com/docker/docker-py/issues/3194
+      - name: docker==6.1.3
       - name: docker-compose
 
 - name: Ensure directory exists
@@ -17,6 +18,11 @@
   template:
     src: docker-compose.yml
     dest: "{{ docker_compose_dir }}/compose.yaml"
+
+- name: Copy other files
+  copy:
+    src: "."
+    dest: "{{ docker_compose_dir }}/"
 
 - name: Docker-compose up
   community.docker.docker_compose:
