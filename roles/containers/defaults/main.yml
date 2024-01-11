@@ -2,4 +2,4 @@
 docker_compose_dir: "/opt/compose"
 
 sub_password: "sub_password"
-register_password: "reg_password"
+reg_password: "reg_password"

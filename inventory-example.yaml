@@ -1,10 +1,33 @@
 proxy_servers:
   hosts:
-    vm01:
-      ansible_host: 1.2.3.4
+    proxy1:
+      ansible_host: 2a02::1
 
   vars:
     ansible_user: root
-    app_uuid: "b0ac36d9-05d4-eaf2-804d-19dd6edd7911"
-    v2_domain: "example.com"
-    sub_password: "123456"
+    
+    v2_domain: "abc.def.eu.org"
+    v2_uuid: "12341234-1234-1234-1234-123412341234"
+
+    sub_id: proxy1_server
+    sub_server: "https://example.com/sub/reg"
+    reg_password: 'pass1'
+
+    claim_token: NETDATA_CLAIM_TOKEN
+    claim_rooms: NETDATA_ROOMS
+
+
+misc_server:
+  hosts:
+    misc:
+      ansible_host: 1.2.3.4
+
+  vars:
+    ansible_user: lyc8503
+    claim_token: NETDATA_CLAIM_TOKEN
+    claim_rooms: NETDATA_ROOMS
+
+    sub_password: pass2
+    reg_password: pass1
+
+    acme_domain: misc.example.com

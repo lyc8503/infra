@@ -17,7 +17,7 @@ services:
       - "127.0.0.1:8000:8000"
     environment:
       - ADMIN_PASSWORD={{ sub_password }}
-      - REG_PASSWORD={{ register_password }}
+      - REG_PASSWORD={{ reg_password }}
 
   subconverter:
     image: tindy2013/subconverter:0.8.1

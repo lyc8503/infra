@@ -1,8 +1,22 @@
 ---
-- name: Install unzip
+- name: Install unzip and jq
   package:
     name:
       - unzip
+      - jq
+    state: present
+
+- name: Install register script
+  template:
+    src: register.sh
+    dest: /opt/register.sh
+    mode: "0755"
+
+- name: Setup cron job
+  cron:
+    name: Register v2ray
+    minute: "*/5"
+    job: /opt/register.sh
     state: present
 
 - name: Ensure directory exist
