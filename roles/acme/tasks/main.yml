@@ -1,0 +1,10 @@
+---
+- name: Install acme.sh
+  ansible.builtin.shell:
+    cmd: (curl https://get.acme.sh | sh -s email={{ acme_email }})
+    creates: ~/.acme.sh
+
+- name: Issue and install certs
+  ansible.builtin.shell:
+    cmd: ~/.acme.sh/acme.sh --issue -d {{ acme_domain }} --standalone && ~/.acme.sh/acme.sh --install-cert -d {{ acme_domain }} --fullchain-file /etc/ssl/chain.pem --key-file /etc/ssl/key.pem --reloadcmd "systemctl force-reload nginx || echo"
+    creates: /etc/ssl/chain.pem

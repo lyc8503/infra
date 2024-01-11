@@ -3,10 +3,12 @@ from fastapi.responses import PlainTextResponse
 import os
 import hashlib
 import time
-import requests
+import yaml
+import copy
 
 app = FastAPI()
 
+proxies = {}
 
 def get_expire():
     return """mixed-port: 7890
@@ -30,8 +32,36 @@ rules:
 """
 
 def get_sub():
-    domain = os.environ['V2RAY_DOMAIN']
-    domain_ws = requests.get('http://127.0.0.1:2333/quicktunnel').json()['hostname']
+    payload = {
+        "proxies": [],
+        "use_proxies": {
+            "proxies": ["DIRECT", "REJECT"]
+        }
+    }
+
+    for p in proxies.values():
+        sub, cf = p
+
+        
+        payload['proxies'].append(sub)
+        payload['use_proxies']['proxies'].append(sub['name'])
+        if cf:
+            for optimized in [
+                    ("优选hostmonit", "blog.hostmonit.com"),
+                    ("优选azhz", "cn.azhz.eu.org"),
+                    ("优选whoint", "www.who.int"),
+                    ("优选cfnode", "cloudflare.cfgo.cc"),
+                    ("优选cfnodeEU", "default.cfnode.eu.org")
+                ]:
+                sub_opt = copy.deepcopy(sub)
+                sub_opt['name'] = str(sub_opt['name']) + "_" + optimized[0]
+                sub_opt['server'] = optimized[1]
+                payload['proxies'].append(sub_opt)
+                payload['use_proxies']['proxies'].append(sub_opt['name'])
+
+    
+    payload = yaml.dump(payload, allow_unicode=True).replace("use_proxies:", "use_proxies: &use_proxies")
+    
     return """mixed-port: 7890
 ipv6: true
 allow-lan: false
@@ -39,37 +69,7 @@ mode: Rule
 log-level: info
 external-controller: :9090
 
-proxies:
-  - {name: GRPC_Default, server: V2RAY_DOMAIN, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-  - {name: GRPC_优选azhz, server: cn.azhz.eu.org, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-  - {name: GRPC_优选whoint, server: www.who.int, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-  - {name: GRPC_优选hostmonit, server: blog.hostmonit.com, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-  - {name: GRPC_优选cfnode, server: cloudflare.cfgo.cc, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-  - {name: GRPC_优选cfnodeEU, server: default.cfnode.eu.org, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}
-
-  - {name: WS_Default, server: V2RAY_DOMAIN_WS, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-  - {name: WS_优选azhz, server: cn.azhz.eu.org, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-  - {name: WS_优选whoint, server: www.who.int, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-  - {name: WS_优选hostmonit, server: blog.hostmonit.com, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-  - {name: WS_优选cfnode, server: cloudflare.cfgo.cc, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-  - {name: WS_优选cfnodeEU, server: default.cfnode.eu.org, port: 443, type: vmess, uuid: UUID, alterId: 0, cipher: auto, tls: true, servername: V2RAY_DOMAIN_WS, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: V2RAY_DOMAIN_WS }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}
-
-use_proxies: &use_proxies
-  proxies:
-    - DIRECT
-    - REJECT
-    - GRPC_Default
-    - GRPC_优选azhz
-    - GRPC_优选whoint
-    - GRPC_优选hostmonit
-    - GRPC_优选cfnode
-    - GRPC_优选cfnodeEU
-    - WS_Default
-    - WS_优选azhz
-    - WS_优选whoint
-    - WS_优选hostmonit
-    - WS_优选cfnode
-    - WS_优选cfnodeEU
+###PAYLOAD###
 
 proxy-groups:
   - name: 代理选择
@@ -124,7 +124,7 @@ rules:
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,国内直连
   - MATCH,漏网之鱼
-""".replace("V2RAY_DOMAIN_WS", domain_ws).replace("V2RAY_DOMAIN", domain).replace("UUID", os.environ['UUID'])
+""".replace("###PAYLOAD###", payload)
 
 
 @app.get("/", response_class=PlainTextResponse)
@@ -154,3 +154,16 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
     
     resp.status_code = 400
     return 'WTF? HOW DID YOU GET HERE?'
+
+
+@app.get("/reg", response_class=PlainTextResponse)
+async def reg(req: Request, resp: Response, token, id, subscription, cf: bool = False):
+
+    if token != os.environ['REG_PASSWORD']:
+        resp.status_code = 403
+        return 'WRONG TOKEN'
+
+    global proxies
+    proxies[id] = (yaml.safe_load(subscription), cf)
+    
+    return 'OK'
