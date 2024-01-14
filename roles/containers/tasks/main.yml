@@ -27,6 +27,7 @@
 - name: Docker-compose up
   community.docker.docker_compose:
     project_src: "{{ docker_compose_dir }}"
+    build: true
     remove_orphans: true
 
 - name: Prune everything (including non-dangling images)

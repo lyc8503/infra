@@ -49,9 +49,7 @@ def get_sub():
             for optimized in [
                     ("优选hostmonit", "blog.hostmonit.com"),
                     ("优选azhz", "cn.azhz.eu.org"),
-                    ("优选whoint", "www.who.int"),
-                    ("优选cfnode", "cloudflare.cfgo.cc"),
-                    ("优选cfnodeEU", "default.cfnode.eu.org")
+                    ("优选cfnode", "cloudflare.cfgo.cc")
                 ]:
                 sub_opt = copy.deepcopy(sub)
                 sub_opt['name'] = str(sub_opt['name']) + "_" + optimized[0]
@@ -157,13 +155,18 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
 
 
 @app.get("/reg", response_class=PlainTextResponse)
-async def reg(req: Request, resp: Response, token, id, subscription, cf: bool = False):
+async def reg(req: Request, resp: Response, token, id, subscription: str = "", cf: bool = False):
 
     if token != os.environ['REG_PASSWORD']:
         resp.status_code = 403
         return 'WRONG TOKEN'
 
     global proxies
+
+    if subscription == "":
+        if id in proxies:
+            del proxies[id]
+        return 'DELETED, LEFT: ' + ",".join(proxies.keys())
+
     proxies[id] = (yaml.safe_load(subscription), cf)
-    
-    return 'OK'
+    return 'ADDED'
