@@ -3,16 +3,19 @@ version: "3"
 services:
   ddddocr:
     image: lyc8503/ddddocr:v1
+    restart: unless-stopped
     ports:
       - "127.0.0.1:9898:80"
 
   webdis:
     image: registry.cn-shanghai.aliyuncs.com/lyc8503/webdis:0.1.21
+    restart: unless-stopped
     ports:
       - "127.0.0.1:7379:7379"
   
   sub:
     build: ./sub
+    restart: unless-stopped
     ports:
       - "127.0.0.1:8000:8000"
     environment:
@@ -21,6 +24,7 @@ services:
 
   subconverter:
     image: tindy2013/subconverter:0.8.1
+    restart: unless-stopped
     ports:
       - "127.0.0.1:25500:25500"
     command:
