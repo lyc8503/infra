@@ -31,7 +31,7 @@ rules:
   - MATCH,DIRECT
 """
 
-def get_sub():
+def get_sub(include):
     payload = {
         "proxies": [],
         "use_proxies": {
@@ -39,12 +39,22 @@ def get_sub():
         }
     }
 
-    for p in proxies.values():
-        sub, cf = p
+    for p in proxies.items():
+        id, [sub, cf] = p
 
+        # Proxy id with @ is tagged, and will not be returned if not explicitly included
+        if "@" in id:
+            if include == "":
+                continue
+            
+            included_tags = include.split(",")
+            if id.split("@")[0] not in included_tags:
+                continue
         
         payload['proxies'].append(sub)
         payload['use_proxies']['proxies'].append(sub['name'])
+
+        # Add optimized IPs for Cloudflare-based proxies
         if cf:
             for optimized in [
                     ("优选hostmonit", "blog.hostmonit.com"),
@@ -126,11 +136,11 @@ rules:
 
 
 @app.get("/", response_class=PlainTextResponse)
-async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0):
+async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0, include: str = ''):
 
     # Admin access
     if admin == os.environ['ADMIN_PASSWORD']:
-        return get_sub()
+        return get_sub(include)
 
     # Sign
     params = list(req.query_params.items())
@@ -148,7 +158,7 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
     if issuer and sub and expire:
         if time.time() > expire:
             return get_expire()
-        return get_sub()
+        return get_sub(include)
     
     resp.status_code = 400
     return 'WTF? HOW DID YOU GET HERE?'
