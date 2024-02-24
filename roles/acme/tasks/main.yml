@@ -1,4 +1,10 @@
 ---
+- name: Install dependencies
+  package:
+    name:
+      - socat
+    state: present
+
 - name: Install acme.sh
   ansible.builtin.shell:
     cmd: (curl https://get.acme.sh | sh -s email={{ acme_email }})
