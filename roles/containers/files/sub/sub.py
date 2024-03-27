@@ -43,7 +43,8 @@ def get_sub(include):
         id, [sub, cf] = p
 
         # Proxy id with @ is tagged, and will not be returned if not explicitly included
-        if "@" in id:
+        # include all tagged proxies if include is "all"
+        if "@" in id and include != "all":
             if include == "":
                 continue
             
