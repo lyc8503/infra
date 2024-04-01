@@ -3,4 +3,5 @@ curl -G '{{ sub_server }}?token={{ reg_password }}&id={{ sub_id }}&cf=1' --data-
 CLOUDFLARED_DOMAIN=$(curl -v 127.0.0.1:2333/quicktunnel | jq -r ".hostname")
 if [ -n "$CLOUDFLARED_DOMAIN" ]; then
     curl -G '{{ sub_server }}?token={{ reg_password }}&id={{ sub_id }}_cloudflared&cf=1' --data-urlencode "subscription={name: {{ sub_id }}_WS, server: $CLOUDFLARED_DOMAIN, port: 443, type: vmess, uuid: {{ v2_uuid }}, alterId: 0, cipher: auto, tls: true, servername: $CLOUDFLARED_DOMAIN, client-fingerprint: chrome, network: ws, ws-opts: { path: /websocket, headers: { Host: $CLOUDFLARED_DOMAIN }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}"
+    curl -G '{{ sub_server }}?token={{ reg_password }}&id={{ sub_id }}_cloudflared_http&cf=1' --data-urlencode "subscription={name: {{ sub_id }}_WS_HTTP, server: $CLOUDFLARED_DOMAIN, port: 80, type: vmess, uuid: {{ v2_uuid }}, alterId: 0, cipher: auto, network: ws, ws-opts: { path: /websocket, headers: { Host: $CLOUDFLARED_DOMAIN }, max-early-data: 2048, early-data-header-name: Sec-WebSocket-Protocol }, udp: true}"
 fi
