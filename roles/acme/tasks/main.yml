@@ -3,6 +3,7 @@
   package:
     name:
       - socat
+      - curl
     state: present
 
 - name: Install acme.sh
