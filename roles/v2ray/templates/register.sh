@@ -1,4 +1,6 @@
-curl -G '{{ sub_server }}?token={{ reg_password }}&id={{ sub_id }}&cf=1' --data-urlencode "subscription={name: {{ sub_id }}_GRPC, server: {{ v2_domain }}, port: 443, type: vmess, uuid: {{ v2_uuid }}, alterId: 0, cipher: auto, tls: true, servername: {{ v2_domain }}, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}"
+if [ -n "{{ v2_domain }}" ]; then
+    curl -G '{{ sub_server }}?token={{ reg_password }}&id={{ sub_id }}&cf=1' --data-urlencode "subscription={name: {{ sub_id }}_GRPC, server: {{ v2_domain }}, port: 443, type: vmess, uuid: {{ v2_uuid }}, alterId: 0, cipher: auto, tls: true, servername: {{ v2_domain }}, client-fingerprint: chrome, network: grpc, grpc-opts: { grpc-service-name: v2grpc }, udp: true}"
+fi
 
 CLOUDFLARED_DOMAIN=$(curl -v 127.0.0.1:2333/quicktunnel | jq -r ".hostname")
 if [ -n "$CLOUDFLARED_DOMAIN" ]; then
