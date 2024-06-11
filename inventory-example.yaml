@@ -6,7 +6,6 @@ proxy_servers:
   vars:
     ansible_user: root
     
-    v2_domain: "abc.def.eu.org"
     v2_uuid: "12341234-1234-1234-1234-123412341234"
 
     sub_id: proxy1_server

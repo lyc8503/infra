@@ -39,25 +39,6 @@
     dest: "/usr/bin/v2ray"
     state: link
 
-# Self-signed certificates for http/2 origin
-- openssl_privatekey:
-    path: /etc/v2ray/server.key
-    size: 3072
-
-- openssl_csr:
-    path: /etc/v2ray/server.csr
-    privatekey_path: /etc/v2ray/server.key
-
-- openssl_certificate:
-    provider: selfsigned
-    path: /etc/v2ray/server.crt
-    privatekey_path: /etc/v2ray/server.key
-    csr_path: /etc/v2ray/server.csr
-
-- ansible.builtin.file:
-    path: /etc/v2ray/server.key
-    mode: "0644"
-
 - name: Generate v2ray config
   template:
     src: config.json.j2

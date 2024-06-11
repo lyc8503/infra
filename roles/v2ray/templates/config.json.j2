@@ -19,33 +19,6 @@
           "earlyDataHeaderName": "Sec-WebSocket-Protocol"
         }
       }
-    },
-    {
-      "port": {{ v2_grpc_port }},
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "{{ v2_uuid }}",
-            "alterId": 0
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "grpc",
-        "grpcSettings": {
-          "serviceName": "v2grpc"
-        },
-        "security": "tls",
-        "tlsSettings": {
-          "certificates": [
-            {
-              "certificateFile": "/etc/v2ray/server.crt",
-              "keyFile": "/etc/v2ray/server.key"
-            }
-          ]
-        }
-      }
     }
   ],
   "outbounds": [

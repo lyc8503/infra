@@ -2,7 +2,6 @@
 app_ver: "5.10.1"
 app_arch: "64"
 v2_ws_port: 4443
-v2_grpc_port: 4444
 v2_uuid: "b0ac36d9-05d4-eaf2-804d-19dd6edd7911"
 
 reg_password: "reg_password"

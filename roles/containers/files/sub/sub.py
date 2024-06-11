@@ -58,9 +58,7 @@ def get_sub(include):
         # Add optimized IPs for Cloudflare-based proxies
         if cf:
             for optimized in [
-                    ("优选hostmonit", "blog.hostmonit.com"),
-                    ("优选azhz", "cn.azhz.eu.org"),
-                    ("优选cfnode", "cloudflare.cfgo.cc")
+                    ("优选", "blog.hostmonit.com")
                 ]:
                 sub_opt = copy.deepcopy(sub)
                 sub_opt['name'] = str(sub_opt['name']) + "_" + optimized[0]
