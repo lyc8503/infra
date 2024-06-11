@@ -5,8 +5,7 @@
     name: geerlingguy.pip
   vars:
     pip_install_packages:
-      # https://github.com/docker/docker-py/issues/3194
-      - name: docker==6.1.3
+      - name: docker
       - name: docker-compose
 
 - name: Ensure directory exists
@@ -18,24 +17,14 @@
   template:
     src: docker-compose.yml
     dest: "{{ docker_compose_dir }}/compose.yaml"
+  notify:
+    - Docker compose up
+    - Prune everything (including non-dangling images)
 
 - name: Copy other files
   copy:
     src: "."
     dest: "{{ docker_compose_dir }}/"
-
-- name: Docker-compose up
-  community.docker.docker_compose:
-    project_src: "{{ docker_compose_dir }}"
-    build: true
-    remove_orphans: true
-
-- name: Prune everything (including non-dangling images)
-  community.docker.docker_prune:
-    containers: true
-    images: true
-    images_filters:
-      dangling: false
-    networks: true
-    volumes: true
-    builder_cache: true
+  notify:
+    - Docker compose up
+    - Prune everything (including non-dangling images)

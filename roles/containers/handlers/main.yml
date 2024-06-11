@@ -1,0 +1,14 @@
+- name: Docker compose up
+  ansible.builtin.command: docker compose up -d --build --force-recreate --remove-orphans
+  args:
+    chdir: "{{ docker_compose_dir }}"
+
+- name: Prune everything (including non-dangling images)
+  community.docker.docker_prune:
+    containers: true
+    images: true
+    images_filters:
+      dangling: false
+    networks: true
+    volumes: true
+    builder_cache: true
