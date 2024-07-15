@@ -4,12 +4,11 @@
 # v2ray requires its own domain with grpc enabled
 - name: Setup proxy servers
   hosts: proxy_servers
-  
+
   roles:
     - v2ray # proxy server (dedicated, ws and grpc mode)
     - cloudflared # cloudflared for tunnel ws
     - netdata
-
 
 # Misc server for containers and proxy subscription
 # currently use Vercel as reverse proxy to accelerate API access
@@ -19,7 +18,7 @@
   roles:
     - acme # apply cert for nginx
     - nginx # nginx server
-    - containers # ddddocr, webdis, subconverter, subscription server
+    - containers # ddddocr, subconverter, subscription server
     - netdata # netdata for monitoring
-  
+
   become: yes
