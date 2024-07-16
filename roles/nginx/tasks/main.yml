@@ -12,6 +12,11 @@
   notify:
     - Restart nginx
 
+- name: Setup index
+  ansible.builtin.template:
+    src: files/index.html
+    dest: /var/www/html/index.html
+
 - name: Start nginx
   ansible.builtin.systemd_service:
     name: nginx
