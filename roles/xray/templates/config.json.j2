@@ -1,0 +1,64 @@
+{% set dest_host, dest_port = v2_reality_dest.split(':') %}
+
+{
+  "inbounds": [
+    {
+      "port": {{ v2_vision_port }},
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "{{ v2_uuid }}",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "{{ v2_reality_dest }}",
+          "serverNames": [
+            "{{ dest_host }}"
+          ],
+          "privateKey": "{{ v2_reality_sk }}",
+          "shortIds": ["", "ae"]
+        }
+      }
+    },
+    {
+      "port": {{ v2_grpc_port }},
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "{{ v2_uuid }}"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "{{ v2_reality_dest }}",
+          "serverNames": [
+            "{{ dest_host }}"
+          ],
+          "privateKey": "{{ v2_reality_sk }}",
+          "shortIds": ["", "ae"]
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
+}
