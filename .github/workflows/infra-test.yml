@@ -4,12 +4,11 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 3'
-
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Build the Docker image
         run: |
@@ -38,3 +37,4 @@ jobs:
           RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
           RESTIC_REPOSITORY: ${{ secrets.RESTIC_REPOSITORY }}
           RESTIC_PASSWORD: ${{ secrets.RESTIC_PASSWORD }}
+        if: github.event_name != 'pull_request'
