@@ -1,0 +1,37 @@
+name: Infrastructure backup Test
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 3'
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check restic backup of my deployment
+        run: |
+          wget https://downloads.rclone.org/rclone-current-linux-amd64.zip
+          unzip rclone-current-linux-amd64.zip
+          cd rclone-*-linux-amd64
+          sudo cp rclone /usr/bin/
+          sudo chown root:root /usr/bin/rclone
+          sudo chmod 755 /usr/bin/rclone
+          cd ..
+
+          wget https://github.com/restic/restic/releases/download/v0.17.0/restic_0.17.0_linux_amd64.bz2
+          bzip2 -d restic_0.17.0_linux_amd64.bz2
+          sudo cp restic_0.17.0_linux_amd64 /usr/bin/restic
+          sudo chown root:root /usr/bin/restic
+          sudo chmod 755 /usr/bin/restic
+
+          mkdir ~/.config/rclone
+          echo "$RC_CONFIG" > ~/.config/rclone/rclone.conf
+
+          restic check --verbose --read-data
+        env:
+          RC_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+          RESTIC_REPOSITORY: ${{ secrets.RESTIC_REPOSITORY }}
+          RESTIC_PASSWORD: ${{ secrets.RESTIC_PASSWORD }}
+        if: github.event_name != 'pull_request'
