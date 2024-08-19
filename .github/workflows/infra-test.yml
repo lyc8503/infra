@@ -31,7 +31,7 @@ jobs:
           echo "$RC_CONFIG" > ~/.config/rclone/rclone.conf
 
           restic snapshots | tee output.log
-          restic check --verbose --read-data | tee -a output.log
+          restic check -o rclone.timeout=30s --verbose --read-data | tee -a output.log
         env:
           RC_CONFIG: ${{ secrets.RCLONE_CONFIG }}
           RESTIC_REPOSITORY: ${{ secrets.RESTIC_REPOSITORY }}
