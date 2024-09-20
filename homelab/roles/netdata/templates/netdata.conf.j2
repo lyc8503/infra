@@ -1,0 +1,9 @@
+# Netdata configuration
+
+[global]
+  hostname = {{ ansible_hostname }}
+  dbengine multihost disk space = {{ dbengine_multihost_disk_space }}
+  bind socket to IP = 0.0.0.0
+
+[web]
+	mode = {{ web_mode }}

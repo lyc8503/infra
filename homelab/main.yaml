@@ -1,0 +1,10 @@
+# HomeLab ansible playbook
+
+- name: Proxmox Host
+  hosts: proxmox
+
+  # TODO: user home basic settings
+  # TODO: apt source settings
+  roles:
+    - basic
+    - netdata

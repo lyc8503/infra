@@ -51,6 +51,8 @@ After reboot, you should be prompted to enter your password set just now.
 
 Login into dashboard, remove `local-zfs` in `Datacenter-Storage`, create a new `ZFS` storage with `rpool/pve`
 
+**TODO: remote unlock and auto unlock**
+
 ---
 
 ## Ansible

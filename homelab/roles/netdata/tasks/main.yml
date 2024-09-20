@@ -1,0 +1,56 @@
+---
+- name: Add Netdata repo
+  ansible.builtin.apt_repository:
+    repo: deb [trusted=yes] https://repo.netdata.cloud/repos/stable/{{ ansible_facts['distribution'] | lower }}/ {{ ansible_distribution_release }}/
+    state: present
+    filename: netdata
+
+# TODO: maybe install lm-sensors
+# Tested on netdata v1.47.1, pin to this version if needed
+- name: Update repositories cache and install Netdata
+  ansible.builtin.apt:
+    name: netdata
+    state: present
+    update_cache: yes
+
+- name: Template Netdata configuration
+  template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+    owner: root
+    group: root
+    mode: u=wrx,g=rx,o=r,+x
+  notify: Restart Netdata
+
+- name: Setup Netdata metrics aggregation
+  template:
+    src: aggregator.chart.py
+    dest: /usr/libexec/netdata/python.d/aggregator.chart.py
+    owner: root
+    group: netdata
+    mode: u=rw,g=r,o=r
+  notify: Restart Netdata
+
+- name: Install MI IOT dependencies
+  ansible.builtin.shell:
+    cmd: pip3 install -t . git+https://github.com/rytilahti/python-miio.git
+    creates: /usr/libexec/netdata/python.d/python_modules/miio/__init__.py
+    chdir: /usr/libexec/netdata/python.d/python_modules/
+
+- name: Setup MI IOT power consumption plugin
+  template:
+    src: miiot_power.chart.py
+    dest: /usr/libexec/netdata/python.d/miiot_power.chart.py
+    owner: root
+    group: netdata
+    mode: u=rw,g=r,o=r
+  notify: Restart Netdata
+
+- name: Setup custom dashboard
+  template:
+    src: mydash.html
+    dest: /usr/share/netdata/web/mydash.html
+    owner: root
+    group: netdata
+    mode: u=rw,g=r,o=r
+  notify: Restart Netdata

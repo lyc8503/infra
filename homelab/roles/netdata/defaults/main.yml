@@ -1,0 +1,14 @@
+---
+# Variables for Netdata
+
+# Set Netdata's metrics retention policy via the disk size for the database
+# engine. Value is in MiB. Read more:
+# https://learn.netdata.cloud/docs/store/change-metrics-storage
+dbengine_multihost_disk_space: 256
+
+# Set whether to run the Agent web server/dashboard/API, or disable them.
+# Because we're connecting this node to Netdata Cloud and will view dashboards
+# there, we'll set this to `none` to disable the local dashboard. Set to
+# `static-threaded` if you want to keep it running. Read more:
+# https://learn.netdata.cloud/docs/configure/secure-nodes
+web_mode: static-threaded
