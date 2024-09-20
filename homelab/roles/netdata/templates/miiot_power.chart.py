@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# This file is managed by ansible, do not modify manually.
 from bases.FrameworkServices.SimpleService import SimpleService
 from miio import GenericMiot
 

@@ -62,3 +62,12 @@ Now you can deploy the playbook on the fresh-installed PVE system:
 ```
 
 ```
+
+## Deployment checklist
+
+1. Test Netdata dashboard
+   - Maybe hardware sensors need manual tweaks
+2. Test mailing system
+   - Setup `sasl_password`
+     write `smtp.larksuite.com username:password` and then `postmap /etc/postfix/sasl_passwd`, `rm /etc/postfix/sasl_passwd`, `chmod 600 /etc/postfix/sasl_passwd.db`
+   - `mail -s "Test Subject" user@example.com < /dev/null`

@@ -1,0 +1,11 @@
+# Postfix should have been installed on a default PVE installation
+- name: Install libsasl2
+  ansible.builtin.apt:
+    name: libsasl2-modules
+    state: present
+
+- name: Postfix configuration
+  ansible.builtin.template:
+    src: main.cf
+    dest: /etc/postfix/main.cf
+  notify: Restart postfix

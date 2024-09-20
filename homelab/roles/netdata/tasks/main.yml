@@ -15,7 +15,7 @@
 
 - name: Template Netdata configuration
   template:
-    src: netdata.conf.j2
+    src: netdata.conf
     dest: /etc/netdata/netdata.conf
     owner: root
     group: root

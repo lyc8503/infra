@@ -3,8 +3,9 @@
 - name: Proxmox Host
   hosts: proxmox
 
-  # TODO: user home basic settings
+  # TODO: user home basic settings (bash hist / vim / ...)
   # TODO: apt source settings
   roles:
     - basic
     - netdata
+    - mail
