@@ -13,27 +13,6 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "none";
-      fsType = "tmpfs";
-    };
-
-  fileSystems."/nix" =
-    { device = "pool/nix";
-      fsType = "zfs";
-    };
-
-  fileSystems."/persist" =
-    { device = "pool/persist";
-      fsType = "zfs";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/95E8-8AD0";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
-
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

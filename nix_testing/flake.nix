@@ -5,6 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     impermanence.url = "github:nix-community/impermanence";
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # home-manager, used for managing user configuration
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
@@ -16,7 +21,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: rec {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
@@ -39,6 +44,8 @@
         }
       ];
     };
+
+    nixosConfigurations.bootstrap = nixosConfigurations.nixos;
 
     packages.x86_64-linux = {
       image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
