@@ -65,6 +65,8 @@ Now you can deploy the playbook on the fresh-installed PVE system:
 
 ## Deployment checklist
 
+Maybe reboot before test
+
 1. Test Netdata dashboard
    - Maybe hardware sensors need manual tweaks
 2. Test mailing system
