@@ -51,7 +51,31 @@ After reboot, you should be prompted to enter your password set just now.
 
 Login into dashboard, remove `local-zfs` in `Datacenter-Storage`, create a new `ZFS` storage with `rpool/pve`
 
-**TODO: remote unlock and auto unlock**
+Setup remote SSH unlock:
+
+```
+# Ref: https://github.com/openzfs/zfs/tree/master/contrib/initramfs & https://www.sindastra.de/p/2789/server-encryption-with-remote-ssh-unlock
+apt install dropbear-initramfs
+apt purge cryptsetup-initramfs
+cat << EOF > /etc/dropbear/initramfs/authorized_keys
+YOUR_KEY_HERE
+EOF
+chmod 600 /etc/dropbear/initramfs/authorized_keys
+
+echo '' >> /etc/default/zfs
+echo 'ZFS_INITRD_ADDITIONAL_DATASETS="rpool/data rpool/pve"' >> /etc/default/zfs
+
+echo '' >> /etc/initramfs-tools/initramfs.conf
+echo 'IP=192.168.1.5::192.168.1.1:255.255.255.0:homelab-initramfs' >> /etc/initramfs-tools/initramfs.conf
+
+echo '' >> /etc/dropbear/initramfs/dropbear.conf
+echo 'IFDOWN="*"' >> /etc/dropbear/initramfs/dropbear.conf
+echo 'DROPBEAR_OPTIONS="-p 2222 -j -k -s -c zfsunlock"' >> /etc/dropbear/initramfs/dropbear.conf
+
+update-initramfs -u
+```
+
+**TODO: unlock other pools & network setup**
 
 ---
 

@@ -1,0 +1,5 @@
+- name: Install smartmontools
+  ansible.builtin.apt:
+    name: smartmontools
+    state: present
+    update_cache: yes

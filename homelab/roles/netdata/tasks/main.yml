@@ -1,4 +1,3 @@
----
 - name: Add Netdata repo
   ansible.builtin.apt_repository:
     repo: deb [trusted=yes] https://repo.netdata.cloud/repos/stable/{{ ansible_facts['distribution'] | lower }}/ {{ ansible_distribution_release }}/
