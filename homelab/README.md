@@ -25,7 +25,7 @@ FQDN = pve.lan
 **[OPTIONAL ENCRYPTION SETUP]** After installation, reboot **with installer ISO**, enter debug mode and run "exit" to get to the shell, execute following commands (to setup zfs encryption and replace `rpool/data` with `rpool/pve`):
 
 ```
-zpool import -f -NR rpool
+zpool import -f rpool
 
 zfs destroy rpool/var-lib-vz
 zfs destroy rpool/data
@@ -38,7 +38,7 @@ zfs create -o encryption=on -o keyformat=passphrase rpool/ROOT
 zfs create -o encryption=on -o keyformat=passphrase rpool/data
 zfs create -o encryption=on -o keyformat=passphrase rpool/pve
 
-zfs send -R rpool/copyroot/pve-1@copy | zfs receive -o encryption=on rpool/ROOT/pve-1
+zfs send -R rpool/copyroot/pve-1@copy | zfs recv -o encryption=on rpool/ROOT/pve-1
 zfs destroy -r rpool/copyroot
 zfs set mountpoint=/ rpool/ROOT/pve-1
 
