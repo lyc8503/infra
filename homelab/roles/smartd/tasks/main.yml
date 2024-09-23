@@ -3,3 +3,10 @@
     name: smartmontools
     state: present
     update_cache: yes
+# default smartd config should be ok (send mail to root, then forwarded to our mailbox via proxmox)
+
+- name: Enable smartd
+  ansible.builtin.systemd:
+    name: smartd
+    enabled: yes
+    state: started

@@ -128,3 +128,6 @@ Maybe reboot before test
      ```
    - Test using `mail -s "Test Subject" user@example.com < /dev/null`
    - Test using `mail -s "Test Subject" root < /dev/null`
+3. Test smartd mail
+   https://wiki.archlinux.org/title/S.M.A.R.T.
+4. Test ZED mail
