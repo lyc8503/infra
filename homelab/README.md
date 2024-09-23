@@ -84,7 +84,7 @@ update-initramfs -u
 Now you can deploy the playbook on the fresh-installed PVE system:
 
 ```
-
+ansible-playbook -i inventory.yaml main.yaml
 ```
 
 ## Deployment checklist

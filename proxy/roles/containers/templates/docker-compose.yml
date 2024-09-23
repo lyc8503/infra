@@ -27,3 +27,17 @@ services:
         "-c",
         'cd /base && cp pref.example.toml pref.toml && sed -i "s/^api_mode = .*$$/api_mode = true/g" pref.toml && sed -i "s/^api_access_token = .*$$/api_access_token = "\"$$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)\""/g" pref.toml && cat pref.toml && subconverter',
       ]
+
+  tgbot:
+    build: ./TGBot
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8001:8000"
+    environment:
+      - BOT_TOKEN={{ bot_token }}
+      - CHAT_ID={{ chat_id }}
+      - PUSH_KEY={{ push_key }}
+      - SELF_URL={{ self_url }}
+      - SECRET_TOKEN={{ secret_token }}
+    volumes:
+      - /opt/nju.txt:/app/nju.txt

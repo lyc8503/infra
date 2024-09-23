@@ -1,0 +1,3 @@
+[submodule "proxy/roles/containers/files/TGBot"]
+	path = proxy/roles/containers/files/TGBot
+	url = https://github.com/lyc8503/TGBot

@@ -48,6 +48,14 @@ server {
 	location /netdata/ {
 		proxy_pass http://127.0.0.1:19999/;
 	}
+
+	location /push {
+		proxy_pass http://127.0.0.1:8001/push;
+	}
+
+	location /push/ {
+		proxy_pass http://127.0.0.1:8001/;
+	}
 }
 
 # ddddocr server configuration

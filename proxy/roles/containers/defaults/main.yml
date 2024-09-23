@@ -3,3 +3,9 @@ docker_compose_dir: "/opt/compose"
 
 sub_password: "sub_password"
 reg_password: "reg_password"
+
+bot_token: "xxx"
+chat_id: "123456"
+push_key: "key"
+self_url: "https://example.com"
+secret_token: "secret"
