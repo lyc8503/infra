@@ -62,20 +62,45 @@ YOUR_KEY_HERE
 EOF
 chmod 600 /etc/dropbear/initramfs/authorized_keys
 
-echo '' >> /etc/default/zfs
-echo 'ZFS_INITRD_ADDITIONAL_DATASETS="rpool/data rpool/pve"' >> /etc/default/zfs
+cat << 'EOF' > /usr/share/initramfs-tools/zfsunlockall
+if [ ! -e /run/zfs_unlock_complete_notify ]; then
+   mkfifo /run/zfs_unlock_complete_notify
+fi
+while true; do
+    pool_pass=$(systemd-ask-password "Encrypted ZFS password for pool:")
+    echo $pool_pass | /sbin/zfs load-key rpool/pve
+    if [ $? -eq 0 ]; then
+        echo "Key loaded successfully."
+        break
+    else
+        echo "Failed to load key. Please try again."
+    fi
+done
+
+echo $pool_pass | /sbin/zfs load-key rpool/data
+echo $pool_pass | /sbin/zfs load-key rpool/ROOT
+
+zfs_console_askpwd_cmd=$(cat /run/zfs_console_askpwd_cmd)
+zfs_console_askpwd_pid=$(ps | awk '!'"/awk/ && /$zfs_console_askpwd_cmd/ { print \$1; exit }")
+if [ -n "$zfs_console_askpwd_pid" ]; then
+    kill "$zfs_console_askpwd_pid"
+fi
+echo "ok" > /run/zfs_unlock_complete_notify
+EOF
+chmod 755 /usr/share/initramfs-tools/zfsunlockall
+
+echo '' >> /usr/share/initramfs-tools/hooks/zfsunlock
+echo 'copy_exec /usr/share/initramfs-tools/zfsunlockall /usr/bin/zfsunlockall' >> /usr/share/initramfs-tools/hooks/zfsunlock
 
 echo '' >> /etc/initramfs-tools/initramfs.conf
 echo 'IP=192.168.1.5::192.168.1.1:255.255.255.0:homelab-initramfs' >> /etc/initramfs-tools/initramfs.conf
 
 echo '' >> /etc/dropbear/initramfs/dropbear.conf
 echo 'IFDOWN="*"' >> /etc/dropbear/initramfs/dropbear.conf
-echo 'DROPBEAR_OPTIONS="-p 2222 -j -k -s -c zfsunlock"' >> /etc/dropbear/initramfs/dropbear.conf
+echo 'DROPBEAR_OPTIONS="-p 2222 -j -k -s -c zfsunlockall"' >> /etc/dropbear/initramfs/dropbear.conf
 
 update-initramfs -u
 ```
-
-**TODO: unlock other pools & network setup**
 
 ---
 
