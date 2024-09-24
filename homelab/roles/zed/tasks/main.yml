@@ -3,6 +3,8 @@
     name: zfs-zed
     state: present
     update_cache: yes
+# PVE default: trim and scrub in /etc/cron.d/zfsutils-linux
+# We setup ZED to send email alerts
 
 - name: Configure zed
   ansible.builtin.template:

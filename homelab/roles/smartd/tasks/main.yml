@@ -4,6 +4,7 @@
     state: present
     update_cache: yes
 # default smartd config should be ok (send mail to root, then forwarded to our mailbox via proxmox)
+# https://pve.proxmox.com/wiki/Disk_Health_Monitoring
 
 - name: Enable smartd
   ansible.builtin.systemd:
