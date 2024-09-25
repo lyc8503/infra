@@ -1,4 +1,3 @@
----
 # Variables for Netdata
 
 # Set Netdata's metrics retention policy via the disk size for the database

@@ -1,0 +1,34 @@
+- name: Add promtail repo
+  ansible.builtin.apt_repository:
+    repo: deb [trusted=yes] https://apt.grafana.com stable main
+    state: present
+    filename: grafana
+
+- name: Install promtail
+  ansible.builtin.apt:
+    name: promtail
+    state: present
+    update_cache: yes
+
+- name: Template configuration
+  template:
+    src: config.yml.j2
+    dest: /etc/promtail/config.yml
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify: Restart promtail
+
+# Requires permission to read /var/log/journal
+- name: Add promtail to systemd-journal group
+  ansible.builtin.user:
+    name: promtail
+    groups: systemd-journal
+    append: yes
+  notify: Restart promtail
+
+- name: Enable promtail
+  ansible.builtin.systemd:
+    name: promtail
+    enabled: yes
+    state: started

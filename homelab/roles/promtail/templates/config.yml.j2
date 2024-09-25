@@ -1,0 +1,22 @@
+# This file is managed by ansible, do not modify manually.
+server:
+  http_listen_port: 0
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: {{ loki_server }}
+
+scrape_configs:
+  - job_name: journal
+    journal:
+      json: true
+      max_age: 12h
+      path: /var/log/journal
+      labels:
+        job: {{ loki_job_name }}
+    relabel_configs:
+      - source_labels: ["__journal__systemd_unit"]
+        target_label: "unit"

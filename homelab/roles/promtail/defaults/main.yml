@@ -1,0 +1,2 @@
+loki_server: https://instance_id:api_key@logs-prod-020.grafana.net/api/prom/push
+loki_job_name: pve-test
