@@ -89,8 +89,19 @@ echo "ok" > /run/zfs_unlock_complete_notify
 EOF
 chmod 755 /usr/share/initramfs-tools/zfsunlockall
 
-echo '' >> /usr/share/initramfs-tools/hooks/zfsunlock
-echo 'copy_exec /usr/share/initramfs-tools/zfsunlockall /usr/bin/zfsunlockall' >> /usr/share/initramfs-tools/hooks/zfsunlock
+cat << 'EOF' > /usr/share/initramfs-tools/hooks/zfsunlockall
+#!/bin/sh
+
+if [ "$1" = "prereqs" ]; then
+        echo "dropbear"
+        exit
+fi
+
+. /usr/share/initramfs-tools/hook-functions
+
+copy_exec /usr/share/initramfs-tools/zfsunlockall /usr/bin/zfsunlockall
+EOF
+chmod 755 /usr/share/initramfs-tools/hooks/zfsunlockall
 
 echo '' >> /etc/initramfs-tools/initramfs.conf
 echo 'IP=192.168.1.5::192.168.1.1:255.255.255.0:homelab-initramfs' >> /etc/initramfs-tools/initramfs.conf
