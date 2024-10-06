@@ -1,0 +1,9 @@
+listen: :{{ hy2_port }}
+
+tls:
+  cert: /opt/hy/server.crt
+  key: /opt/hy/server.key
+
+auth:
+  type: password
+  password: {{ v2_uuid }}

@@ -15,6 +15,7 @@
   hosts: direct_proxy_servers
   roles:
     - xray # proxy server (dedicated, xray reality vision and grpc)
+    - hysteria2
 
 # Misc server for containers and proxy subscription
 # currently use Vercel as reverse proxy to accelerate API access

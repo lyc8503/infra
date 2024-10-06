@@ -1,9 +1,10 @@
 ---
-- name: Install unzip and jq
+- name: Install dependencies
   package:
     name:
       - unzip
       - jq
+      - curl
     state: present
 
 - name: Install register script
