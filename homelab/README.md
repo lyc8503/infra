@@ -112,6 +112,23 @@ echo 'DROPBEAR_OPTIONS="-p 2222 -j -k -s -c zfsunlockall"' >> /etc/dropbear/init
 
 update-initramfs -u
 ```
+---
+
+**[Optional] Intel GVT-g**  
+
+Edit `/etc/default/grub`:  `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on i915.enable_gvt=1"`  
+Run `update-grub` (or `proxmox-boot-tool refresh`)  
+
+Run:
+```
+echo vfio >> /etc/modules
+echo vfio_iommu_type1 >> /etc/modules
+echo vfio_pci >> /etc/modules
+echo vfio_virqfd >> /etc/modules
+echo kvmgt >> /etc/modules
+```
+
+Reboot and use `ls /sys/bus/pci/devices/0000:00:02.0/mdev_supported_types/` to validate  
 
 ---
 
