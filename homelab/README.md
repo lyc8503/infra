@@ -143,3 +143,4 @@ Maybe reboot before test
    https://wiki.archlinux.org/title/S.M.A.R.T.
 4. Test ZED mail
    https://www.reddit.com/r/zfs/comments/fb8utq/how_to_test_zed_notification_emails/
+5. Check Grafana Loki log & alerts
