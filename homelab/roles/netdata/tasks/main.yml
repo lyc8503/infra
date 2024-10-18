@@ -5,7 +5,8 @@
     filename: netdata
 
 # TODO: maybe install lm-sensors
-# Tested on netdata v1.47.1, pin to this version if needed
+# TODO: upgrade to newer sensors implementation
+# Tested on netdata v1.47.7, pin to this version if needed
 - name: Update repositories cache and install Netdata
   ansible.builtin.apt:
     name: netdata
