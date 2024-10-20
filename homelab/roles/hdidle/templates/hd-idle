@@ -1,0 +1,3 @@
+# This file is managed by ansible, do not modify manually.
+
+HD_IDLE_OPTS="-i 900 -l /var/log/hd-idle.log"

@@ -1,0 +1,5 @@
+- name: Restart hd-idle
+  service:
+    name: hd-idle
+    state: restarted
+    enabled: yes

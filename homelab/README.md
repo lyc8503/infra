@@ -142,6 +142,10 @@ ansible-playbook -i inventory.yaml main.yaml
 
 ## Deployment checklist
 
+Some other optional:
+
+- Enable conservative cpu governor: `cpupower frequency-set -g conservative`
+
 Maybe reboot before test
 
 1. Test Netdata dashboard
