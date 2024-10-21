@@ -9,10 +9,23 @@
     name: git
     state: present
 
+- name: Install vim
+  ansible.builtin.apt:
+    name: vim
+    state: present
+
 - name: Global Vim configuration
   ansible.builtin.template:
     src: vimrc
     dest: /etc/vim/vimrc.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Bash profile
+  ansible.builtin.template:
+    src: profile
+    dest: /root/.profile
     owner: root
     group: root
     mode: 0644

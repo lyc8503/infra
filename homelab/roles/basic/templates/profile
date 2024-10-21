@@ -1,0 +1,14 @@
+# This file is managed by ansible, do not modify manually.
+# ~/.profile: executed by Bourne-compatible login shells.
+
+# Remove history size limit
+export HISTSIZE=-1
+export HISTFILESIZE=-1
+
+if [ "$BASH" ]; then
+  if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+  fi
+fi
+
+mesg n 2> /dev/null || true
