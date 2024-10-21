@@ -8,3 +8,11 @@
   ansible.builtin.apt:
     name: git
     state: present
+
+- name: Global Vim configuration
+  ansible.builtin.template:
+    src: vimrc
+    dest: /etc/vim/vimrc.local
+    owner: root
+    group: root
+    mode: 0644
