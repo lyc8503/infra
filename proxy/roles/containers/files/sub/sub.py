@@ -31,7 +31,7 @@ rules:
   - MATCH,DIRECT
 """
 
-def get_sub(include):
+def get_sub(min_traffic):
     payload = {
         "proxies": [],
         "use_proxies": {
@@ -40,17 +40,10 @@ def get_sub(include):
     }
 
     for p in proxies.items():
-        id, [sub, cf] = p
+        id, [sub, cf, traffic] = p
 
-        # Proxy id with @ is tagged, and will not be returned if not explicitly included
-        # include all tagged proxies if include is "all"
-        if "@" in id and include != "all":
-            if include == "":
-                continue
-            
-            included_tags = include.split(",")
-            if id.split("@")[0] not in included_tags:
-                continue
+        if traffic < min_traffic:
+            continue
         
         payload['proxies'].append(sub)
         payload['use_proxies']['proxies'].append(sub['name'])
@@ -135,11 +128,11 @@ rules:
 
 
 @app.get("/", response_class=PlainTextResponse)
-async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0, include: str = ''):
+async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0, min_traffic: int = 200):
 
     # Admin access
     if admin == os.environ['ADMIN_PASSWORD']:
-        return get_sub(include)
+        return get_sub(-1)
 
     # Sign
     params = list(req.query_params.items())
@@ -157,15 +150,14 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
     if issuer and sub and expire:
         if time.time() > expire:
             return get_expire()
-        return get_sub(include)
+        return get_sub(min_traffic)
     
     resp.status_code = 400
     return 'WTF? HOW DID YOU GET HERE?'
 
 
 @app.get("/reg", response_class=PlainTextResponse)
-async def reg(req: Request, resp: Response, token, id, subscription: str = "", cf: bool = False):
-
+async def reg(req: Request, resp: Response, token, id, subscription: str = "", cf: bool = False, traffic: int = 500):
     if token != os.environ['REG_PASSWORD']:
         resp.status_code = 403
         return 'WRONG TOKEN'
@@ -177,5 +169,5 @@ async def reg(req: Request, resp: Response, token, id, subscription: str = "", c
             del proxies[id]
         return 'DELETED, LEFT: ' + ",".join(proxies.keys())
 
-    proxies[id] = (yaml.safe_load(subscription), cf)
+    proxies[id] = (yaml.safe_load(subscription), cf, traffic)
     return 'ADDED'
