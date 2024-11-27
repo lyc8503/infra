@@ -24,7 +24,7 @@
 
 - name: Get hysteria2 binary
   get_url:
-    url: "https://download.hysteria.network/app/latest/hysteria-linux-amd64"
+    url: "https://download.hysteria.network/app/latest/hysteria-linux-{% if app_arch == '64' %}amd64{% else %}arm64{% endif %}"
     dest: /opt/hy/hysteria2
     mode: 0755
 

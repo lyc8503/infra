@@ -28,6 +28,8 @@ direct_proxy_servers:
     v2_reality_pk: "YSy5h3-fNKXWy6cdivpBi36N_zyYgteNzQ8Sy0uorxg"
     v2_reality_sk: "QIKlvQRwxfXFoc3RcMVB-Y9lwmCCD0YYuuZYXTrkNzA"
 
+    traffic: 200
+
     sub_server: "https://example.com/sub/reg"
     reg_password: "qvq"
 
