@@ -31,7 +31,7 @@ rules:
   - MATCH,DIRECT
 """
 
-def get_sub(min_traffic):
+def get_sub(min_traffic, hysteria_up = 0, hysteria_down = 0):
     payload = {
         "proxies": [],
         "use_proxies": {
@@ -44,6 +44,10 @@ def get_sub(min_traffic):
 
         if traffic < min_traffic:
             continue
+        
+        if hysteria_up > 0 and hysteria_down > 0 and 'type' in sub and sub['type'] == 'hysteria2':
+            sub['up'] = f'{hysteria_up} Mbps'
+            sub['down'] = f'{hysteria_down} Mbps'
         
         payload['proxies'].append(sub)
         payload['use_proxies']['proxies'].append(sub['name'])
@@ -128,15 +132,15 @@ rules:
 
 
 @app.get("/", response_class=PlainTextResponse)
-async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0, min_traffic: int = 200):
+async def root(req: Request, resp: Response, admin: str = '', sign: str = '', issuer: str = '', sub: str = '', expire: int = 0, min_traffic: int = 200, up: int = 0, down: int = 0):
 
     # Admin access
     if admin == os.environ['ADMIN_PASSWORD']:
-        return get_sub(-1)
+        return get_sub(-1, up, down)
 
     # Sign
     params = list(req.query_params.items())
-    params = list(filter(lambda x: x[0] not in ['sign', 'host'], params))
+    params = list(filter(lambda x: x[0] not in ['sign', 'up', 'down'], params))
     params.sort(key=lambda x: x[0])
     sign_str = '&'.join(list(map(lambda x: f'{x[0]}={x[1]}', params)))
 
@@ -150,7 +154,7 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
     if issuer and sub and expire:
         if time.time() > expire:
             return get_expire()
-        return get_sub(min_traffic)
+        return get_sub(min_traffic, up, down)
     
     resp.status_code = 400
     return 'WTF? HOW DID YOU GET HERE?'
