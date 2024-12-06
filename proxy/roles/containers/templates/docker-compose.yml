@@ -29,3 +29,12 @@ services:
       - SECRET_TOKEN={{ secret_token }}
     volumes:
       - /opt/nju.txt:/app/nju.txt
+
+  tgrss:
+    image: rongronggg9/rss-to-telegram:dev  # stable image: rongronggg9/rss-to-telegram
+    restart: unless-stopped
+    volumes:
+      - /opt/tgrss:/app/config
+    environment:
+      - TOKEN={{ rss_bot_token }}
+      - MANAGER={{ rss_manager }}

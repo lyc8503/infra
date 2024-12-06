@@ -9,3 +9,6 @@ chat_id: "123456"
 push_key: "key"
 self_url: "https://example.com"
 secret_token: "secret"
+
+rss_bot_token: "xxx"
+rss_manager: "123456"
