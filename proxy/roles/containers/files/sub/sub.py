@@ -140,7 +140,7 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
 
     # Sign
     params = list(req.query_params.items())
-    params = list(filter(lambda x: x[0] not in ['sign', 'up', 'down'], params))
+    params = list(filter(lambda x: x[0] not in ['host', 'sign', 'up', 'down'], params))  # host is always included in params smh
     params.sort(key=lambda x: x[0])
     sign_str = '&'.join(list(map(lambda x: f'{x[0]}={x[1]}', params)))
 
