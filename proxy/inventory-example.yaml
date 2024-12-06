@@ -39,11 +39,9 @@ misc_server:
       ansible_host: 1.2.3.4
 
   vars:
-    ansible_user: lyc8503
-    claim_token: NETDATA_CLAIM_TOKEN
-    claim_rooms: NETDATA_ROOMS
+    ansible_user: root
+
+    misc_domain: misc.example.com
 
     sub_password: pass2
     reg_password: pass1
-
-    acme_domain: misc.example.com
