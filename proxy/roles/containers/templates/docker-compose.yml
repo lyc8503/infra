@@ -16,18 +16,6 @@ services:
       - ADMIN_PASSWORD={{ sub_password }}
       - REG_PASSWORD={{ reg_password }}
 
-  subconverter:
-    image: tindy2013/subconverter:0.8.1
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:25500:25500"
-    command:
-      [
-        "/bin/sh",
-        "-c",
-        'cd /base && cp pref.example.toml pref.toml && sed -i "s/^api_mode = .*$$/api_mode = true/g" pref.toml && sed -i "s/^api_access_token = .*$$/api_access_token = "\"$$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)\""/g" pref.toml && cat pref.toml && subconverter',
-      ]
-
   tgbot:
     build: ./TGBot
     restart: unless-stopped
