@@ -2,7 +2,7 @@
 
 ## System installation (manual steps)
 
-Tested on: PVE 8.2-2 graphical installer
+Tested on: PVE 8.3 graphical installer
 
 First install PVE normally with following config:
 
@@ -50,6 +50,8 @@ zpool export rpool
 After reboot, you should be prompted to enter your password set just now.
 
 Login into dashboard, remove `local-zfs` in `Datacenter-Storage`, create a new `ZFS` storage with `rpool/pve`
+
+**If you use ZFS-as-root without secure boot, systemd-boot will be selected. Make sure you switch to GRUB before continuing (format boot partition and re-init): [https://pve.proxmox.com/wiki/Host_Bootloader](https://pve.proxmox.com/wiki/Host_Bootloader)**
 
 Setup remote SSH unlock:
 
@@ -104,7 +106,7 @@ EOF
 chmod 755 /usr/share/initramfs-tools/hooks/zfsunlockall
 
 echo '' >> /etc/initramfs-tools/initramfs.conf
-echo 'IP=192.168.1.5::192.168.1.1:255.255.255.0:homelab-initramfs' >> /etc/initramfs-tools/initramfs.conf
+echo 'IP=192.168.1.10::192.168.1.1:255.255.255.0:homelab-initramfs' >> /etc/initramfs-tools/initramfs.conf
 
 echo '' >> /etc/dropbear/initramfs/dropbear.conf
 echo 'IFDOWN="*"' >> /etc/dropbear/initramfs/dropbear.conf
@@ -117,7 +119,9 @@ update-initramfs -u
 **[Optional] Intel GVT-g**  
 
 Edit `/etc/default/grub`:  `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on i915.enable_gvt=1"`  
-Run `update-grub` (or `proxmox-boot-tool refresh`)  
+Run `update-grub` (or `proxmox-boot-tool refresh`)
+
+*GVT-g+Windows guest doesn't work on kernel 6.8.12 SMH, [downgrade](https://forum.proxmox.com/threads/downgrade-kernel-from-6-8-to-6-7.156205/) to 6.8.8 if needed*
 
 Run:
 ```
@@ -140,28 +144,35 @@ Now you can deploy the playbook on the fresh-installed PVE system:
 ansible-playbook -i inventory.yaml main.yaml
 ```
 
+Some other manual steps:
+
+[ ] Restore VM from backup (and make sure they're running correctly)
+[ ] Change APT sources & enterprise license
+[ ] Setup Let's Encrypt SSL & 2FA
+[ ] Setup backup jobs & script
+[ ] Setup SSH Key & Disable password login
+[ ] Enable conservative cpu governor: `cpupower frequency-set -g conservative` (put it in crontab if you like, use `@reboot <command>`)
+[ ] CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/
+
 ## Deployment checklist
-
-Some other optional:
-
-- Enable conservative cpu governor: `cpupower frequency-set -g conservative`
 
 Maybe reboot before test
 
-1. Test Netdata dashboard
-   - Maybe hardware sensors need manual tweaks
-2. Test mailing system
-   - Setup `sasl_password`
-     ```
-     # write "smtp.larksuite.com username:password"
-     postmap /etc/postfix/sasl_passwd
-     rm /etc/postfix/sasl_passwd
-     chmod 600 /etc/postfix/sasl_passwd.db
-     ```
-   - Test using `mail -s "Test Subject" user@example.com < /dev/null`
-   - Test using `mail -s "Test Subject" root < /dev/null`
-3. Test smartd mail
-   https://wiki.archlinux.org/title/S.M.A.R.T.
-4. Test ZED mail
-   https://www.reddit.com/r/zfs/comments/fb8utq/how_to_test_zed_notification_emails/
-5. Check Grafana Loki log & alerts
+[ ] Test Netdata dashboard
+    - Maybe hardware sensors need manual tweaks
+[ ] Test mailing system
+    - Setup `sasl_password`
+      ```
+      # write "smtp.larksuite.com username:password"
+      postmap /etc/postfix/sasl_passwd
+      rm /etc/postfix/sasl_passwd
+      chmod 600 /etc/postfix/sasl_passwd.db
+      ```
+    - Test using `mail -s "Test Subject" user@example.com < /dev/null`
+    - Test using `mail -s "Test Subject" root < /dev/null`
+[ ] Test smartd mail
+    https://wiki.archlinux.org/title/S.M.A.R.T.
+[ ] Test ZED mail
+    https://www.reddit.com/r/zfs/comments/fb8utq/how_to_test_zed_notification_emails/
+[ ] Check Grafana Loki log & alerts
+[ ] Check system firewall status

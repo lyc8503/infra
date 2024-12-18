@@ -5,6 +5,7 @@
 
   # TODO: user home basic settings (bash hist / vim / ...)
   # TODO: apt source settings
+  # TODO: zrepl
   roles:
     - basic
     - netdata
@@ -12,3 +13,4 @@
     - smartd
     - zed
     - promtail
+    - hdidle
