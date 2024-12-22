@@ -1,6 +1,9 @@
 {% set dest_host, dest_port = v2_reality_dest.split(':') %}
 
 {
+  "log": {
+    "loglevel": "info"
+  },
   "inbounds": [
     {
       "port": {{ v2_vision_port }},

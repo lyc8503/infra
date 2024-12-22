@@ -1,0 +1,30 @@
+- name: Install exporter
+  ansible.builtin.include_role:
+    name: prometheus.prometheus.node_exporter
+
+- name: Install Alloy
+  ansible.builtin.include_role:
+    name: grafana.grafana.alloy
+  vars:
+    alloy_config: |
+      prometheus.scrape "default" {
+        targets = [{"__address__" = "localhost:9100", "instance" = "{{ inventory_hostname }}"}]
+        forward_to = [prometheus.remote_write.prom.receiver]
+      }
+
+      prometheus.remote_write "prom" {
+        endpoint {
+          url = "{{ push_endpoint }}"
+        }
+      }
+
+      loki.source.journal "read"  {
+        forward_to    = [loki.write.endpoint.receiver]
+        labels        = {component = "{{ inventory_hostname }}"}
+      }
+
+      loki.write "endpoint" {
+        endpoint {
+          url = "{{ loki_endpoint }}"
+        }
+      }

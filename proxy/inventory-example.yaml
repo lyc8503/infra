@@ -11,27 +11,26 @@ proxy_servers:
     sub_server: "https://example.com/sub/reg"
     reg_password: "pass1"
 
-    claim_token: NETDATA_CLAIM_TOKEN
-    claim_rooms: NETDATA_ROOMS
-
 direct_proxy_servers:
   hosts:
     direct_proxy1:
       ansible_host: 2a02::1
       sub_id: direct_proxy1
-
+      traffic: 200
+      app_arch: "arm64-v8a"
+      v2_reality_dest: "www.example.com:443"
   vars:
     ansible_user: root
 
     v2_uuid: "b0ac36d9-05d4-eaf2-804d-19dd6edd7911"
-    v2_reality_dest: "www.example.com:443"
     v2_reality_pk: "YSy5h3-fNKXWy6cdivpBi36N_zyYgteNzQ8Sy0uorxg"
     v2_reality_sk: "QIKlvQRwxfXFoc3RcMVB-Y9lwmCCD0YYuuZYXTrkNzA"
 
-    traffic: 200
-
     sub_server: "https://example.com/sub/reg"
     reg_password: "qvq"
+
+    push_endpoint: "https://user:pass@prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push"
+    loki_endpoint: "https://user:pass@logs-prod-020.grafana.net/api/prom/push"
 
 misc_server:
   hosts:
@@ -45,3 +44,6 @@ misc_server:
 
     sub_password: pass2
     reg_password: pass1
+
+    push_endpoint: "https://user:pass@prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push"
+    loki_endpoint: "https://user:pass@logs-prod-020.grafana.net/api/prom/push"

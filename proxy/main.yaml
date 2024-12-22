@@ -8,7 +8,6 @@
   roles:
     - v2ray # proxy server (dedicated, ws mode)
     - cloudflared # cloudflared for tunnel ws
-    - netdata
 
 # Proxy servers (direct connection)
 - name: Setup direct proxy servers
@@ -16,6 +15,7 @@
   roles:
     - xray # proxy server (dedicated, xray reality vision and grpc)
     - hysteria2
+    - metrics # prometheus node exporter and alloy
 
 # Misc server for containers and proxy subscription
 # currently use Vercel as reverse proxy to accelerate API access
@@ -25,4 +25,4 @@
   roles:
     - caddy # reverse proxy with automatic HTTPS
     - containers # ddddocr, subscription server, TG bots
-    # - netdata # netdata for monitoring
+    - metrics # prometheus node exporter and alloy
