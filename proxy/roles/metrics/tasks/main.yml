@@ -5,6 +5,9 @@
     alloy_config: |
       prometheus.exporter.unix "local_system" {
         disable_collectors = ["systemd"]
+        netclass {
+          ignored_devices = "^(br|veth|fw).*"
+        }
       }
 
       prometheus.scrape "scrape_metrics" {
