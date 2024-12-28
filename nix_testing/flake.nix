@@ -3,12 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    impermanence.url = "github:nix-community/impermanence";
+    # impermanence.url = "github:nix-community/impermanence";
 
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # disko = {
+    #   url = "github:nix-community/disko";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # home-manager, used for managing user configuration
     home-manager = {
@@ -26,8 +26,8 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
-        inputs.impermanence.nixosModules.impermanence
-        inputs.disko.nixosModules.disko
+        # inputs.impermanence.nixosModules.impermanence
+        # inputs.disko.nixosModules.disko
 
         # 将 home-manager 配置为 nixos 的一个 module
         # 这样在 nixos-rebuild switch 时，home-manager 配置也会被自动部署
@@ -47,8 +47,8 @@
 
     nixosConfigurations.bootstrap = nixosConfigurations.nixos;
 
-    packages.x86_64-linux = {
-      image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
-    };
+    # packages.x86_64-linux = {
+    #   image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
+    # };
   };
 }

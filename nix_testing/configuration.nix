@@ -5,68 +5,69 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  boot.isContainer = true;
+  # imports =
+  #   [ # Include the results of the hardware scan.
+  #     ./hardware-configuration.nix
+  #   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  # # Use the systemd-boot EFI boot loader.
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
+
+  # boot.supportedFilesystems = [ "zfs" ];
+  # boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   networking.hostId = "00000000";
 
-  import ./disk-config.nix;
+  # import ./disk-config.nix;
 
   # 由于我们没有让 Disko 管理 fileSystems.* 配置，我们需要手动配置
   # 根分区，由于我开了 Impermanence，所以这里是 tmpfs
-  fileSystems."/" = {
-    device = "tmpfs";
-    fsType = "tmpfs";
-    options = ["defaults" "size=2G" "mode=755"];
-  };
+  # fileSystems."/" = {
+  #   device = "tmpfs";
+  #   fsType = "tmpfs";
+  #   options = [ "defaults" "size=2G" "mode=755" ];
+  # };
 
-  # /nix 分区
-  fileSystems."/nix" = {
-    device = "pool/nix";
-    fsType = "zfs";
-    options = ["zfsutil"];
-  };
+  # # /nix 分区
+  # fileSystems."/nix" = {
+  #   device = "pool/nix";
+  #   fsType = "zfs";
+  #   options = [ "zfsutil" ];
+  # };
 
-  # /persist 分区
-  fileSystems."/persist" = {
-    device = "pool/persist";
-    fsType = "zfs";
-    options = ["zfsutil"];
-    neededForBoot = true;
-  };
+  # # /persist 分区
+  # fileSystems."/persist" = {
+  #   device = "pool/persist";
+  #   fsType = "zfs";
+  #   options = [ "zfsutil" ];
+  #   neededForBoot = true;
+  # };
 
-  # /boot 分区，是磁盘镜像上的第二个分区。由于我的 VPS 将硬盘识别为 sda，因此这里用 sda2。如果你的 VPS 识别结果不同请按需修改
-  fileSystems."/boot" = {
-    device = "/dev/sda2";
-    fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
-  };
+  # # /boot 分区，是磁盘镜像上的第二个分区。由于我的 VPS 将硬盘识别为 sda，因此这里用 sda2。如果你的 VPS 识别结果不同请按需修改
+  # fileSystems."/boot" = {
+  #   device = "/dev/sda2";
+  #   fsType = "vfat";
+  #   options = [ "fmask=0077" "dmask=0077" ];
+  # };
 
-  environment.persistence."/persist" = {
-    hideMounts = true;
+  # environment.persistence."/persist" = {
+  #   hideMounts = true;
 
-    directories = [
-      "/home"
-      "/root"
-      "/var"
-    ];
+  #   directories = [
+  #     "/home"
+  #     "/root"
+  #     "/var"
+  #   ];
 
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_rsa_key.pub"
-      "/etc/ssh/ssh_host_rsa_key"
-    ];
-  };
+  #   files = [
+  #     "/etc/machine-id"
+  #     "/etc/ssh/ssh_host_ed25519_key.pub"
+  #     "/etc/ssh/ssh_host_ed25519_key"
+  #     "/etc/ssh/ssh_host_rsa_key.pub"
+  #     "/etc/ssh/ssh_host_rsa_key"
+  #   ];
+  # };
 
   systemd.services.nix-daemon = {
     environment = {
@@ -155,7 +156,7 @@
     initialPassword = "changeme";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -174,7 +175,7 @@
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     netdata
-  #  wget
+    #  wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
