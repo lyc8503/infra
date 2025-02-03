@@ -148,9 +148,10 @@ Some other manual steps:
 
 - [ ] Restore VM from backup (and make sure they're running correctly)
 - [ ] Setup Let's Encrypt SSL & 2FA
-- [ ] Setup backup jobs & script
+- [ ] Setup backup jobs & pigz conf & script
 - [ ] Setup SSH Key & Disable password login
 - [ ] CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/
+- [ ] Restore /var/lib/vz isos & /root
 
 ## Deployment checklist
 
