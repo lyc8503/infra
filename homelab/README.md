@@ -157,6 +157,7 @@ Some other manual steps:
 
 Maybe reboot before test
 
+- [ ] hd-idle sleep config
 - [ ] Test Netdata dashboard
    - Maybe hardware sensors need manual tweaks
 - [ ] Test mailing system
