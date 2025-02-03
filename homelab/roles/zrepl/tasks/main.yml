@@ -1,0 +1,11 @@
+- name: Install zrepl
+  ansible.builtin.apt:
+    deb: https://github.com/zrepl/zrepl/releases/download/v0.6.1/zrepl_0.6.1-2_amd64.deb
+  environment:
+    https_proxy: http://192.168.1.51:7890/
+
+- name: Configure zrepl
+  template:
+    src: zrepl.yml
+    dest: /etc/zrepl/zrepl.yml
+  notify: Restart zrepl

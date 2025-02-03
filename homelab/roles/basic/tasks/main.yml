@@ -1,3 +1,19 @@
+- name: Use tsinghua mirror
+  ansible.builtin.template:
+    src: sources.list
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Remove default enterprise repository
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/apt/sources.list.d/ceph.list
+    - /etc/apt/sources.list.d/pve-enterprise.list
+
 - name: Install pip3
   ansible.builtin.apt:
     name: python3-pip
@@ -29,3 +45,14 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Install cpupower
+  ansible.builtin.apt:
+    name: linux-cpupower
+    state: present
+
+- name: Set CPU frequency governor to conservative on reboot
+  ansible.builtin.cron:
+    name: cpupower_conservative
+    special_time: reboot
+    job: "cpupower frequency-set -g conservative"

@@ -1,0 +1,114 @@
+# This file is managed by ansible, do not modify manually.
+
+# rpool/ROOT  -> snapshots, no backup
+# rpool/data  -> snapshots, backup to hdd
+# rpool/pve   -> snapshots, backup to hdd/pool_backup using vzdump
+# hdd/storage -> snapshots, backup to hddbackup
+
+# cloud backup: hdd/storage & hdd/pool_backup & rpool/data
+
+jobs:
+  # this job takes care of snapshot creation + pruning
+  - type: snap
+    name: rpool_and_hdd_snapshot
+    filesystems: { "rpool<": true, "hdd/storage<": true }
+    snapshotting:
+      type: periodic
+      interval: 1h
+      prefix: zrepl_
+    pruning:
+      keep:
+        # fade-out scheme for snapshots starting with `zrepl_`
+        # - keep all created in the last hour
+        # - then destroy snapshots such that we keep 30 each 1 day apart
+        # - then destroy snapshots such that we keep 52 each 1 week apart
+        # - then destroy snapshots such that we keep 120 each 1 month apart
+        - type: grid
+          grid: 24x1h(keep=all) | 30x1d | 52x7d | 120x30d
+          regex: "^zrepl_.*"
+        # keep all snapshots that don't have the `zrepl_` prefix
+        - type: regex
+          negate: true
+          regex: "^zrepl_.*"
+
+  # backup hdd/storage to hddbackup
+  - type: push
+    name: backup_hdd_storage
+    connect:
+      type: local
+      listener_name: hddbackup_sink
+      client_identity: pve_zrepl
+    filesystems: { "hdd/storage<": true }
+    send:
+      encrypted: true
+    replication:
+      protection:
+        initial: guarantee_incremental
+        incremental: guarantee_incremental
+    snapshotting:
+      type: manual
+    pruning:
+      # no-op prune rule on sender (keep all snapshots), job `rpool_and_hdd_snapshot` takes care of this
+      keep_sender:
+        - type: regex
+          regex: ".*"
+      # retain
+      keep_receiver:
+        - type: last_n
+          count: 1
+          regex: "^zrepl_.*"
+        # retain all non-zrepl snapshots on the backup drive
+        - type: regex
+          negate: true
+          regex: "^zrepl_.*"
+
+  # backup rpool/data to hdd
+  - type: push
+    name: backup_rpool_data
+    connect:
+      type: local
+      listener_name: hdd_sink
+      client_identity: pve_zrepl
+    filesystems: { "rpool/data<": true }
+    send:
+      encrypted: true
+    replication:
+      protection:
+        initial: guarantee_incremental
+        incremental: guarantee_incremental
+    snapshotting:
+      type: manual
+    pruning:
+      # no-op prune rule on sender (keep all snapshots), job `rpool_and_hdd_snapshot` takes care of this
+      keep_sender:
+        - type: regex
+          regex: ".*"
+      # retain
+      keep_receiver:
+        - type: last_n
+          count: 1
+          regex: "^zrepl_.*"
+        # retain all non-zrepl snapshots on the backup drive
+        - type: regex
+          negate: true
+          regex: "^zrepl_.*"
+
+  - type: sink
+    name: hddbackup_sink
+    root_fs: "hddbackup"
+    recv:
+      placeholder:
+        encryption: off
+    serve:
+      type: local
+      listener_name: hddbackup_sink
+
+  - type: sink
+    name: hdd_sink
+    root_fs: "hdd"
+    recv:
+      placeholder:
+        encryption: off
+    serve:
+      type: local
+      listener_name: hdd_sink

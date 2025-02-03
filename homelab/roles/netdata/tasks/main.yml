@@ -74,6 +74,8 @@
     cmd: pip3 install -t . git+https://github.com/rytilahti/python-miio.git
     creates: /usr/libexec/netdata/python.d/python_modules/miio/__init__.py
     chdir: /usr/libexec/netdata/python.d/python_modules/
+  environment:
+    https_proxy: http://192.168.1.51:7890/
 
 - name: Setup MI IOT power consumption plugin
   template:

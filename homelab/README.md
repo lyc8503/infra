@@ -147,11 +147,9 @@ ansible-playbook -i inventory.yaml main.yaml
 Some other manual steps:
 
 - [ ] Restore VM from backup (and make sure they're running correctly)
-- [ ] Change APT sources & enterprise license
 - [ ] Setup Let's Encrypt SSL & 2FA
 - [ ] Setup backup jobs & script
 - [ ] Setup SSH Key & Disable password login
-- [ ] Enable conservative cpu governor: `cpupower frequency-set -g conservative` (put it in crontab if you like, use `@reboot <command>`)
 - [ ] CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/
 
 ## Deployment checklist
