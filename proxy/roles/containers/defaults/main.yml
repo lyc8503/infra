@@ -12,3 +12,5 @@ secret_token: "secret"
 
 rss_bot_token: "xxx"
 rss_manager: "123456"
+
+loki_token: "xxx"

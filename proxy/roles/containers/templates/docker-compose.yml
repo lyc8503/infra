@@ -38,3 +38,9 @@ services:
     environment:
       - TOKEN={{ rss_bot_token }}
       - MANAGER={{ rss_manager }}
+  
+  log_forward:
+    build: ./log_forward
+    restart: unless-stopped
+    environment:
+      - LOKI_TOKEN={{ loki_token }}
