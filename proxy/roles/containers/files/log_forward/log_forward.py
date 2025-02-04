@@ -21,6 +21,7 @@ log_rules = {
     'homelab-openwrt': [
         '.*login.*',
         '.*publickey.*'
+        '.*preauth.*'
     ]
 }
 
