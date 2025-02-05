@@ -20,7 +20,7 @@ log_rules = {
     ],
     'homelab-openwrt': [
         '.*login.*',
-        '.*publickey.*'
+        '.*publickey.*',
         '.*preauth.*'
     ]
 }
@@ -70,6 +70,8 @@ def scheduled_task():
                     msg = f'Log from {stream["stream"]["service_name"]} at {time}:\n{entry[1]}'
                     logging.info(f'Matched log from {stream["stream"]["service_name"]}: {entry[1]}')
                     bot_push(msg)
+                else:
+                    logging.debug(f'Unmatched log from {stream["stream"]["service_name"]}: {entry[1]}')
 
 scheduler = BlockingScheduler()
 scheduler.add_job(scheduled_task, CronTrigger(second=40))
