@@ -1,6 +1,6 @@
 # This file is managed by ansible, do not modify manually.
 
-# rpool/ROOT  -> snapshots, no backup
+# rpool/ROOT  -> snapshots, backup to hdd
 # rpool/data  -> snapshots, backup to hdd
 # rpool/pve   -> snapshots, backup to hdd/pool_backup using vzdump
 # hdd/storage -> snapshots, backup to hddbackup
@@ -62,14 +62,14 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup rpool/data to hdd
+  # backup rpool/data & ROOT to hdd
   - type: push
     name: backup_rpool_data
     connect:
       type: local
       listener_name: hdd_sink
       client_identity: pve_zrepl
-    filesystems: { "rpool/data<": true }
+    filesystems: { "rpool/data<": true, "rpool/ROOT<": true }
     send:
       encrypted: true
     replication:
