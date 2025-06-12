@@ -6,19 +6,6 @@
       - jq
     state: present
 
-- name: Install register script
-  template:
-    src: register.sh
-    dest: /opt/register.sh
-    mode: "0755"
-
-- name: Setup cron job
-  cron:
-    name: Register v2ray
-    minute: "*/5"
-    job: /opt/register.sh
-    state: present
-
 - name: Ensure directory exist
   file:
     path: "{{ item }}"
@@ -26,6 +13,19 @@
   loop:
     - /opt/v2ray
     - /etc/v2ray
+
+- name: Install register script
+  template:
+    src: register.sh
+    dest: /opt/v2ray/register.sh
+    mode: "0755"
+
+- name: Setup cron job
+  cron:
+    name: Register v2ray
+    minute: "*/5"
+    job: /opt/v2ray/register.sh
+    state: present
 
 - name: Get v2ray binary package
   unarchive:
