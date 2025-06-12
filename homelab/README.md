@@ -160,7 +160,7 @@ Maybe reboot before test
 - [ ] Hd-idle sleep config (e.g. `-i 0 -a /dev/sda -i 900 -l /var/log/hd-idle.log`)
 - [ ] Test Netdata dashboard
    - Maybe hardware sensors need manual tweaks
-- [ ] Test mailing system
+- [ ] Test mailing system (TODO: generic map rewrite FROM)
    - Setup `sasl_password`
    ```
    # write "smtp.larksuite.com username:password"
