@@ -1,12 +1,8 @@
 ---
-- include_role:
-    name: geerlingguy.docker
-- include_role:
-    name: geerlingguy.pip
-  vars:
-    pip_install_packages:
-      - name: docker
-      - name: docker-compose
+- name: Install Docker
+  ansible.builtin.shell:
+    cmd: curl -fsSL https://get.docker.com | sh
+    creates: /usr/bin/docker
 
 - name: Ensure directory exists
   ansible.builtin.file:
