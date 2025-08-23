@@ -1,12 +1,6 @@
 version: "3"
 
 services:
-  ddddocr:
-    image: lyc8503/ddddocr:v1
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:9898:80"
-  
   sub:
     build: ./sub
     restart: unless-stopped
