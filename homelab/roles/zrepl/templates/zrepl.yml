@@ -14,17 +14,17 @@ jobs:
     filesystems: { "rpool<": true, "hdd/storage<": true }
     snapshotting:
       type: periodic
-      interval: 1h
+      interval: 4h
       prefix: zrepl_
     pruning:
       keep:
         # fade-out scheme for snapshots starting with `zrepl_`
-        # - keep all created in the last hour
-        # - then destroy snapshots such that we keep 30 each 1 day apart
-        # - then destroy snapshots such that we keep 52 each 1 week apart
-        # - then destroy snapshots such that we keep 120 each 1 month apart
+        # - keep all created in the last day (6 per day)
+        # - then destroy snapshots such that we keep 7 each 1 day apart
+        # - then destroy snapshots such that we keep 12 each 1 month apart
+        # ...More snapshots at restic snapshots
         - type: grid
-          grid: 24x1h(keep=all) | 30x1d | 52x7d | 120x30d
+          grid: 6x4h(keep=all) | 7x1d | 12x30d
           regex: "^zrepl_.*"
         # keep all snapshots that don't have the `zrepl_` prefix
         - type: regex
