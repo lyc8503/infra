@@ -31,15 +31,6 @@
     name: caddy
     state: present
 
-- name: Check current Caddy modules
-  command: caddy list-modules
-  register: caddy_modules
-  changed_when: false
-
-- name: Install Caddy modules
-  command: caddy add-package github.com/caddyserver/replace-response
-  when: "'http.handlers.replace_response' not in caddy_modules.stdout"
-
 - name: Template config
   template:
     src: Caddyfile
