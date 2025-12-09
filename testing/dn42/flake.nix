@@ -12,12 +12,7 @@
         };
       };
 
-      do-sg1 = { ... }: {
-        imports = [
-          ./modules/common.nix
-          ./hosts/do-sg1/default.nix
-        ];
-      };
+      do-sg1 = import ./hosts/do-sg1/default.nix;
     };
   };
 }
