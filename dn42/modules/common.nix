@@ -3,11 +3,55 @@
 {
   environment.systemPackages = with pkgs; [
     vim
+    neovim
     git
     wget
+    curl
     htop
+    btop
     screen
+    tmux
+    fzf
+    ripgrep
+    bat
+    lsd
+    jq
+    ncdu
+    neofetch
+    dnsutils
+    mtr
+    iperf3
+    tcpdump
   ];
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+    ohMyZsh = {
+      enable = true;
+      plugins = [ "git" "sudo" "systemd" "extract" ];
+      theme = "robbyrussell";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+    };
+  };
+
+  users.defaultUserShell = pkgs.zsh;
+
+  environment.shellAliases = {
+    ll = "lsd -l";
+    ls = "lsd";
+    cat = "bat";
+    vi = "nvim";
+    vim = "nvim";
+  };
 
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
