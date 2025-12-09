@@ -12,7 +12,9 @@
         };
       };
 
-      do-sg1 = import ./hosts/do-sg1/default.nix;
+      do-sgp1 = import ./hosts/do-sgp1/default.nix;
+      do-ams1 = import ./hosts/do-ams1/default.nix;
+      do-sfo1 = import ./hosts/do-sfo1/default.nix;
     };
   };
 }
