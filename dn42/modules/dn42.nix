@@ -71,6 +71,12 @@ let
         scan time 10;
     }
 
+    protocol direct {
+        ipv4;
+        ipv6;
+        interface "dn42dummy0";
+    }
+
     /*
      *  Utility functions
      */
@@ -239,17 +245,19 @@ in
   config = mkIf (config.networking.dn42.peers != {}) {
     services.bird.enable = true;
     services.bird.package = pkgs.bird2;
-    networking.wireguard.interfaces = mapAttrs' (name: peer: 
+    networking.wg-quick.interfaces = mapAttrs' (name: peer: 
       nameValuePair "dn42_${name}" {
         listenPort = peer.listenPort;
         privateKey = peer.privateKey;
         
-        postSetup = ''
+        # Avoid routing loops and conflicts with BIRD
+        table = "off";
+
+        postUp = ''
           ${pkgs.iproute2}/bin/ip addr add ${peer.ipv6.local} peer ${peer.ipv6.remote} dev dn42_${name}
           ${if peer.ipv4 != null then "${pkgs.iproute2}/bin/ip addr add ${peer.ipv4.local} peer ${peer.ipv4.remote} dev dn42_${name}" else ""}
-          sleep 1
           ${pkgs.procps}/bin/sysctl -w net.ipv6.conf.dn42_${name}.autoconf=0
-          ${pkgs.procps}/bin/sysctl -w net.ipv4.conf.dn42_${name}.rp_filter=0
+          ${pkgs.procps}/bin/sysctl -w net.ipv4.conf.dn42_${name}.rp_filter=0  # Otherwise it drops some packets
         '';
 
         peers = [
