@@ -5,7 +5,14 @@
     ./hardware.nix
     ../../modules/common.nix
     ../../modules/dn42.nix
+    ../../modules/looking-glass.nix
   ];
+
+  services.dn42-looking-glass = {
+    enable = true;
+    servers = [ "ams1" "sfo1" "sgp1" ];
+    domain = "dn42.42420167.xyz";
+  };
 
   deployment = {
     targetHost = "sgp1.dn42.42420167.xyz";
