@@ -6,7 +6,14 @@
     ../../modules/common.nix
     ../../modules/dn42.nix
     ../../modules/looking-glass.nix
+    ../../modules/metrics.nix
   ];
+
+  services.metrics = {
+    enable = true;
+    push_endpoint = lib.trim (builtins.readFile ../../secrets/metrics_push_endpoint);
+    loki_endpoint = lib.trim (builtins.readFile ../../secrets/metrics_loki_endpoint);
+  };
 
   services.dn42-looking-glass = {
     enable = true;
