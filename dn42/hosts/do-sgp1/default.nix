@@ -45,24 +45,6 @@
     ipv6.network = "fd00:1100:8503::/48";
   };
 
-  networking.dn42.peers."3914" = {
-    asn = 4242423914;
-    listenPort = 23914;
-    privateKey = lib.trim (builtins.readFile ../../secrets/3914.key);
-    publicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
-    endpoint = "hk1.g-load.eu:20167";
-    
-    ipv6 = {
-      local = "fe80::ade1";
-      remote = "fe80::ade0";
-    };
-    
-    ipv4 = {
-      local = "172.20.42.224";
-      remote = "172.20.53.105";
-    };
-  };
-
   networking.dn42.peers.ams1 = {
     asn = 4242420167;
     listenPort = 10001;
@@ -84,6 +66,40 @@
     ipv6 = {
       local = "fe80::3";
       remote = "fe80::2";
+    };
+  };
+
+  networking.dn42.peers."3914" = {
+    asn = 4242423914;
+    listenPort = 23914;
+    privateKey = lib.trim (builtins.readFile ../../secrets/3914.key);
+    publicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+    endpoint = "hk1.g-load.eu:20167";
+    
+    ipv6 = {
+      local = "fe80::ade1";
+      remote = "fe80::ade0";
+    };
+    
+    ipv4 = {
+      local = "172.20.42.224";
+      remote = "172.20.53.105";
+    };
+  };
+
+  networking.dn42.peers."2034" = {
+    asn = 4242422034;
+    listenPort = 22034;
+    privateKey = lib.trim (builtins.readFile ../../secrets/2034.key);
+    publicKey = "Zl72hWVO9Ib3ylYqKpDCEq8VyiJjY0WDhXP+vX+CzFs=";
+    endpoint = "v1.932.moe:20167";
+    ipv6 = {
+      local = "fe80::1067";
+      remote = "fe80::2034";
+    };
+    ipv4 = {
+      local = "172.20.42.224";
+      remote = "172.21.104.33";
     };
   };
 }
