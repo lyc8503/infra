@@ -35,9 +35,15 @@ let
         remote = mkOption { type = types.str; description = "Remote IPv6 link-local address"; };
       };
 
-      ipv4 = {
-        local = mkOption { type = types.str; description = "Local IPv4 PtP address"; };
-        remote = mkOption { type = types.str; description = "Remote IPv4 PtP address"; };
+      ipv4 = mkOption {
+        type = types.nullOr (types.submodule {
+          options = {
+            local = mkOption { type = types.str; description = "Local IPv4 PtP address"; };
+            remote = mkOption { type = types.str; description = "Remote IPv4 PtP address"; };
+          };
+        });
+        default = null;
+        description = "IPv4 PtP configuration";
       };
     };
   };
@@ -47,13 +53,13 @@ let
     #               Variable header                #
     ################################################
 
-    define OWNAS = 4242420167;
-    define OWNIP = 172.20.42.224;
-    define OWNIPv6 = fd00:1100:8503::1;
-    define OWNNET = 172.20.42.224/27;
-    define OWNNETv6 = fd00:1100:8503::/48;
-    define OWNNETSET = [172.20.42.224/27+];
-    define OWNNETSETv6 = [fd00:1100:8503::/48+];
+    define OWNAS = ${toString config.networking.dn42.asn};
+    define OWNIP = ${config.networking.dn42.ipv4.routerId};
+    define OWNIPv6 = ${config.networking.dn42.ipv6.routerId};
+    define OWNNET = ${config.networking.dn42.ipv4.network};
+    define OWNNETv6 = ${config.networking.dn42.ipv6.network};
+    define OWNNETSET = [${config.networking.dn42.ipv4.network}+];
+    define OWNNETSETv6 = [${config.networking.dn42.ipv6.network}+];
 
     ################################################
     #                 Header end                   #
@@ -189,13 +195,45 @@ let
             import limit 9000 action block; 
         };
     }
+
+    template bgp dnpeers_ibgp {
+        local as OWNAS;
+        path metric 1;
+        direct;
+
+        ipv4 {
+            import all;
+            export all;
+            next hop self;
+        };
+
+        ipv6 {
+            import all;
+            export all;
+            next hop self;
+        };
+    }
   '';
 in
 {
-  options.networking.dn42.peers = mkOption {
-    type = types.attrsOf (types.submodule peerOptions);
-    default = {};
-    description = "DN42 peers configuration";
+  options.networking.dn42 = {
+    asn = mkOption {
+      type = types.int;
+      description = "Autonomous System Number";
+    };
+    ipv4 = {
+      routerId = mkOption { type = types.str; description = "Router ID / Main IPv4 Address"; };
+      network = mkOption { type = types.str; description = "IPv4 Network to announce"; };
+    };
+    ipv6 = {
+      routerId = mkOption { type = types.str; description = "Main IPv6 Address"; };
+      network = mkOption { type = types.str; description = "IPv6 Network to announce"; };
+    };
+    peers = mkOption {
+      type = types.attrsOf (types.submodule peerOptions);
+      default = {};
+      description = "DN42 peers configuration";
+    };
   };
 
   config = mkIf (config.networking.dn42.peers != {}) {
@@ -208,8 +246,10 @@ in
         
         postSetup = ''
           ${pkgs.iproute2}/bin/ip addr add ${peer.ipv6.local} peer ${peer.ipv6.remote} dev dn42_${name}
-          ${pkgs.iproute2}/bin/ip addr add ${peer.ipv4.local} peer ${peer.ipv4.remote} dev dn42_${name}
+          ${if peer.ipv4 != null then "${pkgs.iproute2}/bin/ip addr add ${peer.ipv4.local} peer ${peer.ipv4.remote} dev dn42_${name}" else ""}
+          sleep 1
           ${pkgs.procps}/bin/sysctl -w net.ipv6.conf.dn42_${name}.autoconf=0
+          ${pkgs.procps}/bin/sysctl -w net.ipv4.conf.dn42_${name}.rp_filter=0
         '';
 
         peers = [
@@ -222,8 +262,24 @@ in
       }
     ) config.networking.dn42.peers;
 
+    networking.interfaces.dn42dummy0 = {
+      virtual = true;
+      ipv4.addresses = [{
+        address = config.networking.dn42.ipv4.routerId;
+        prefixLength = 32;
+      }];
+      ipv6.addresses = [{
+        address = config.networking.dn42.ipv6.routerId;
+        prefixLength = 128;
+      }];
+    };
+
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.dn42dummy0.rp_filter" = "0";
+    };
+
     services.bird.config = birdBaseConfig + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: ''
-      protocol bgp dn42_${name} from dnpeers {
+      protocol bgp dn42_${name} from ${if peer.asn == config.networking.dn42.asn then "dnpeers_ibgp" else "dnpeers"} {
           enable extended messages on;
           neighbor ${peer.ipv6.remote}%dn42_${name} as ${toString peer.asn};
           ipv4 {

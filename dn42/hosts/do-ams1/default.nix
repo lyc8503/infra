@@ -36,4 +36,36 @@
     };
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
   };
+
+  networking.dn42 = {
+    asn = 4242420167;
+    ipv4.routerId = "172.20.42.226";
+    ipv4.network = "172.20.42.224/27";
+    ipv6.routerId = "fd00:1100:8503::3";
+    ipv6.network = "fd00:1100:8503::/48";
+  };
+
+  networking.dn42.peers.sfo1 = {
+    asn = 4242420167;
+    listenPort = 10002;
+    privateKey = lib.trim (builtins.readFile ../../secrets/do-ams1.key);
+    publicKey = "aOfobLo+vPiOHzA98aOLWfZs1ROw5w+H7H5RCp4qbxg=";
+    endpoint = "sfo1.dn42.42420167.xyz:10001";
+    ipv6 = {
+      local = "fe80::1";
+      remote = "fe80::2";
+    };
+  };
+
+  networking.dn42.peers.sgp1 = {
+    asn = 4242420167;
+    listenPort = 10003;
+    privateKey = lib.trim (builtins.readFile ../../secrets/do-ams1.key);
+    publicKey = "OUjT7QCteL40MpZJeAh1HEMSH7Uu0g0vBIIjShRQVDc=";
+    endpoint = "sgp1.dn42.42420167.xyz:10001";
+    ipv6 = {
+      local = "fe80::1";
+      remote = "fe80::3";
+    };
+  };
 }
