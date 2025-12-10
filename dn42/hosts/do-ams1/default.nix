@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  secrets = import ../../secrets.nix;
+in
 {
   imports = [
     ./hardware.nix
@@ -11,8 +14,8 @@
 
   services.metrics = {
     enable = true;
-    push_endpoint = lib.trim (builtins.readFile ../../secrets/metrics_push_endpoint);
-    loki_endpoint = lib.trim (builtins.readFile ../../secrets/metrics_loki_endpoint);
+    push_endpoint = secrets.push_endpoint;
+    loki_endpoint = secrets.loki_endpoint;
   };
 
   services.dn42-looking-glass = {
@@ -62,7 +65,7 @@
   networking.dn42.peers.sfo1 = {
     asn = 4242420167;
     listenPort = 10002;
-    privateKey = lib.trim (builtins.readFile ../../secrets/do-ams1.key);
+    privateKey = secrets.key_do_ams1;
     publicKey = "aOfobLo+vPiOHzA98aOLWfZs1ROw5w+H7H5RCp4qbxg=";
     endpoint = "sfo1.dn42.42420167.xyz:10001";
     ipv6 = {
@@ -74,7 +77,7 @@
   networking.dn42.peers.sgp1 = {
     asn = 4242420167;
     listenPort = 10003;
-    privateKey = lib.trim (builtins.readFile ../../secrets/do-ams1.key);
+    privateKey = secrets.key_do_ams1;
     publicKey = "OUjT7QCteL40MpZJeAh1HEMSH7Uu0g0vBIIjShRQVDc=";
     endpoint = "sgp1.dn42.42420167.xyz:10001";
     ipv6 = {
