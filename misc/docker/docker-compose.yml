@@ -7,8 +7,8 @@ services:
     ports:
       - "127.0.0.1:8000:8000"
     environment:
-      - ADMIN_PASSWORD={{ sub_password }}
-      - REG_PASSWORD={{ reg_password }}
+      - ADMIN_PASSWORD
+      - REG_PASSWORD
 
   tgbot:
     build: ./TGBot
@@ -16,25 +16,25 @@ services:
     ports:
       - "127.0.0.1:8001:8000"
     environment:
-      - BOT_TOKEN={{ bot_token }}
-      - CHAT_ID={{ chat_id }}
-      - PUSH_KEY={{ push_key }}
-      - SELF_URL={{ self_url }}
-      - SECRET_TOKEN={{ secret_token }}
+      - BOT_TOKEN
+      - CHAT_ID
+      - PUSH_KEY
+      - SELF_URL
+      - SECRET_TOKEN
     volumes:
       - /opt/nju.txt:/app/nju.txt
 
   tgrss:
-    image: rongronggg9/rss-to-telegram:dev  # stable image: rongronggg9/rss-to-telegram
+    image: rongronggg9/rss-to-telegram:dev
     restart: unless-stopped
     volumes:
       - /opt/tgrss:/app/config
     environment:
-      - TOKEN={{ rss_bot_token }}
-      - MANAGER={{ rss_manager }}
+      - TOKEN
+      - MANAGER
   
   log_forward:
     build: ./log_forward
     restart: unless-stopped
     environment:
-      - LOKI_TOKEN={{ loki_token }}
+      - LOKI_TOKEN

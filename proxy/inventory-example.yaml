@@ -31,19 +31,3 @@ direct_proxy_servers:
 
     push_endpoint: "https://user:pass@prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push"
     loki_endpoint: "https://user:pass@logs-prod-020.grafana.net/api/prom/push"
-
-misc_server:
-  hosts:
-    misc:
-      ansible_host: 1.2.3.4
-
-  vars:
-    ansible_user: root
-
-    misc_domain: misc.example.com
-
-    sub_password: pass2
-    reg_password: pass1
-
-    push_endpoint: "https://user:pass@prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push"
-    loki_endpoint: "https://user:pass@logs-prod-020.grafana.net/api/prom/push"

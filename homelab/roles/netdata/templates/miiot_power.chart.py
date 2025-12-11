@@ -4,7 +4,7 @@ from bases.FrameworkServices.SimpleService import SimpleService
 from miio import GenericMiot
 
 NETDATA_UPDATE_EVERY = 1
-mi_dev = GenericMiot("192.168.1.244", "248e201bed14c01cec1e44de04e0ec26")
+mi_dev = GenericMiot("192.168.1.245", "02b83b028c085b261d3597183f8f037c")
 
 ORDER = [
     'power_usage'
