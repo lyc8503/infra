@@ -69,10 +69,4 @@ in
     LOKI_TOKEN=${secrets.log_forward_loki_token}
     EOF
   '';
-
-  # Ensure /opt directories exist
-  systemd.tmpfiles.rules = [
-    "d /opt/tgrss 0755 root root -"
-    "f /opt/nju.txt 0644 root root -"
-  ];
 }
