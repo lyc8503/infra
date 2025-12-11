@@ -7,8 +7,8 @@ in
 {
   imports = [
     ./hardware.nix
-    ../dn42/modules/common.nix
-    ../dn42/modules/metrics.nix
+    /home/lyc/playbooks/dn42/modules/common.nix
+    /home/lyc/playbooks/dn42/modules/metrics.nix
   ];
 
   deployment = {
@@ -32,6 +32,7 @@ in
     enable = true;
     virtualHosts."http://sub.${secrets.misc_domain}".extraConfig = "reverse_proxy 127.0.0.1:8000";
     virtualHosts."http://bot.${secrets.misc_domain}".extraConfig = "reverse_proxy 127.0.0.1:8001";
+    virtualHosts."http://da.lyc8503.net".extraConfig = "reverse_proxy 127.0.0.1:3000";
   };
 
   # Docker Compose Service
@@ -41,12 +42,12 @@ in
     description = "Misc Docker Compose Project";
     wantedBy = [ "multi-user.target" ];
     after = [ "docker.service" "network.target" ];
+    restartTriggers = [ "${./docker}" ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
       WorkingDirectory = "/opt/misc-docker";
-      ExecStart = "${pkgs.docker-compose}/bin/docker-compose -p misc-docker up -d --remove-orphans --build";
-      ExecStop = "${pkgs.docker-compose}/bin/docker-compose -p misc-docker down";
+      ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d --remove-orphans --build";
     };
   };
 
@@ -67,6 +68,7 @@ in
     TOKEN=${secrets.tgrss_token}
     MANAGER=${secrets.tgrss_manager}
     LOKI_TOKEN=${secrets.log_forward_loki_token}
+    APP_SECRET=${secrets.umami_app_secret}
     EOF
   '';
 }
