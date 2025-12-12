@@ -23,6 +23,7 @@
     iperf3
     tcpdump
     pwru
+    python3
   ];
 
   programs.zsh = {

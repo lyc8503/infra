@@ -10,6 +10,8 @@ in
     ../../modules/dn42.nix
     ../../modules/looking-glass.nix
     ../../modules/metrics.nix
+    ../../modules/knot-dns.nix
+    ../../modules/zones.nix
   ];
 
   services.metrics = {
