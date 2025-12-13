@@ -13,6 +13,7 @@
   with_items:
     - /etc/apt/sources.list.d/ceph.list
     - /etc/apt/sources.list.d/pve-enterprise.list
+    - /etc/apt/sources.list.d/pve-enterprise.sources
 
 - name: Install pip3
   ansible.builtin.apt:
