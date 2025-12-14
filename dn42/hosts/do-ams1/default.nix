@@ -68,7 +68,7 @@ in
     asn = 4242420167;
     listenPort = 10002;
     privateKey = secrets.key_do_ams1;
-    publicKey = "aOfobLo+vPiOHzA98aOLWfZs1ROw5w+H7H5RCp4qbxg=";
+    publicKey = secrets.key_do_sfo1_pub;
     endpoint = "sfo1.dn42.42420167.xyz:10001";
     ipv6 = {
       local = "fe80::1";
@@ -80,7 +80,7 @@ in
     asn = 4242420167;
     listenPort = 10003;
     privateKey = secrets.key_do_ams1;
-    publicKey = "OUjT7QCteL40MpZJeAh1HEMSH7Uu0g0vBIIjShRQVDc=";
+    publicKey = secrets.key_do_sgp1_pub;
     endpoint = "sgp1.dn42.42420167.xyz:10001";
     ipv6 = {
       local = "fe80::1";

@@ -68,7 +68,7 @@ in
     asn = 4242420167;
     listenPort = 10001;
     privateKey = secrets.key_do_sgp1;
-    publicKey = "8X4sDGOx0koca/fJw/OOlUycgV5HMYER0QTkkAHZ6RE=";
+    publicKey = secrets.key_do_ams1_pub;
     endpoint = "ams1.dn42.42420167.xyz:10003";
     ipv6 = {
       local = "fe80::3";
@@ -80,7 +80,7 @@ in
     asn = 4242420167;
     listenPort = 10002;
     privateKey = secrets.key_do_sgp1;
-    publicKey = "aOfobLo+vPiOHzA98aOLWfZs1ROw5w+H7H5RCp4qbxg=";
+    publicKey = secrets.key_do_sfo1_pub;
     endpoint = "sfo1.dn42.42420167.xyz:10003";
     ipv6 = {
       local = "fe80::3";
@@ -91,7 +91,7 @@ in
   networking.dn42.peers."3914" = {
     asn = 4242423914;
     listenPort = 23914;
-    privateKey = secrets.key_3914;
+    privateKey = secrets.key_do_sgp1;
     publicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
     endpoint = "hk1.g-load.eu:20167";
     
@@ -109,7 +109,7 @@ in
   networking.dn42.peers."2034" = {
     asn = 4242422034;
     listenPort = 22034;
-    privateKey = secrets.key_2034;
+    privateKey = secrets.key_do_sgp1;
     publicKey = "Zl72hWVO9Ib3ylYqKpDCEq8VyiJjY0WDhXP+vX+CzFs=";
     endpoint = "v1.932.moe:20167";
     ipv6 = {
