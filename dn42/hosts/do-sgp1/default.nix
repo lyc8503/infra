@@ -57,6 +57,7 @@ in
   };
 
   networking.dn42 = {
+    useDnet = true;
     asn = 4242420167;
     ipv4.routerId = "172.20.42.224";
     ipv4.network = "172.20.42.224/27";
@@ -100,10 +101,10 @@ in
       remote = "fe80::ade0";
     };
     
-    ipv4 = {
-      local = "172.20.42.224";
-      remote = "172.20.53.105";
-    };
+    # ipv4 = {
+    #   local = "172.20.42.224";
+    #   remote = "172.20.53.105";
+    # };
   };
 
   networking.dn42.peers."2034" = {
@@ -116,9 +117,10 @@ in
       local = "fe80::1067";
       remote = "fe80::2034";
     };
-    ipv4 = {
-      local = "172.20.42.224";
-      remote = "172.21.104.33";
-    };
+
+    # ipv4 = {
+    #   local = "172.20.42.224";
+    #   remote = "172.21.104.33";
+    # };
   };
 }

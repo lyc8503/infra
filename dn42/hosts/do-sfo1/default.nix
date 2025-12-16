@@ -57,6 +57,7 @@ in
   };
 
   networking.dn42 = {
+    useDnet = true;
     asn = 4242420167;
     ipv4.routerId = "172.20.42.225";
     ipv4.network = "172.20.42.224/27";

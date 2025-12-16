@@ -3,6 +3,8 @@
 with lib;
 
 let
+  cfg = config.networking.dn42;
+
   peerOptions = { name, config, ... }: {
     options = {
       asn = mkOption {
@@ -53,13 +55,13 @@ let
     #               Variable header                #
     ################################################
 
-    define OWNAS = ${toString config.networking.dn42.asn};
-    define OWNIP = ${config.networking.dn42.ipv4.routerId};
-    define OWNIPv6 = ${config.networking.dn42.ipv6.routerId};
-    define OWNNET = ${config.networking.dn42.ipv4.network};
-    define OWNNETv6 = ${config.networking.dn42.ipv6.network};
-    define OWNNETSET = [${config.networking.dn42.ipv4.network}+];
-    define OWNNETSETv6 = [${config.networking.dn42.ipv6.network}+];
+    define OWNAS = ${toString cfg.asn};
+    define OWNIP = ${cfg.ipv4.routerId};
+    define OWNIPv6 = ${cfg.ipv6.routerId};
+    define OWNNET = ${cfg.ipv4.network};
+    define OWNNETv6 = ${cfg.ipv6.network};
+    define OWNNETSET = [${cfg.ipv4.network}+];
+    define OWNNETSETv6 = [${cfg.ipv6.network}+];
 
     ################################################
     #                 Header end                   #
@@ -74,7 +76,7 @@ let
     protocol direct {
         ipv4;
         ipv6;
-        interface "dn42dummy0";
+        interface "${if config.networking.dn42.useDnet then "dnet0" else "dn42dummy0"}";
     }
 
     /*
@@ -142,7 +144,7 @@ let
             import none;
             export filter {
                 if source = RTS_STATIC then reject;
-                krt_prefsrc = OWNIP;
+                ${if cfg.useDnet then "#" else ""}krt_prefsrc = OWNIP;
                 accept;
             };
         };
@@ -150,6 +152,7 @@ let
 
     protocol static {
         route OWNNET reject;
+        ${if cfg.useDnet then "route ${cfg.ipv4.routerId}/32 via \"dnet0\";" else ""}
 
         ipv4 {
             import all;
@@ -222,7 +225,10 @@ let
   '';
 in
 {
+  imports = [ ./dnet.nix ];
+
   options.networking.dn42 = {
+    useDnet = mkEnableOption "Use DNet-core instead of dn42dummy0";
     asn = mkOption {
       type = types.int;
       description = "Autonomous System Number";
@@ -242,7 +248,7 @@ in
     };
   };
 
-  config = mkIf (config.networking.dn42.peers != {}) {
+  config = mkIf (cfg.peers != {}) {
     services.bird.enable = true;
     services.bird.package = pkgs.bird2;
     networking.wg-quick.interfaces = mapAttrs' (name: peer: 
@@ -268,32 +274,39 @@ in
           }
         ];
       }
-    ) config.networking.dn42.peers;
+    ) cfg.peers;
 
-    networking.interfaces.dn42dummy0 = {
+    networking.interfaces.dn42dummy0 = mkIf (!cfg.useDnet) {
       virtual = true;
       ipv4.addresses = [{
-        address = config.networking.dn42.ipv4.routerId;
+        address = cfg.ipv4.routerId;
         prefixLength = 32;
       }];
       ipv6.addresses = [{
-        address = config.networking.dn42.ipv6.routerId;
+        address = cfg.ipv6.routerId;
         prefixLength = 128;
       }];
     };
 
+    services.dnet-core = mkIf cfg.useDnet {
+      enable = true;
+      ip = cfg.ipv4.routerId;
+      netmask = "255.255.255.255";
+      cidr = "${cfg.ipv4.routerId}/32";
+    };
+
     boot.kernel.sysctl = {
-      "net.ipv4.conf.dn42dummy0.rp_filter" = "0";
+      "net.ipv4.conf.dn42dummy0.rp_filter" = mkIf (!cfg.useDnet) "0";
     };
 
     services.bird.config = birdBaseConfig + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: ''
-      protocol bgp dn42_${name} from ${if peer.asn == config.networking.dn42.asn then "dnpeers_ibgp" else "dnpeers"} {
-          enable extended messages on;
-          neighbor ${peer.ipv6.remote}%dn42_${name} as ${toString peer.asn};
-          ipv4 {
-              extended next hop on;
-          };
+      protocol bgp dn42_${name} from ${if peer.asn == cfg.asn then "dnpeers_ibgp" else "dnpeers"} {
+        enable extended messages on;
+        neighbor ${peer.ipv6.remote}%dn42_${name} as ${toString peer.asn};
+        ipv4 {
+          extended next hop on;
+        };
       };
-    '') config.networking.dn42.peers));
+    '') cfg.peers));
   };
 }
