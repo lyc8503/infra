@@ -7,22 +7,16 @@ let
   
   dnet-core = pkgs.stdenv.mkDerivation {
     pname = "dnet-core";
-    version = "0.0.1-unstable-2025-12-16";
+    version = "0.0.1-unstable-2025-12-17";
 
     src = pkgs.fetchFromGitHub {
       owner = "lyc8503";
       repo = "DNet-core";
-      rev = "5b54082300c1f95bc1fe8c772209d7bb305ccd22";
-      sha256 = "sha256-7G/GSyGEBPPPYx2rMXTF8B/AzHGHVMstbIq4WM+DyHM=";
+      rev = "41fb499ac370087d0670d9d0e272fbb564d786e4";
+      sha256 = "sha256-2NCzNes0jovSLHB58P80lf/aEcr2MoSMSIgCww7NaZA=";
     };
 
     nativeBuildInputs = [ pkgs.cmake ];
-
-    postPatch = ''
-      substituteInPlace main.cpp \
-        --replace 'DNet dnet("dnet0", 1500, "10.0.0.0", "255.255.255.0");' \
-                  'DNet dnet("dnet0", 1500, "${cfg.ip}", "${cfg.netmask}");'
-    '';
 
     installPhase = ''
       mkdir -p $out/bin
@@ -58,7 +52,7 @@ in
           "-${pkgs.coreutils}/bin/mknod /dev/net/tap c 10 200"
           "${pkgs.coreutils}/bin/chmod 666 /dev/net/tap"
         ];
-        ExecStart = "${dnet-core}/bin/dnet-core";
+        ExecStart = "${dnet-core}/bin/dnet-core dnet0 1280 11:45:14:19:19:81 ${cfg.ip} ${cfg.netmask}";
         Restart = "always";
       };
       postStart = ''

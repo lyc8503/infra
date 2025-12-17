@@ -24,6 +24,7 @@
     tcpdump
     pwru
     python3
+    termshark
   ];
 
   programs.zsh = {
