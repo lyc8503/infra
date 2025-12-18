@@ -138,4 +138,17 @@ in
       remote = "fe80::2279";
     };
   };
+
+  # QQ
+  networking.dn42.peers."1313" = {
+    asn = 4242421313;
+    listenPort = 21313;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "nDppZOorVG2qZgS7++ZIDeQWLFDCGYIZBZepdiDCJXU=";
+    endpoint = "140.245.41.240:48372";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1313";
+    };
+  };
 }
