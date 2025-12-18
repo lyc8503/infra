@@ -123,4 +123,16 @@ in
     #   remote = "172.21.104.33";
     # };
   };
+
+  networking.dn42.peers."2279" = {
+    asn = 4242422279;
+    listenPort = 22279;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "Yu5PP+dKWqFCWSOqzEd2d3YGPZDOs7bgxQfZiNJjJH4=";
+    endpoint = "sg-sin1.bb.mhr.hk:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::2279";
+    };
+  };
 }
