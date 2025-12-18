@@ -88,4 +88,16 @@ in
       remote = "fe80::3";
     };
   };
+
+  networking.dn42.peers."3377" = {
+    asn = 4242423377;
+    listenPort = 23377;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "Xzt9UrH2moj84QSH0jsw8Zj+jwXwdBLpApe4hHyfnAw=";
+    endpoint = "v4.los1-us.peer.dn42.leziblog.com:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3377";
+    };
+  };
 }
