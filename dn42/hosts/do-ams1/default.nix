@@ -87,4 +87,16 @@ in
       remote = "fe80::3";
     };
   };
+
+  networking.dn42.peers."1888" = {
+    asn = 4242421888;
+    listenPort = 21888;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "k9F2akSTkbA/GiO59PNW/v0D65ioMYD4P1DqeKSL3FM=";
+    endpoint = "de1.dn42.ni.sb:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1888";
+    };
+  };
 }
