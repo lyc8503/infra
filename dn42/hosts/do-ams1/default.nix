@@ -113,4 +113,17 @@ in
       remote = "fe80::2999:232";
     };
   };
+
+  # TG @HExpNetworkBot
+  networking.dn42.peers."0298" = {
+    asn = 424242298;
+    listenPort = 20298;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "VMOGexXB0v+zWhxAjYk8r2tI/WQmfxCmd4nXb0GULBg=";
+    endpoint = "node4.ox5.cc:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::298";
+    };
+  };
 }
