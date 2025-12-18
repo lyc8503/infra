@@ -88,7 +88,8 @@ in
       remote = "fe80::2";
     };
   };
-
+  
+  # https://dn42.g-load.eu/
   networking.dn42.peers."3914" = {
     asn = 4242423914;
     listenPort = 23914;
@@ -107,6 +108,7 @@ in
     # };
   };
 
+  # Email wyf@932686.xyz
   networking.dn42.peers."2034" = {
     asn = 4242422034;
     listenPort = 22034;
@@ -124,6 +126,7 @@ in
     # };
   };
 
+  # TG @moohric
   networking.dn42.peers."2279" = {
     asn = 4242422279;
     listenPort = 22279;

@@ -88,6 +88,7 @@ in
     };
   };
 
+  # TG @imlonghao
   networking.dn42.peers."1888" = {
     asn = 4242421888;
     listenPort = 21888;
@@ -100,6 +101,7 @@ in
     };
   };
 
+  # TG @baka_lg_bot
   networking.dn42.peers."3374" = {
     asn = 4242423374;
     listenPort = 23374;

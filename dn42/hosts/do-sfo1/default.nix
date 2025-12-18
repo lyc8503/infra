@@ -89,6 +89,7 @@ in
     };
   };
 
+  # TG @LeZi9916
   networking.dn42.peers."3377" = {
     asn = 4242423377;
     listenPort = 23377;
@@ -101,6 +102,7 @@ in
     };
   };
 
+  # TG @beacon_owo
   networking.dn42.peers."1117" = {
     asn = 4242421117;
     listenPort = 21117;
@@ -110,6 +112,19 @@ in
     ipv6 = {
       local = "fe80::167";
       remote = "fe80::1117";
+    };
+  };
+
+  # TG @iYoRoy
+  networking.dn42.peers."2024" = {
+    asn = 4242422024;
+    listenPort = 22024;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "As0rZo5b9Bwt4loPGl6iSdtOqkd2p6ExK/Xyoy9OmTU=";
+    endpoint = "ipv4.lax-us.ecs.iyoroy-infra.top:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::2024";
     };
   };
 }
