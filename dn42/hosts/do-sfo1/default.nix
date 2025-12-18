@@ -100,4 +100,16 @@ in
       remote = "fe80::3377";
     };
   };
+
+  networking.dn42.peers."1117" = {
+    asn = 4242421117;
+    listenPort = 21117;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "PW/+rv0B8e4tUJ9j1TWscx1sl36WwhPh9adEqoM7Jic=";
+    endpoint = "us01.dn42.yuyuko.com:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1117";
+    };
+  };
 }
