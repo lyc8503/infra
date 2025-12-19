@@ -59,9 +59,10 @@ in
   networking.dn42 = {
     useDnet = true;
     asn = 4242420167;
-    ipv4.routerId = "172.20.42.224";
+    ipv4.address = "172.20.42.240";
+    ipv4.dnetAddress = "172.20.42.224";
     ipv4.network = "172.20.42.224/27";
-    ipv6.routerId = "fd00:1100:8503::1";
+    ipv6.address = "fd00:1100:8503::1";
     ipv6.network = "fd00:1100:8503::/48";
   };
 

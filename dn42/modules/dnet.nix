@@ -12,8 +12,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "lyc8503";
       repo = "DNet-core";
-      rev = "0773b919d85883660f515ccf903c7241b4841f42";
-      sha256 = "sha256-S/Gz+TlZO8aKTFKiDG2XO/8YeCWVdAWiYDewso53/4M=";
+      rev = "5dd63c626f22d4cef6eb1c9f46ebadba3b6ef678";
+      sha256 = "sha256-25rDvvkjQUin50c9+UWiailO+4wiu19iobBnQ2wqybY=";
     };
 
     nativeBuildInputs = [ pkgs.cmake ];
