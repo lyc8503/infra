@@ -152,4 +152,17 @@ in
       remote = "fe80::1313";
     };
   };
+
+  # TG @charliemoomoo
+  networking.dn42.peers."3999" = {
+    asn = 4242423999;
+    listenPort = 23999;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "mGGBczSVKW+7UKRquI2GkbKrfxiATv9r4uF5WTP+vWI=";
+    endpoint = "hkg.node.cowgl.xyz:30167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3999";
+    };
+  };
 }
