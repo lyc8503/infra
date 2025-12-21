@@ -25,6 +25,8 @@
     pwru
     python3
     termshark
+    iptables
+    hping
   ];
 
   programs.zsh = {
