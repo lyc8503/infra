@@ -6,11 +6,14 @@ in
 {
   imports = [
     ./hardware.nix
+    ../../conf42/sfo1.nix
     ../../modules/common.nix
     ../../modules/dn42.nix
     ../../modules/looking-glass.nix
     ../../modules/metrics.nix
   ];
+
+  system.stateVersion = "25.11";
 
   services.metrics = {
     enable = true;
@@ -18,19 +21,11 @@ in
     loki_endpoint = secrets.loki_endpoint;
   };
 
-  services.dn42-looking-glass = {
-    enable = true;
-    servers = [ "ams1" "sfo1" "sgp1" ];
-    domain = "dn42.42420167.xyz";
-  };
-
   deployment = {
     targetHost = "sfo1.dn42.42420167.xyz";
     targetUser = "root";
     tags = [ "digitalocean" "vps" ];
   };
-
-  system.stateVersion = "25.11";
 
   networking = {
     hostName = "do-sfo1";
@@ -54,89 +49,4 @@ in
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
   };
 
-  networking.dn42 = {
-    useDnet = true;
-    asn = 4242420167;
-    ipv4.address = "172.20.42.241";
-    ipv4.dnetAddress = "172.20.42.225";
-    ipv4.network = "172.20.42.224/27";
-    ipv6.address = "fd00:1100:8503::2";
-    ipv6.network = "fd00:1100:8503::/48";
-  };
-
-  networking.dn42.peers.ams1 = {
-    asn = 4242420167;
-    listenPort = 10001;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = secrets.key_do_ams1_pub;
-    endpoint = "ams1.dn42.42420167.xyz:10002";
-    ipv6 = {
-      local = "fe80::2";
-      remote = "fe80::1";
-    };
-  };
-
-  networking.dn42.peers.sgp1 = {
-    asn = 4242420167;
-    listenPort = 10003;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = secrets.key_do_sgp1_pub;
-    endpoint = "sgp1.dn42.42420167.xyz:10002";
-    ipv6 = {
-      local = "fe80::2";
-      remote = "fe80::3";
-    };
-  };
-
-  # TG @LeZi9916
-  networking.dn42.peers."3377" = {
-    asn = 4242423377;
-    listenPort = 23377;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = "Xzt9UrH2moj84QSH0jsw8Zj+jwXwdBLpApe4hHyfnAw=";
-    endpoint = "v4.los1-us.peer.dn42.leziblog.com:20167";
-    ipv6 = {
-      local = "fe80::167";
-      remote = "fe80::3377";
-    };
-  };
-
-  # TG @beacon_owo
-  networking.dn42.peers."1117" = {
-    asn = 4242421117;
-    listenPort = 21117;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = "PW/+rv0B8e4tUJ9j1TWscx1sl36WwhPh9adEqoM7Jic=";
-    endpoint = "us01.dn42.yuyuko.com:20167";
-    ipv6 = {
-      local = "fe80::167";
-      remote = "fe80::1117";
-    };
-  };
-
-  # TG @iYoRoy
-  networking.dn42.peers."2024" = {
-    asn = 4242422024;
-    listenPort = 22024;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = "As0rZo5b9Bwt4loPGl6iSdtOqkd2p6ExK/Xyoy9OmTU=";
-    endpoint = "ipv4.lax-us.ecs.iyoroy-infra.top:20167";
-    ipv6 = {
-      local = "fe80::167";
-      remote = "fe80::2024";
-    };
-  };
-
-  # TG @charliemoomoo
-  networking.dn42.peers."3999" = {
-    asn = 4242423999;
-    listenPort = 23999;
-    privateKey = secrets.key_do_sfo1;
-    publicKey = "jhOukGNAKHI8Ivn8uI1TS25n5ho/rVlKFfenGmwCVlg=";
-    endpoint = "lax.node.cowgl.xyz:30167";
-    ipv6 = {
-      local = "fe80::167";
-      remote = "fe80::2:3999";
-    };
-  };
 }
