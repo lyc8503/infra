@@ -11,6 +11,7 @@ in
     ../../modules/dn42.nix
     ../../modules/looking-glass.nix
     ../../modules/metrics.nix
+    ../../modules/tcpdump.nix
   ];
   
   system.stateVersion = "25.11";
