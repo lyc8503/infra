@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./scx.nix ];
+
+  services.scx_horoscope.enable = true;
+
   environment.systemPackages = with pkgs; [
     vim
     neovim
