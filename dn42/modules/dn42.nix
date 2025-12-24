@@ -56,12 +56,12 @@ let
     ################################################
 
     define OWNAS = ${toString cfg.asn};
-    define OWNIP = ${cfg.ipv4.address};
-    define OWNIPv6 = ${cfg.ipv6.address};
-    define OWNNET = ${cfg.ipv4.network};
-    define OWNNETv6 = ${cfg.ipv6.network};
-    define OWNNETSET = [${cfg.ipv4.network}+];
-    define OWNNETSETv6 = [${cfg.ipv6.network}+];
+    define OWNIP = ${builtins.head cfg.ipv4.addresses};
+    define OWNIPv6 = ${builtins.head cfg.ipv6.addresses};
+    define OWNNET = ${builtins.head cfg.ipv4.networks};
+    define OWNNETv6 = ${builtins.head cfg.ipv6.networks};
+    define OWNNETSET = [${concatStringsSep ", " (map (n: n + "+") cfg.ipv4.networks)}];
+    define OWNNETSETv6 = [${concatStringsSep ", " (map (n: n + "+") cfg.ipv6.networks)}];
 
     ################################################
     #                 Header end                   #
@@ -151,7 +151,7 @@ let
     }
 
     protocol static {
-        route OWNNET reject;
+        ${concatStringsSep "\n        " (map (n: "route " + n + " reject;") cfg.ipv4.networks)}
         ${if cfg.useDnet then "route ${cfg.ipv4.dnetAddress}/32 via \"dnet0\";" else ""}
 
         ipv4 {
@@ -161,7 +161,7 @@ let
     }
 
     protocol static {
-        route OWNNETv6 reject;
+        ${concatStringsSep "\n        " (map (n: "route " + n + " reject;") cfg.ipv6.networks)}
 
         ipv6 {
             import all;
@@ -234,13 +234,13 @@ in
       description = "Autonomous System Number";
     };
     ipv4 = {
-      address = mkOption { type = types.str; description = "Host IPv4 Address"; };
+      addresses = mkOption { type = types.listOf types.str; description = "List of Host IPv4 Addresses"; };
       dnetAddress = mkOption { type = types.str; description = "DNET IPv4 Address (used when useDnet)"; };
-      network = mkOption { type = types.str; description = "IPv4 Network to announce"; };
+      networks = mkOption { type = types.listOf types.str; description = "List of IPv4 Networks to announce"; };
     };
     ipv6 = {
-      address = mkOption { type = types.str; description = "Host IPv6 Address"; };
-      network = mkOption { type = types.str; description = "IPv6 Network to announce"; };
+      addresses = mkOption { type = types.listOf types.str; description = "List of Host IPv6 Addresses"; };
+      networks = mkOption { type = types.listOf types.str; description = "List of IPv6 Networks to announce"; };
     };
     peers = mkOption {
       type = types.attrsOf (types.submodule peerOptions);
@@ -279,14 +279,14 @@ in
 
     networking.interfaces.dn42dummy0 = {
       virtual = true;
-      ipv4.addresses = [{
-        address = cfg.ipv4.address;
+      ipv4.addresses = map (addr: {
+        address = addr;
         prefixLength = 32;
-      }];
-      ipv6.addresses = [{
-        address = cfg.ipv6.address;
+      }) cfg.ipv4.addresses;
+      ipv6.addresses = map (addr: {
+        address = addr;
         prefixLength = 128;
-      }];
+      }) cfg.ipv6.addresses;
     };
 
     services.dnet-core = mkIf cfg.useDnet {
