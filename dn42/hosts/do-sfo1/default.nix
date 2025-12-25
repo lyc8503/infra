@@ -12,7 +12,18 @@ in
     ../../modules/looking-glass.nix
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix
+    ../../modules/tor-relay.nix
   ];
+
+  services.tor-relay = {
+    enable = true;
+    ipv6 = secrets.tor.sfo1.ipv6;
+    nickname = secrets.tor.sfo1.nickname;
+    contactInfo = secrets.tor.contact;
+    anchorIPv4 = "10.48.0.5";
+    ipv4Gateway = "10.48.0.1";
+    publicIPv4 = secrets.tor.sfo1.ipv4;
+  };
 
   system.stateVersion = "25.11";
 
