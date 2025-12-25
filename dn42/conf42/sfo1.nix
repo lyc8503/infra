@@ -10,6 +10,13 @@ in
     domain = "dn42.42420167.xyz";
   };
 
+  services.xjbcast = {
+    enable = true;
+    nodeName = "sfo1";
+    ipv4Address = "172.23.41.81";
+    ipv6Address = "fd32:3940:2738::1";
+  };
+
   networking.dn42 = {
     useDnet = true;
     asn = 4242420167;

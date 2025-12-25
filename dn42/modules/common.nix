@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./scx.nix ];
+  imports = [ ./scx.nix ./xjbcast.nix ];
 
   services.scx_horoscope.enable = true;
 
