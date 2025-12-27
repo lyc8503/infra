@@ -9,6 +9,7 @@ in
     ../../conf42/sgp1.nix
     ../../modules/common.nix
     ../../modules/dn42.nix
+    ../../modules/ibgp-full-mesh.nix
     ../../modules/looking-glass.nix
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix

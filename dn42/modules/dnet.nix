@@ -37,6 +37,12 @@ let
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.sfo1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x00\x04\x01\xd0\x00\x00\x00\x01\x45\x00\x10\x00");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.ams1.dn42.42420167.xyz", 16, "\x2a\x03\xb0\xc0\x00\x02\x00\xf0\x00\x00\x00\x01\x17\x60\xe0\x01");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.sgp1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x00\x00\xd2\x00\x00\x00\x02\x74\x90\xd0\x00");
+        REGISTER_A_RECORD("syd1.dn42.42420167.xyz", "209.38.16.169");
+        REGISTER_A_RECORD("tor1.dn42.42420167.xyz", "159.203.11.66");
+        REGISTER_A_RECORD("blr1.dn42.42420167.xyz", "139.59.68.194");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.syd1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x10\x02\x00\x00\x00\x00\x00\x92\x72\x50\x00");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.tor1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x0c\xad\x00\xd0\x00\x00\x00\x01\x32\x1a\x40\x01");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.blr1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x01\x00\x00\xd0\x00\x00\x00\x00\xe3\xfe\x20\x01");
     }
     #endif // DNET_DNS_RECORD_H
   '';

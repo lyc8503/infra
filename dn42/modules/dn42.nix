@@ -242,6 +242,11 @@ in
       addresses = mkOption { type = types.listOf types.str; description = "List of Host IPv6 Addresses"; };
       networks = mkOption { type = types.listOf types.str; description = "List of IPv6 Networks to announce"; };
     };
+    ibgpPeers = mkOption {
+      type = types.attrsOf (types.submodule peerOptions);
+      default = {};
+      description = "DN42 iBGP peers configuration (Full Mesh)";
+    };
     peers = mkOption {
       type = types.attrsOf (types.submodule peerOptions);
       default = {};
@@ -249,7 +254,7 @@ in
     };
   };
 
-  config = mkIf (cfg.peers != {}) {
+  config = mkIf (cfg.peers != {} || cfg.ibgpPeers != {}) {
     services.bird.enable = true;
     services.bird.package = pkgs.bird2;
     networking.wg-quick.interfaces = mapAttrs' (name: peer: 
@@ -275,7 +280,7 @@ in
           }
         ];
       }
-    ) cfg.peers;
+    ) (cfg.peers // cfg.ibgpPeers);
 
     networking.interfaces.dn42dummy0 = {
       virtual = true;
@@ -300,14 +305,23 @@ in
       "net.ipv4.conf.dn42dummy0.rp_filter" = "0";
     };
 
-    services.bird.config = birdBaseConfig + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: ''
-      protocol bgp dn42_${name} from ${if peer.asn == cfg.asn then "dnpeers_ibgp" else "dnpeers"} {
+    services.bird.config = birdBaseConfig + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: 
+      if (peer.asn != cfg.asn) then ''
+      protocol bgp dn42_${name} from dnpeers {
         enable extended messages on;
         neighbor ${peer.ipv6.remote}%dn42_${name} as ${toString peer.asn};
         ipv4 {
           extended next hop on;
         };
       };
-    '') cfg.peers));
+    '' else "") cfg.peers)) + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: ''
+      protocol bgp dn42_${name} from dnpeers_ibgp {
+        enable extended messages on;
+        neighbor ${peer.ipv6.remote} as ${toString cfg.asn};
+        ipv4 {
+          extended next hop on;
+        };
+      }
+    '') cfg.ibgpPeers));
   };
 }

@@ -6,7 +6,7 @@ in
 {
   services.dn42-looking-glass = {
     enable = true;
-    servers = [ "ams1" "sfo1" "sgp1" ];
+    servers = [ "ams1" "sfo1" "sgp1" "syd1" "tor1" "blr1" ];
     domain = "dn42.42420167.xyz";
   };
 
@@ -27,29 +27,6 @@ in
     ipv6.networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
   };
 
-  networking.dn42.peers.ams1 = {
-    asn = 4242420167;
-    listenPort = 10001;
-    privateKey = secrets.key_do_sgp1;
-    publicKey = secrets.key_do_ams1_pub;
-    endpoint = "ams1.dn42.42420167.xyz:10003";
-    ipv6 = {
-      local = "fe80::3";
-      remote = "fe80::1";
-    };
-  };
-
-  networking.dn42.peers.sfo1 = {
-    asn = 4242420167;
-    listenPort = 10002;
-    privateKey = secrets.key_do_sgp1;
-    publicKey = secrets.key_do_sfo1_pub;
-    endpoint = "sfo1.dn42.42420167.xyz:10003";
-    ipv6 = {
-      local = "fe80::3";
-      remote = "fe80::2";
-    };
-  };
   
   # https://dn42.g-load.eu/
   networking.dn42.peers."3914" = {

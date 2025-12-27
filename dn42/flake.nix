@@ -15,6 +15,9 @@
       do-sgp1 = import ./hosts/do-sgp1/default.nix;
       do-ams1 = import ./hosts/do-ams1/default.nix;
       do-sfo1 = import ./hosts/do-sfo1/default.nix;
+      do-syd1 = import ./hosts/do-syd1/default.nix;
+      do-tor1 = import ./hosts/do-tor1/default.nix;
+      do-blr1 = import ./hosts/do-blr1/default.nix;
     };
   };
 }
