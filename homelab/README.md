@@ -150,7 +150,7 @@ Some other manual steps:
 - [ ] Setup Let's Encrypt SSL & 2FA
 - [ ] Setup backup jobs & pigz conf & script
 - [ ] Setup SSH Key & Disable password login
-- [ ] CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/
+- [ ] ~~CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/~~
 - [ ] Restore /var/lib/vz isos & /root
 
 ## Deployment checklist

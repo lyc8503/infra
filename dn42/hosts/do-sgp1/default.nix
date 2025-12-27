@@ -14,6 +14,8 @@ in
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix
     ../../modules/tor-relay.nix
+    ../../modules/xray.nix
+    ../../modules/hysteria.nix
   ];
 
   services.tor-relay = {
@@ -27,6 +29,34 @@ in
   };
   
   system.stateVersion = "25.11";
+
+  services.my-xray = {
+    enable = true;
+    uuid = secrets.proxy.uuid;
+    visionPort = 23389;
+    realityDest = "software.download.prss.microsoft.com:443";
+    realityPrivateKey = secrets.proxy.reality_sk;
+    realityShortIds = secrets.proxy.short_ids;
+    registration = {
+      enable = true;
+      subServer = secrets.proxy.sub_server;
+      regPassword = secrets.proxy.reg_password;
+      subId = "do_sgp1";
+      realityPublicKey = secrets.proxy.reality_pk;
+    };
+  };
+
+  services.my-hysteria = {
+    enable = true;
+    port = 61145;
+    password = secrets.proxy.uuid;
+    registration = {
+      enable = true;
+      subServer = secrets.proxy.sub_server;
+      regPassword = secrets.proxy.reg_password;
+      subId = "do_sgp1";
+    };
+  };
 
   services.metrics = {
     enable = true;
