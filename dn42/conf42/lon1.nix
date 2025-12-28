@@ -26,4 +26,17 @@ in
     ipv6.addresses = [ "fd00:1100:8503::6" "fd32:3940:2738::1" ];
     ipv6.networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
   };
+
+  # https://dn42.routedbits.io/peering
+  networking.dn42.peers."0207" = {
+    asn = 4242420207;
+    listenPort = 20207;
+    privateKey = secrets.key_do_lon1;
+    publicKey = "vlqNoUSJ4T2sORBHusdwr9rCtQfdsIJvjV3Y/qBUcgY=";
+    endpoint = "router.lon1.routedbits.com:50167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::207";
+    };
+  };
 }

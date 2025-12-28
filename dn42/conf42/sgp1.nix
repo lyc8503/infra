@@ -103,4 +103,43 @@ in
       remote = "fe80::3999";
     };
   };
+
+  # https://blog.yuyuko.com/post/7
+  networking.dn42.peers."1117" = {
+    asn = 4242421117;
+    listenPort = 21117;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "gqwdC9p6jdSy80oRxdatr9QdSrNMLCvRMadaCeOBqDY=";
+    endpoint = "hk01.dn42.yuyuko.com:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1117";
+    };
+  };
+
+  # https://dn42.routedbits.io/peering
+  networking.dn42.peers."0207" = {
+    asn = 4242420207;
+    listenPort = 20207;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "8sTnWN7ykPaDe1WIZOlnqECiGMJzwXB8TXWHcT7qnEw=";
+    endpoint = "router.sin1.routedbits.com:50167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::207";
+    };
+  };
+
+  # TG @baka_lg_bot
+  networking.dn42.peers."3374" = {
+    asn = 4242423374;
+    listenPort = 23374;
+    privateKey = secrets.key_do_sgp1;
+    publicKey = "zcxhWeI3SrJtqlHuqdeNaCeWSwJIYOTjAraXm655+VY=";
+    endpoint = "hk01.dn42.baka.pub:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3374";
+    };
+  };
 }

@@ -76,6 +76,7 @@ let
     protocol direct {
         ipv4;
         ipv6;
+        interface "dn42_*";
         ${if config.networking.dn42.useDnet then ''interface "dn42dummy0"; interface "dnet0";'' else ''interface "dn42dummy0";''}
     }
 
@@ -208,7 +209,6 @@ let
     template bgp dnpeers_ibgp {
         local as OWNAS;
         path metric 1;
-        direct;
 
         ipv4 {
             import all;

@@ -61,6 +61,7 @@ let
         register_txt("ams1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_ams1_pub}");
         register_txt("ams1.dn42.42420167.xyz", "MP-BGP: enabled");
         register_txt("ams1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("ams1.dn42.42420167.xyz", "Looking Glass: http://ams1.dn42.42420167.xyz:5000/");
         register_txt("ams1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
 
         register_txt("sfo1.dn42.42420167.xyz", "ASN: 4242420167");
@@ -69,6 +70,7 @@ let
         register_txt("sfo1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_sfo1_pub}");
         register_txt("sfo1.dn42.42420167.xyz", "MP-BGP: enabled");
         register_txt("sfo1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("sfo1.dn42.42420167.xyz", "Looking Glass: http://sfo1.dn42.42420167.xyz:5000/");
         register_txt("sfo1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
 
         register_txt("sgp1.dn42.42420167.xyz", "ASN: 4242420167");
@@ -77,6 +79,7 @@ let
         register_txt("sgp1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_sgp1_pub}");
         register_txt("sgp1.dn42.42420167.xyz", "MP-BGP: enabled");
         register_txt("sgp1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("sgp1.dn42.42420167.xyz", "Looking Glass: http://sgp1.dn42.42420167.xyz:5000/");
         register_txt("sgp1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
 
         register_txt("syd1.dn42.42420167.xyz", "ASN: 4242420167");
@@ -84,6 +87,7 @@ let
         register_txt("syd1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
         register_txt("syd1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_syd1_pub}");
         register_txt("syd1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("syd1.dn42.42420167.xyz", "Looking Glass: http://syd1.dn42.42420167.xyz:5000/");
         register_txt("syd1.dn42.42420167.xyz", "Extended Next Hop: enabled");
         register_txt("syd1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
 
@@ -92,6 +96,7 @@ let
         register_txt("tor1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
         register_txt("tor1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_tor1_pub}");
         register_txt("tor1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("tor1.dn42.42420167.xyz", "Looking Glass: http://tor1.dn42.42420167.xyz:5000/");
         register_txt("tor1.dn42.42420167.xyz", "Extended Next Hop: enabled");
         register_txt("tor1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
 
@@ -100,6 +105,7 @@ let
         register_txt("lon1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
         register_txt("lon1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_lon1_pub}");
         register_txt("lon1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("lon1.dn42.42420167.xyz", "Looking Glass: http://lon1.dn42.42420167.xyz:5000/");
         register_txt("lon1.dn42.42420167.xyz", "Extended Next Hop: enabled");
         register_txt("lon1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
     }

@@ -26,4 +26,30 @@ in
     ipv6.addresses = [ "fd00:1100:8503::4" "fd32:3940:2738::1" ];
     ipv6.networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
   };
+
+  # https://dn42.routedbits.io/peering
+  networking.dn42.peers."0207" = {
+    asn = 4242420207;
+    listenPort = 20207;
+    privateKey = secrets.key_do_syd1;
+    publicKey = "wgCrE2lSvrfctVSngdHo6iAT/RRK7gNldJcFIFKi/Go=";
+    endpoint = "router.syd1.routedbits.com:50167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::207";
+    };
+  };
+
+  # TG @Potat0_DN42_Bot
+  networking.dn42.peers."1816" = {
+    asn = 4242421816;
+    listenPort = 21816;
+    privateKey = secrets.key_do_syd1;
+    publicKey = "BRBdho23apYZttFbSFvLLEhR59F0dBQgKB3YFychGHQ=";
+    endpoint = "syd.node.potat0.cc:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1816";
+    };
+  };
 }

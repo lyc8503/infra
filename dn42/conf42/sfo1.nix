@@ -79,4 +79,69 @@ in
       remote = "fe80::2:3999";
     };
   };
+
+  # TG @moohric
+  networking.dn42.peers."2279" = {
+    asn = 4242422279;
+    listenPort = 22279;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "WCVsWHNq+VeafZ7agkfkafZIoC/8oHF46D07PkOVljA=";
+    endpoint = "us-sjc1.bb.mhr.hk:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::2279";
+    };
+  };
+
+  # https://dn42.routedbits.io/peering
+  networking.dn42.peers."0207" = {
+    asn = 4242420207;
+    listenPort = 20207;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "s4uGYMeLV30vO/Z3+c1qrg/YA1eIMRVFYUsZEGD1hH8=";
+    endpoint = "router.lax1.routedbits.com:50167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::207";
+    };
+  };
+
+  # https://blog.moe233.net/dn42/
+  networking.dn42.peers."0253" = {
+    asn = 4242420253;
+    listenPort = 20253;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
+    endpoint = "lv.dn42.moe233.net:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::253";
+    };
+  };
+
+  # TG @Potat0_DN42_Bot
+  networking.dn42.peers."1816" = {
+    asn = 4242421816;
+    listenPort = 21816;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "LUwqKS6QrCPv510Pwt1eAIiHACYDsbMjrkrbGTJfviU=";
+    endpoint = "las.node.potat0.cc:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1816";
+    };
+  };
+
+  # TG @baka_lg_bot
+  networking.dn42.peers."3374" = {
+    asn = 4242423374;
+    listenPort = 23374;
+    privateKey = secrets.key_do_sfo1;
+    publicKey = "p8ADoxb0sVm1ZBp9Fkom6IaP04dm1DLrpHQLfI9HpGY=";
+    endpoint = "us01.dn42.baka.pub:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3374";
+    };
+  };
 }

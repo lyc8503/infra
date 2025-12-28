@@ -79,4 +79,43 @@ in
       remote = "fe80::3:3999";
     };
   };
+
+  # https://blog.yuyuko.com/post/7
+  networking.dn42.peers."1117" = {
+    asn = 4242421117;
+    listenPort = 21117;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "9oVGKPUnxykn9y/CeNmHbImnX2WRsHk6VzSIAQfy0hc=";
+    endpoint = "nl01.dn42.yuyuko.com:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::1117";
+    };
+  };
+
+  # TG @moohric
+  networking.dn42.peers."2279" = {
+    asn = 4242422279;
+    listenPort = 22279;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "cXdcdBVi0Yt78jmwGhnv+ju6dxSQ9YKX6xL7O91tmVw=";
+    endpoint = "6.nl-ams1.bb.mhr.hk:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::2279";
+    };
+  };
+
+  # https://dn42.routedbits.io/peering
+  networking.dn42.peers."0207" = {
+    asn = 4242420207;
+    listenPort = 20207;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "JjAHDWR1CgQd1HJNvURrqUECkN++0bzYxlm57VXjlyc=";
+    endpoint = "router.ams1.routedbits.com:50167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::207";
+    };
+  };
 }
