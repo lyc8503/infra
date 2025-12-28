@@ -6,13 +6,13 @@ in
 {
   services.dn42-looking-glass = {
     enable = true;
-    servers = [ "ams1" "sfo1" "sgp1" "syd1" "tor1" "blr1" ];
+    servers = [ "ams1" "sfo1" "sgp1" "syd1" "tor1" "lon1" ];
     domain = "dn42.42420167.xyz";
   };
 
   services.xjbcast = {
     enable = true;
-    nodeName = "blr1";
+    nodeName = "lon1";
     ipv4Address = "172.23.41.81";
     ipv6Address = "fd32:3940:2738::1";
   };

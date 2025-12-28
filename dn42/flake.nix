@@ -17,7 +17,7 @@
       do-sfo1 = import ./hosts/do-sfo1/default.nix;
       do-syd1 = import ./hosts/do-syd1/default.nix;
       do-tor1 = import ./hosts/do-tor1/default.nix;
-      do-blr1 = import ./hosts/do-blr1/default.nix;
+      do-lon1 = import ./hosts/do-lon1/default.nix;
     };
   };
 }

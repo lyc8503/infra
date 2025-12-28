@@ -14,6 +14,8 @@ in
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix
     ../../modules/tor-relay.nix
+    ../../modules/xray.nix
+    ../../modules/hysteria.nix
   ];
 
   services.tor-relay = {
@@ -27,6 +29,34 @@ in
   };
 
   system.stateVersion = "25.11";
+
+  services.my-xray = {
+    enable = true;
+    uuid = secrets.proxy.uuid;
+    visionPort = 23389;
+    realityDest = "software.download.prss.microsoft.com:443";
+    realityPrivateKey = secrets.proxy.reality_sk;
+    realityShortIds = secrets.proxy.short_ids;
+    registration = {
+      enable = true;
+      subServer = secrets.proxy.sub_server;
+      regPassword = secrets.proxy.reg_password;
+      subId = "do_tor1";
+      realityPublicKey = secrets.proxy.reality_pk;
+    };
+  };
+
+  services.my-hysteria = {
+    enable = true;
+    port = 61145;
+    password = secrets.proxy.uuid;
+    registration = {
+      enable = true;
+      subServer = secrets.proxy.sub_server;
+      regPassword = secrets.proxy.reg_password;
+      subId = "do_tor1";
+    };
+  };
 
   services.metrics = {
     enable = true;
@@ -44,15 +74,15 @@ in
     hostName = "do-tor1";
     usePredictableInterfaceNames = false;
     interfaces.eth0.ipv4.addresses = [{
-      address = "159.203.11.66";
+      address = "142.93.150.243";
       prefixLength = 20;
     }];
     interfaces.eth0.ipv6.addresses = [{
-      address = "2604:a880:cad:d0:0:1:321a:4001";
+      address = "2604:a880:cad:d0:0:1:32c7:6001";
       prefixLength = 64;
     }];
     defaultGateway = {
-      address = "159.203.0.1";
+      address = "142.93.144.1";
       interface = "eth0";
     };
     defaultGateway6 = {

@@ -12,7 +12,7 @@ let
     sgp1 = { id = 3; endpoint = "sgp1.dn42.42420167.xyz"; };
     syd1 = { id = 4; endpoint = "syd1.dn42.42420167.xyz"; };
     tor1 = { id = 5; endpoint = "tor1.dn42.42420167.xyz"; };
-    blr1 = { id = 6; endpoint = "blr1.dn42.42420167.xyz"; };
+    lon1 = { id = 6; endpoint = "lon1.dn42.42420167.xyz"; };
   };
   
   hosts = attrNames nodes;

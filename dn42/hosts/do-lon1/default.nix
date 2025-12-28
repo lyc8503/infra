@@ -6,7 +6,7 @@ in
 {
   imports = [
     ./hardware.nix
-    ../../conf42/syd1.nix
+    ../../conf42/lon1.nix
     ../../modules/common.nix
     ../../modules/dn42.nix
     ../../modules/ibgp-full-mesh.nix
@@ -20,12 +20,12 @@ in
 
   services.tor-relay = {
     enable = true;
-    ipv6 = secrets.tor.syd1.ipv6;
-    nickname = secrets.tor.syd1.nickname;
+    ipv6 = secrets.tor.lon1.ipv6;
+    nickname = secrets.tor.lon1.nickname;
     contactInfo = secrets.tor.contact;
-    anchorIPv4 = "10.49.0.5";
-    ipv4Gateway = "10.49.0.1";
-    publicIPv4 = secrets.tor.syd1.ipv4;
+    anchorIPv4 = "10.16.0.5";
+    ipv4Gateway = "10.16.0.1";
+    publicIPv4 = secrets.tor.lon1.ipv4;
   };
 
   system.stateVersion = "25.11";
@@ -41,7 +41,7 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "do_syd1";
+      subId = "do_lon1";
       realityPublicKey = secrets.proxy.reality_pk;
     };
   };
@@ -54,7 +54,7 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "do_syd1";
+      subId = "do_lon1";
     };
   };
 
@@ -65,28 +65,28 @@ in
   };
 
   deployment = {
-    targetHost = "syd1.dn42.42420167.xyz";
+    targetHost = "lon1.dn42.42420167.xyz";
     targetUser = "root";
     tags = [ "digitalocean" "vps" ];
   };
 
   networking = {
-    hostName = "do-syd1";
+    hostName = "do-lon1";
     usePredictableInterfaceNames = false;
     interfaces.eth0.ipv4.addresses = [{
-      address = "209.38.16.169";
+      address = "143.110.173.23";
       prefixLength = 20;
     }];
     interfaces.eth0.ipv6.addresses = [{
-      address = "2400:6180:10:200::9272:5000";
+      address = "2a03:b0c0:1:e0::ed14:8001";
       prefixLength = 64;
     }];
     defaultGateway = {
-      address = "209.38.16.1";
+      address = "143.110.160.1";
       interface = "eth0";
     };
     defaultGateway6 = {
-      address = "2400:6180:10:200::1";
+      address = "2a03:b0c0:1:e0::1";
       interface = "eth0";
     };
     nameservers = [ "1.1.1.1" "8.8.8.8" ];

@@ -6,7 +6,7 @@ in
 {
   services.dn42-looking-glass = {
     enable = true;
-    servers = [ "ams1" "sfo1" "sgp1" "syd1" "tor1" "blr1" ];
+    servers = [ "ams1" "sfo1" "sgp1" "syd1" "tor1" "lon1" ];
     domain = "dn42.42420167.xyz";
   };
 
