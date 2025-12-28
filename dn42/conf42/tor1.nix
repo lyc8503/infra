@@ -40,4 +40,30 @@ in
       remote = "fe80::207";
     };
   };
+
+  # TG @charliemoomoo
+  networking.dn42.peers."3999" = {
+    asn = 4242423999;
+    listenPort = 23999;
+    privateKey = secrets.key_do_tor1;
+    publicKey = "XGIBvqoUOgb8IiLIWtO9JVNZc4SEpEAM1eWh26MtoRE=";
+    endpoint = "yyz.node.cowgl.xyz:30167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::5:3999";
+    };
+  };
+
+  # TG @LeZi9916
+  networking.dn42.peers."3377" = {
+    asn = 4242423377;
+    listenPort = 23377;
+    privateKey = secrets.key_do_tor1;
+    publicKey = "3g3PDuwQCak26e760RurWm684Ur7CG3k+dwRsQgzyxU=";
+    endpoint = "v4.ca1-yyz.peer.dn42.leziblog.com:20167";
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3377";
+    };
+  };
 }

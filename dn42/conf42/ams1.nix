@@ -106,6 +106,20 @@ in
     };
   };
 
+  # TG @LeZi9916
+  networking.dn42.peers."3377" = {
+    asn = 4242423377;
+    listenPort = 23377;
+    privateKey = secrets.key_do_ams1;
+    publicKey = "Kd5+CvZW3NRvUXpbdqGFt85VzMyReBtnVeDVXae06Qg=";
+    endpoint = "v4.de1.peer.dn42.leziblog.com:20167";
+    mtu = 1370;
+    ipv6 = {
+      local = "fe80::167";
+      remote = "fe80::3377";
+    };
+  };
+
   # https://dn42.routedbits.io/peering
   networking.dn42.peers."0207" = {
     asn = 4242420207;

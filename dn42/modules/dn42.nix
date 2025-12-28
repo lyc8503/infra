@@ -47,6 +47,12 @@ let
         default = null;
         description = "IPv4 PtP configuration";
       };
+
+      mtu = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = "Interface MTU";
+      };
     };
   };
 
@@ -301,6 +307,7 @@ in
       nameValuePair "dn42_${name}" {
         listenPort = peer.listenPort;
         privateKey = peer.privateKey;
+        mtu = peer.mtu;
         
         # Avoid routing loops and conflicts with BIRD
         table = "off";
