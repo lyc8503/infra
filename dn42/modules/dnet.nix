@@ -4,12 +4,14 @@ with lib;
 
 let
   cfg = config.services.dnet-core;
+  secrets = import ../secrets.nix;
   
   dnsRecord = pkgs.writeText "DNSRecord.h" ''
     #ifndef DNET_DNS_RECORD_H
     #define DNET_DNS_RECORD_H
 
     #include "DNS.h"
+    #include <cstring>
 
     void register_dns_records(std::unordered_multimap<record_key, record_value>& dns_records) {
         REGISTER_GENERIC_RECORD(TYPE_SOA, "42420167.xyz",
@@ -43,6 +45,63 @@ let
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.syd1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x10\x02\x00\x00\x00\x00\x00\x92\x72\x50\x00");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.tor1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x0c\xad\x00\xd0\x00\x00\x00\x01\x32\xc7\x60\x01");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.lon1.dn42.42420167.xyz", 16, "\x2a\x03\xb0\xc0\x00\x01\x00\xe0\x00\x00\x00\x00\xed\x14\x80\x01");
+
+        auto register_txt = [&](const char* name, const char* text) {
+            size_t len = strlen(text);
+            char* rdata = new char[len + 1];
+            rdata[0] = (char)len;
+            memcpy(rdata + 1, text, len);
+            REGISTER_GENERIC_RECORD(16, name, len + 1, rdata);
+            delete[] rdata;
+        };
+
+        register_txt("ams1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("ams1.dn42.42420167.xyz", "Endpoint: ams1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("ams1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("ams1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_ams1_pub}");
+        register_txt("ams1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("ams1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("ams1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
+
+        register_txt("sfo1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("sfo1.dn42.42420167.xyz", "Endpoint: sfo1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("sfo1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("sfo1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_sfo1_pub}");
+        register_txt("sfo1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("sfo1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("sfo1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
+
+        register_txt("sgp1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("sgp1.dn42.42420167.xyz", "Endpoint: sgp1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("sgp1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("sgp1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_sgp1_pub}");
+        register_txt("sgp1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("sgp1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("sgp1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
+
+        register_txt("syd1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("syd1.dn42.42420167.xyz", "Endpoint: syd1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("syd1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("syd1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_syd1_pub}");
+        register_txt("syd1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("syd1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("syd1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
+
+        register_txt("tor1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("tor1.dn42.42420167.xyz", "Endpoint: tor1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("tor1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("tor1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_tor1_pub}");
+        register_txt("tor1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("tor1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("tor1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
+
+        register_txt("lon1.dn42.42420167.xyz", "ASN: 4242420167");
+        register_txt("lon1.dn42.42420167.xyz", "Endpoint: lon1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
+        register_txt("lon1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
+        register_txt("lon1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_lon1_pub}");
+        register_txt("lon1.dn42.42420167.xyz", "MP-BGP: enabled");
+        register_txt("lon1.dn42.42420167.xyz", "Extended Next Hop: enabled");
+        register_txt("lon1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
     }
     #endif // DNET_DNS_RECORD_H
   '';
