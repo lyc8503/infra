@@ -29,6 +29,11 @@ in
       type = types.str;
       description = "Public IPv4 address to advertise";
     };
+    monthlyLimitGB = mkOption {
+      type = types.int;
+      default = 750;
+      description = "Monthly traffic limit in GBytes, will be split into 30 days";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -81,8 +86,8 @@ in
         Address = cfg.publicIPv4;
         OutboundBindAddress = [ cfg.anchorIPv4 cfg.ipv6 ];
         
-        AccountingMax = "750 GBytes";
-        AccountingStart = "month 1 00:00";
+        AccountingMax = "${toString (cfg.monthlyLimitGB * 1024 / 30)} MBytes";
+        AccountingStart = "day 00:00";
         
         Nickname = cfg.nickname;
         ContactInfo = cfg.contactInfo;

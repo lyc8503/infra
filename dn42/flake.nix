@@ -18,6 +18,7 @@
       do-syd1 = import ./hosts/do-syd1/default.nix;
       do-tor1 = import ./hosts/do-tor1/default.nix;
       do-lon1 = import ./hosts/do-lon1/default.nix;
+      neo-misc = import ./hosts/neo-misc/default.nix;
     };
   };
 }

@@ -26,6 +26,7 @@ in
     anchorIPv4 = "10.20.0.5";
     ipv4Gateway = "10.20.0.1";
     publicIPv4 = secrets.tor.tor1.ipv4;
+    monthlyLimitGB = 200;
   };
 
   system.stateVersion = "25.11";

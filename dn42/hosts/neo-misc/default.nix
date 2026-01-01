@@ -2,13 +2,13 @@
 
 
 let
-  secrets = import ./secrets.nix;
+  secrets = import ../../secrets.nix;
 in
 {
   imports = [
     ./hardware.nix
-    /home/lyc/playbooks/dn42/modules/common.nix
-    /home/lyc/playbooks/dn42/modules/metrics.nix
+    ../../modules/common.nix
+    ../../modules/metrics.nix
   ];
 
   deployment = {
