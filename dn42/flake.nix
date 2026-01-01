@@ -19,6 +19,8 @@
       do-tor1 = import ./hosts/do-tor1/default.nix;
       do-lon1 = import ./hosts/do-lon1/default.nix;
       neo-misc = import ./hosts/neo-misc/default.nix;
+      az-sg1 = import ./hosts/az-sg1/default.nix;
+      az-hk1-arm = import ./hosts/az-hk1-arm/default.nix;
     };
   };
 }

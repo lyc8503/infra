@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [ ./scx.nix ./xjbcast.nix ];
@@ -10,7 +10,7 @@
     "net.ipv4.tcp_congestion_control" = "bbr";
   };
 
-  services.scx_horoscope.enable = true;
+  services.scx_horoscope.enable = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
     vim

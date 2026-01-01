@@ -13,6 +13,9 @@ let
     syd1 = { id = 4; endpoint = "syd1.dn42.42420167.xyz"; };
     tor1 = { id = 5; endpoint = "tor1.dn42.42420167.xyz"; };
     lon1 = { id = 6; endpoint = "lon1.dn42.42420167.xyz"; };
+    neo-misc = { id = 7; endpoint = secrets.misc_endpoint; };
+    az-sg1 = { id = 8; endpoint = secrets.az_sg1_ip; };
+    az-hk1-arm = { id = 9; endpoint = secrets.az_hk1_arm_ip; };
   };
   
   hosts = attrNames nodes;
@@ -34,8 +37,8 @@ let
   genPeer = name: {
     asn = 4242420167;
     listenPort = 10000 + nodes.${name}.id;
-    privateKey = secrets."key_do_${myName}";
-    publicKey = secrets."key_do_${name}_pub";
+    privateKey = secrets."key_do_${replaceStrings ["-"] ["_"] myName}";
+    publicKey = secrets."key_do_${replaceStrings ["-"] ["_"] name}_pub";
     endpoint = "${nodes.${name}.endpoint}:${toString (10000 + nodes.${myName}.id)}";
     ipv6 = {
       local = head config.networking.dn42.ipv6.addresses;

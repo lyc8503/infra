@@ -304,7 +304,10 @@ in
     services.bird.enable = true;
     services.bird.package = pkgs.bird2;
     networking.wg-quick.interfaces = mapAttrs' (name: peer: 
-      nameValuePair "dn42_${name}" {
+      let
+        safeName = lib.replaceStrings ["-"] ["_"] name;
+      in
+      nameValuePair "dn42_${safeName}" {
         listenPort = peer.listenPort;
         privateKey = peer.privateKey;
         mtu = peer.mtu;
@@ -313,10 +316,10 @@ in
         table = "off";
 
         postUp = ''
-          ${pkgs.iproute2}/bin/ip addr add ${peer.ipv6.local} peer ${peer.ipv6.remote} dev dn42_${name}
-          ${if peer.ipv4 != null then "${pkgs.iproute2}/bin/ip addr add ${peer.ipv4.local} peer ${peer.ipv4.remote} dev dn42_${name}" else ""}
-          ${pkgs.procps}/bin/sysctl -w net.ipv6.conf.dn42_${name}.autoconf=0
-          ${pkgs.procps}/bin/sysctl -w net.ipv4.conf.dn42_${name}.rp_filter=0  # Otherwise it drops some packets
+          ${pkgs.iproute2}/bin/ip addr add ${peer.ipv6.local} peer ${peer.ipv6.remote} dev dn42_${safeName}
+          ${if peer.ipv4 != null then "${pkgs.iproute2}/bin/ip addr add ${peer.ipv4.local} peer ${peer.ipv4.remote} dev dn42_${safeName}" else ""}
+          ${pkgs.procps}/bin/sysctl -w net.ipv6.conf.dn42_${safeName}.autoconf=0
+          ${pkgs.procps}/bin/sysctl -w net.ipv4.conf.dn42_${safeName}.rp_filter=0  # Otherwise it drops some packets
         '';
 
         peers = [
@@ -353,16 +356,22 @@ in
     };
 
     services.bird.config = birdBaseConfig + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: 
+      let
+        safeName = lib.replaceStrings ["-"] ["_"] name;
+      in
       if (peer.asn != cfg.asn) then ''
-      protocol bgp dn42_${name} from dnpeers {
+      protocol bgp dn42_${safeName} from dnpeers {
         enable extended messages on;
-        neighbor ${peer.ipv6.remote}%dn42_${name} as ${toString peer.asn};
+        neighbor ${peer.ipv6.remote}%dn42_${safeName} as ${toString peer.asn};
         ipv4 {
           extended next hop on;
         };
       };
-    '' else "") cfg.peers)) + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: ''
-      protocol bgp dn42_${name} from dnpeers_ibgp {
+    '' else "") cfg.peers)) + "\n" + (concatStringsSep "\n" (mapAttrsToList (name: peer: 
+      let
+        safeName = lib.replaceStrings ["-"] ["_"] name;
+      in ''
+      protocol bgp dn42_${safeName} from dnpeers_ibgp {
         enable extended messages on;
         neighbor ${peer.ipv6.remote} as ${toString cfg.asn};
         ipv4 {

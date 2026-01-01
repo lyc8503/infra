@@ -7,8 +7,13 @@ in
 {
   imports = [
     ./hardware.nix
+    ../../conf42/neo-misc.nix
+    ../../modules/dn42.nix
+    ../../modules/ibgp-full-mesh.nix
+
     ../../modules/common.nix
     ../../modules/metrics.nix
+    ../../modules/tcpdump.nix
   ];
 
   deployment = {
