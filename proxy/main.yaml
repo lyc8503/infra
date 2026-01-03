@@ -16,7 +16,7 @@
   roles:
     - xray # proxy server (dedicated, xray reality vision and grpc)
     - hysteria2
-    - metrics # prometheus node exporter and alloy
+    # - metrics # prometheus node exporter and alloy
 
 - name: Setup metrics-only servers
   hosts: metrics_only
