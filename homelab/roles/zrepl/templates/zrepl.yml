@@ -1,17 +1,20 @@
 # This file is managed by ansible, do not modify manually.
 
-# rpool/ROOT  -> snapshots, backup to hdd
-# rpool/data  -> snapshots, backup to hdd
-# rpool/pve   -> snapshots, backup to hdd/pool_backup using vzdump
-# hdd/storage -> snapshots, backup to hddbackup
+# rpool/ROOT  -> snapshots, backup to hdd1/rpool_backup
+# rpool/data  -> snapshots, backup to hdd1/rpool_backup
+# rpool/pve   -> snapshots, backup to hdd0/pbs_datastore using PBS
 
-# cloud backup: hdd/storage & hdd/pool_backup & rpool/data
+# hdd0/storage -> snapshots, backup to hdd1/hdd0_backup/storage
+# hdd0/other -> backup to hdd1/hdd0_backup/other
+
+# cloud backup: hdd0/storage & hdd0/pbs_datastore & rpool/data
+
 
 jobs:
   # this job takes care of snapshot creation + pruning
   - type: snap
-    name: rpool_and_hdd_snapshot
-    filesystems: { "rpool<": true, "hdd/storage<": true }
+    name: snapshot_all
+    filesystems: { "rpool<": true, "hdd0/storage<": true }
     snapshotting:
       type: periodic
       interval: 4h
@@ -31,14 +34,14 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup hdd/storage to hddbackup
+  # backup hdd0/storage & hdd0/other to hdd1
   - type: push
-    name: backup_hdd_storage
+    name: backup_hdd0
     connect:
       type: local
-      listener_name: hddbackup_sink
-      client_identity: pve_zrepl
-    filesystems: { "hdd/storage<": true }
+      listener_name: hdd1_sink
+      client_identity: hdd0_backup
+    filesystems: { "hdd0/storage<": true, "hdd0/other<": true }
     send:
       encrypted: true
     replication:
@@ -62,13 +65,13 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup rpool/data & ROOT to hdd
+  # backup rpool/data & ROOT to hdd1
   - type: push
-    name: backup_rpool_data
+    name: backup_rpool
     connect:
       type: local
-      listener_name: hdd_sink
-      client_identity: pve_zrepl
+      listener_name: hdd1_sink
+      client_identity: rpool_backup
     filesystems: { "rpool/data<": true, "rpool/ROOT<": true }
     send:
       encrypted: true
@@ -79,7 +82,7 @@ jobs:
     snapshotting:
       type: manual
     pruning:
-      # no-op prune rule on sender (keep all snapshots), job `rpool_and_hdd_snapshot` takes care of this
+      # no-op prune rule on sender (keep all snapshots), snapshot job takes care of this
       keep_sender:
         - type: regex
           regex: ".*"
@@ -94,21 +97,21 @@ jobs:
           regex: "^zrepl_.*"
 
   - type: sink
-    name: hddbackup_sink
-    root_fs: "hddbackup"
+    name: hdd1_sink
+    root_fs: "hdd1"
     recv:
       placeholder:
         encryption: off
     serve:
       type: local
-      listener_name: hddbackup_sink
+      listener_name: hdd1_sink
 
   - type: sink
-    name: hdd_sink
-    root_fs: "hdd"
+    name: hdd0_sink
+    root_fs: "hdd0"
     recv:
       placeholder:
         encryption: off
     serve:
       type: local
-      listener_name: hdd_sink
+      listener_name: hdd0_sink
