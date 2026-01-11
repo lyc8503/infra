@@ -10,9 +10,6 @@ let
     ams1 = { id = 1; endpoint = "ams1.dn42.42420167.xyz"; };
     sfo1 = { id = 2; endpoint = "sfo1.dn42.42420167.xyz"; };
     sgp1 = { id = 3; endpoint = "sgp1.dn42.42420167.xyz"; };
-    syd1 = { id = 4; endpoint = "syd1.dn42.42420167.xyz"; };
-    tor1 = { id = 5; endpoint = "tor1.dn42.42420167.xyz"; };
-    lon1 = { id = 6; endpoint = "lon1.dn42.42420167.xyz"; };
     neo-misc = { id = 7; endpoint = secrets.misc_endpoint; };
     az-sg1 = { id = 8; endpoint = secrets.az_sg1_ip; };
     az-hk1-arm = { id = 9; endpoint = secrets.az_hk1_arm_ip; };

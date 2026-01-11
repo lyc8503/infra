@@ -33,18 +33,20 @@ let
         REGISTER_A_RECORD("ns1.42420167.xyz", "64.227.99.106");
         REGISTER_A_RECORD("ns2.42420167.xyz", "165.22.195.57");
         REGISTER_A_RECORD("ns3.42420167.xyz", "167.99.65.156");
+
         REGISTER_A_RECORD("sfo1.dn42.42420167.xyz", "64.227.99.106");
         REGISTER_A_RECORD("ams1.dn42.42420167.xyz", "165.22.195.57");
         REGISTER_A_RECORD("sgp1.dn42.42420167.xyz", "167.99.65.156");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "sfo1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x00\x04\x01\xd0\x00\x00\x00\x01\x45\x00\x10\x00");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "ams1.dn42.42420167.xyz", 16, "\x2a\x03\xb0\xc0\x00\x02\x00\xf0\x00\x00\x00\x01\x17\x60\xe0\x01");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "sgp1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x00\x00\xd2\x00\x00\x00\x02\x74\x90\xd0\x00");
+
+        REGISTER_A_RECORD("v4.sfo1.dn42.42420167.xyz", "64.227.99.106");
+        REGISTER_A_RECORD("v4.ams1.dn42.42420167.xyz", "165.22.195.57");
+        REGISTER_A_RECORD("v4.sgp1.dn42.42420167.xyz", "167.99.65.156");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.sfo1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x00\x04\x01\xd0\x00\x00\x00\x01\x45\x00\x10\x00");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.ams1.dn42.42420167.xyz", 16, "\x2a\x03\xb0\xc0\x00\x02\x00\xf0\x00\x00\x00\x01\x17\x60\xe0\x01");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.sgp1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x00\x00\xd2\x00\x00\x00\x02\x74\x90\xd0\x00");
-        REGISTER_A_RECORD("syd1.dn42.42420167.xyz", "209.38.16.169");
-        REGISTER_A_RECORD("tor1.dn42.42420167.xyz", "142.93.150.243");
-        REGISTER_A_RECORD("lon1.dn42.42420167.xyz", "143.110.173.23");
-        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.syd1.dn42.42420167.xyz", 16, "\x24\x00\x61\x80\x00\x10\x02\x00\x00\x00\x00\x00\x92\x72\x50\x00");
-        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.tor1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x0c\xad\x00\xd0\x00\x00\x00\x01\x32\xc7\x60\x01");
-        REGISTER_GENERIC_RECORD(TYPE_AAAA, "v6.lon1.dn42.42420167.xyz", 16, "\x2a\x03\xb0\xc0\x00\x01\x00\xe0\x00\x00\x00\x00\xed\x14\x80\x01");
 
         auto register_txt = [&](const char* name, const char* text) {
             size_t len = strlen(text);
@@ -81,33 +83,6 @@ let
         register_txt("sgp1.dn42.42420167.xyz", "Extended Next Hop: enabled");
         register_txt("sgp1.dn42.42420167.xyz", "Looking Glass: http://sgp1.dn42.42420167.xyz:5000/");
         register_txt("sgp1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
-
-        register_txt("syd1.dn42.42420167.xyz", "ASN: 4242420167");
-        register_txt("syd1.dn42.42420167.xyz", "Endpoint: syd1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
-        register_txt("syd1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
-        register_txt("syd1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_syd1_pub}");
-        register_txt("syd1.dn42.42420167.xyz", "MP-BGP: enabled");
-        register_txt("syd1.dn42.42420167.xyz", "Looking Glass: http://syd1.dn42.42420167.xyz:5000/");
-        register_txt("syd1.dn42.42420167.xyz", "Extended Next Hop: enabled");
-        register_txt("syd1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
-
-        register_txt("tor1.dn42.42420167.xyz", "ASN: 4242420167");
-        register_txt("tor1.dn42.42420167.xyz", "Endpoint: tor1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
-        register_txt("tor1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
-        register_txt("tor1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_tor1_pub}");
-        register_txt("tor1.dn42.42420167.xyz", "MP-BGP: enabled");
-        register_txt("tor1.dn42.42420167.xyz", "Looking Glass: http://tor1.dn42.42420167.xyz:5000/");
-        register_txt("tor1.dn42.42420167.xyz", "Extended Next Hop: enabled");
-        register_txt("tor1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
-
-        register_txt("lon1.dn42.42420167.xyz", "ASN: 4242420167");
-        register_txt("lon1.dn42.42420167.xyz", "Endpoint: lon1.dn42.42420167.xyz:2xxxx (xxxx is the last 4 digits of your ASN)");
-        register_txt("lon1.dn42.42420167.xyz", "IPv6 LLA: fe80::167");
-        register_txt("lon1.dn42.42420167.xyz", "PubKey: ${secrets.key_do_lon1_pub}");
-        register_txt("lon1.dn42.42420167.xyz", "MP-BGP: enabled");
-        register_txt("lon1.dn42.42420167.xyz", "Looking Glass: http://lon1.dn42.42420167.xyz:5000/");
-        register_txt("lon1.dn42.42420167.xyz", "Extended Next Hop: enabled");
-        register_txt("lon1.dn42.42420167.xyz", "Please provide me with your endpoint/port/pubkey/link-local address so I can peer with you!");
     }
     #endif // DNET_DNS_RECORD_H
   '';

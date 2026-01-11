@@ -1,5 +1,0 @@
----
-- name: Restart cloudflared
-  systemd:
-    name: cloudflared
-    state: restarted

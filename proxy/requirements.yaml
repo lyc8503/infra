@@ -1,5 +1,0 @@
-- src: geerlingguy.pip
-  version: 3.0.1
-
-- src: grafana.grafana
-  version: 5.7.0

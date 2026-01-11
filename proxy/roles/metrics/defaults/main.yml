@@ -1,2 +1,0 @@
-push_endpoint: https://user:password@example.com/
-loki_endpoint: https://user:password@loki.example.com/
