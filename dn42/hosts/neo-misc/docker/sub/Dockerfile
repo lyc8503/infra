@@ -6,4 +6,4 @@ RUN pip3 install uvicorn requests fastapi pyyaml
 
 COPY sub.py /sub.py
 
-CMD ["uvicorn", "--host", "0.0.0.0", "sub:app"]
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8002", "sub:app"]

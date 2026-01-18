@@ -5,7 +5,7 @@ services:
     build: ./sub
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8002:8002"
     environment:
       - ADMIN_PASSWORD
       - REG_PASSWORD

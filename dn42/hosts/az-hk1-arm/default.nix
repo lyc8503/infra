@@ -6,10 +6,11 @@ in
 {
   imports = [
     ./hardware.nix
-    ../../conf42/az-hk1-arm.nix
+    ../../conf42/hkg1.nix
     ../../modules/common.nix
     ../../modules/dn42.nix
     ../../modules/ibgp-full-mesh.nix
+    ../../modules/looking-glass.nix
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix
     ../../modules/xray.nix
@@ -36,7 +37,7 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "az_hk1_arm";
+      subId = "az-hk1";
       realityPublicKey = secrets.proxy.reality_pk;
     };
   };
@@ -49,7 +50,7 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "az_hk1_arm";
+      subId = "az-hk1";
     };
   };
 

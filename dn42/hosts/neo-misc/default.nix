@@ -7,13 +7,14 @@ in
 {
   imports = [
     ./hardware.nix
-    ../../conf42/neo-misc.nix
+    ../../conf42/sgp1.nix
     ../../modules/dn42.nix
     ../../modules/ibgp-full-mesh.nix
 
     ../../modules/common.nix
     ../../modules/metrics.nix
     ../../modules/tcpdump.nix
+    ../../modules/looking-glass.nix
   ];
 
   deployment = {
@@ -24,6 +25,7 @@ in
   system.stateVersion = "25.11";
 
   networking.hostName = "neo-misc";
+  services.dnet-core.externalInterface = "ens3";
 
   # Alloy Metrics
   services.metrics = {
@@ -35,7 +37,7 @@ in
   # Caddy
   services.caddy = {
     enable = true;
-    virtualHosts."http://sub.${secrets.misc_domain}".extraConfig = "reverse_proxy 127.0.0.1:8000";
+    virtualHosts."http://sub.${secrets.misc_domain}".extraConfig = "reverse_proxy 127.0.0.1:8002";
     virtualHosts."http://bot.${secrets.misc_domain}".extraConfig = "reverse_proxy 127.0.0.1:8001";
     virtualHosts."http://da.lyc8503.net".extraConfig = "reverse_proxy 127.0.0.1:3000";
   };

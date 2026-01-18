@@ -6,6 +6,10 @@ in
 {
   imports = [
     ./hardware.nix
+    ../../conf42/chs1.nix
+    ../../modules/dn42.nix
+    ../../modules/ibgp-full-mesh.nix
+    ../../modules/looking-glass.nix
     ../../modules/common.nix
     ../../modules/metrics.nix
   ];

@@ -29,8 +29,9 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "do_sfo1";
+      subId = "do-sfo1";
       realityPublicKey = secrets.proxy.reality_pk;
+      traffic = 1000;
     };
   };
 
@@ -42,7 +43,8 @@ in
       enable = true;
       subServer = secrets.proxy.sub_server;
       regPassword = secrets.proxy.reg_password;
-      subId = "do_sfo1";
+      subId = "do-sfo1";
+      traffic = 1000;
     };
   };
 
@@ -66,7 +68,7 @@ in
   };
 
   deployment = {
-    targetHost = "sfo1.dn42.42420167.xyz";
+    targetHost = "64.227.99.106";
     targetUser = "root";
     tags = [ "digitalocean" "vps" ];
   };
