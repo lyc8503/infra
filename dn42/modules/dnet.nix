@@ -32,7 +32,7 @@ let
         // Physical Hostnames
         REGISTER_A_RECORD("do-sfo1.dn42.42420167.xyz", "64.227.99.106");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "do-sfo1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x00\x04\x01\xd0\x00\x00\x00\x01\x45\x00\x10\x00");
-        REGISTER_GENERIC_RECORD(TYPE_AAAA, "scw-ams1.dn42.42420167.xyz", 16, "\x20\x01\x0d\xb8\x16\x40\x4f\x16\xf5\xbf\xe8\xbf\xfd\x1d\xe6\x5a");
+        REGISTER_GENERIC_RECORD(TYPE_AAAA, "scw-ams1.dn42.42420167.xyz", 16, "\x20\x01\x0b\xc8\x16\x40\x4f\x16\xf5\xbf\xe8\xbf\xfd\x1d\xe6\x5a");
         REGISTER_A_RECORD("neo-misc.dn42.42420167.xyz", "188.239.22.57");
         REGISTER_A_RECORD("az-sg-1-ats.dn42.42420167.xyz", "13.76.30.153");
         REGISTER_A_RECORD("az-hk-1-arm.dn42.42420167.xyz", "20.2.153.221");

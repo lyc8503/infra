@@ -26,6 +26,22 @@ in
 
   networking.networkmanager.enable = true;
   networking.hostName = "gcp-chs1";
+
+  networking.wg-quick.interfaces.wg-warp = {
+    autostart = true;
+    address = [ "2606:4700:110:8eb4:6b54:7ffe:4c25:35fa/128" ];
+    privateKey = secrets.warp.chs1.privateKey;
+    mtu = 1280;
+    peers = [
+      {
+        publicKey = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
+        allowedIPs = [ "::/0" ];
+        endpoint = "engage.cloudflareclient.com:2408";
+        persistentKeepalive = 25;
+      }
+    ];
+  };
+
   system.stateVersion = "25.11";
 
   services.metrics = {

@@ -25,6 +25,30 @@ in
   system.stateVersion = "25.11";
 
   networking.hostName = "neo-misc";
+
+  # HE IPv6 Tunnel
+  systemd.services.he-ipv6 = {
+    description = "HE IPv6 tunnel";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ${pkgs.kmod}/bin/modprobe ipv6
+      ${pkgs.iproute2}/bin/ip tunnel add he-ipv6 mode sit remote 216.218.221.42 local 192.168.15.189 ttl 255 || true
+      ${pkgs.iproute2}/bin/ip link set he-ipv6 up
+      ${pkgs.iproute2}/bin/ip addr add 2001:470:35:50a::2/64 dev he-ipv6 || true
+      ${pkgs.iproute2}/bin/ip addr add 2001:470:ecb0::1/48 dev he-ipv6 || true
+      ${pkgs.iproute2}/bin/ip route add ::/0 dev he-ipv6 || true
+    '';
+    postStop = ''
+      ${pkgs.iproute2}/bin/ip link set he-ipv6 down || true
+      ${pkgs.iproute2}/bin/ip tunnel del he-ipv6 || true
+    '';
+  };
+
   services.dnet-core.externalInterface = "ens3";
 
   # Alloy Metrics

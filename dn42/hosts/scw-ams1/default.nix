@@ -60,6 +60,21 @@ in
   networking.networkmanager.enable = true;
   networking.hostName = "scw-ams1";
   
+  networking.wg-quick.interfaces.wg-warp = {
+    autostart = true;
+    address = [ "172.16.0.2/32" ];
+    privateKey = secrets.warp.ams1.privateKey;
+    mtu = 1280;
+    peers = [
+      {
+        publicKey = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
+        allowedIPs = [ "0.0.0.0/0" ];
+        endpoint = "engage.cloudflareclient.com:2408";
+        persistentKeepalive = 25;
+      }
+    ];
+  };
+
   system.stateVersion = "25.11";
 
   services.metrics = {
