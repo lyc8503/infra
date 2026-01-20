@@ -99,7 +99,6 @@ in
     TOKEN=${secrets.tgrss_token}
     MANAGER=${secrets.tgrss_manager}
     LOKI_TOKEN=${secrets.log_forward_loki_token}
-    APP_SECRET=${secrets.umami_app_secret}
     EOF
   '';
 }
