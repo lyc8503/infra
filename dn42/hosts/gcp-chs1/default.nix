@@ -12,6 +12,7 @@ in
     ../../modules/looking-glass.nix
     ../../modules/common.nix
     ../../modules/metrics.nix
+    ../../modules/traffic-limit.nix
   ];
 
   deployment = {
@@ -48,5 +49,11 @@ in
     enable = true;
     push_endpoint = secrets.push_endpoint;
     loki_endpoint = secrets.loki_endpoint;
+  };
+
+  services.traffic-limit = {
+    enable = true;
+    limitGB = 180;
+    dryRun = true;  # 测试模式，不会真的关机
   };
 }

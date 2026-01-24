@@ -27,6 +27,7 @@
     bat
     lsd
     jq
+    gawk
     ncdu
     neofetch
     dnsutils
