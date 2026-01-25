@@ -29,6 +29,13 @@ let
         REGISTER_A_RECORD("ns1.42420167.xyz", "188.239.22.57");
         REGISTER_A_RECORD("ns2.42420167.xyz", "64.227.99.106");
 
+        // Mail records
+        REGISTER_A_RECORD("mail.dn42.42420167.xyz", "188.239.22.57");
+        REGISTER_GENERIC_RECORD(TYPE_MX, "dn42.42420167.xyz",
+          26,
+          "\000\012\004mail\004dn42\01042420167\003xyz\000"
+        );
+
         // Physical Hostnames
         REGISTER_A_RECORD("do-sfo1.dn42.42420167.xyz", "64.227.99.106");
         REGISTER_GENERIC_RECORD(TYPE_AAAA, "do-sfo1.dn42.42420167.xyz", 16, "\x26\x04\xa8\x80\x00\x04\x01\xd0\x00\x00\x00\x01\x45\x00\x10\x00");

@@ -66,6 +66,21 @@ in
     virtualHosts."http://da.lyc8503.net".extraConfig = "reverse_proxy 127.0.0.1:3000";
   };
 
+  services.postfix = {
+    enable = true;
+    hostname = "mail.dn42.42420167.xyz";
+    domain = "dn42.42420167.xyz";
+    networks = [ "127.0.0.0/8" "[::1]/128" ];
+    destination = [ "$myhostname" "localhost.$mydomain" "localhost" ];
+    config = {
+      virtual_alias_domains = [ "dn42.42420167.xyz" ];
+    };
+    virtualMapType = "regexp";
+    virtual = ''
+/^.*@dn42\.42420167\.xyz$/    me@lyc8503.net
+'';
+  };
+
   # Docker Compose Service
   virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [ docker-compose ];
