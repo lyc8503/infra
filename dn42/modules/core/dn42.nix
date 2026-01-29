@@ -344,13 +344,6 @@ in
       }) cfg.ipv6.addresses;
     };
 
-    services.dnet-core = mkIf cfg.useDnet {
-      enable = true;
-      ip = cfg.ipv4.dnetAddress;
-      netmask = "255.255.255.255";
-      cidr = "${cfg.ipv4.dnetAddress}/32";
-    };
-
     boot.kernel.sysctl = {
       "net.ipv4.conf.dn42dummy0.rp_filter" = "0";
     };

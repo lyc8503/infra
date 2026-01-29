@@ -1,32 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let
-  secrets = import ../secrets.nix;
+  secrets = import ../../secrets.nix;
 in
 {
-  services.dn42-looking-glass = {
-    enable = true;
-    servers = [ "ams1" "sfo1" "sgp1" "sgp2" "hkg1" "chs1" ];
-    domain = "dn42.42420167.xyz";
-  };
+  # Only external DN42 peers - DN42 base config is auto-generated
 
-  # services.xjbcast = {
-  #   enable = true;
-  #   nodeName = "sgp1";
-  #   ipv4Address = "172.23.41.81";
-  #   ipv6Address = "fd32:3940:2738::1";
-  # };
 
-  networking.dn42 = {
-    useDnet = true;
-    asn = 4242420167;
-    ipv4.addresses = [ "172.20.42.224" "172.23.41.81" ];
-    ipv4.dnetAddress = "172.20.42.240";
-    ipv4.networks = [ "172.20.42.224/27" "172.23.41.80/28" ];
-    ipv6.addresses = [ "fd00:1100:8503::1" "fd32:3940:2738::1" ];
-    ipv6.networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
-  };
-  
   # https://dn42.g-load.eu/
   networking.dn42.peers."3914" = {
     asn = 4242423914;

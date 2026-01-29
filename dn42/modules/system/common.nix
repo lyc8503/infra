@@ -1,13 +1,17 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./scx.nix ./xjbcast.nix ];
+  imports = [ ./scx.nix ../services/xjbcast.nix ];
 
   boot.kernelModules = [ "tcp_bbr" ];
 
   boot.kernel.sysctl = {
     "net.core.default_qdisc" = "fq";
     "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+    "net.ipv4.conf.all.rp_filter" = 0;
+    "net.ipv4.conf.default.rp_filter" = 0;
   };
 
   services.scx_horoscope.enable = lib.mkDefault true;
@@ -96,14 +100,11 @@
     };
   };
 
-  boot.kernel.sysctl = {
-    "net.ipv4.ip_forward" = 1;
-    "net.ipv6.conf.all.forwarding" = 1;
-    "net.ipv4.conf.all.rp_filter" = 0;
-    "net.ipv4.conf.default.rp_filter" = 0;
-  };
-
   networking.firewall.enable = false;
   networking.firewall.checkReversePath = false;
   zramSwap.enable = true;
+
+  # Disable NetworkManager-wait-online to prevent deployment timeouts
+  # DN42 nodes have many WireGuard interfaces that may not be immediately online
+  systemd.services.NetworkManager-wait-online.enable = false;
 }

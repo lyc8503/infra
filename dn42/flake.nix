@@ -13,12 +13,12 @@
       };
 
 
-      do-sfo1 = import ./hosts/do-sfo1/default.nix;
-      neo-misc = import ./hosts/neo-misc/default.nix;
-      az-sg1 = import ./hosts/az-sg1/default.nix;
-      az-hk1-arm = import ./hosts/az-hk1-arm/default.nix;
-      scw-ams1 = import ./hosts/scw-ams1/default.nix;
-      gcp-chs1 = import ./hosts/gcp-chs1/default.nix;
+      do-sfo1 = import ./hosts/do-sfo1/configuration.nix;
+      neo-misc = import ./hosts/neo-misc/configuration.nix;
+      az-sg1 = import ./hosts/az-sg1/configuration.nix;
+      az-hk1-arm = import ./hosts/az-hk1-arm/configuration.nix;
+      scw-ams1 = import ./hosts/scw-ams1/configuration.nix;
+      gcp-chs1 = import ./hosts/gcp-chs1/configuration.nix;
     };
   };
 }
