@@ -1,6 +1,6 @@
 # Service Default Configurations
 # Provides default settings for all services with ability to override per-node
-{ lib, secrets }:
+{ lib, secrets, nodeRegistry }:
 
 {
   # Proxy service defaults (for edge nodes)
@@ -18,7 +18,8 @@
         regPassword = secrets.proxy.reg_password;
         # subId should be overridden per-node
         realityPublicKey = secrets.proxy.reality_pk;
-        traffic = lib.mkDefault 1000;
+        ipv4 = lib.mkDefault true;
+        ipv6 = lib.mkDefault false;
       };
     };
 
@@ -31,7 +32,8 @@
         subServer = secrets.proxy.sub_server;
         regPassword = secrets.proxy.reg_password;
         # subId should be overridden per-node
-        traffic = lib.mkDefault 1000;
+        ipv4 = lib.mkDefault true;
+        ipv6 = lib.mkDefault false;
       };
     };
   };
@@ -54,8 +56,13 @@
   xjbcast = {
     enable = lib.mkDefault false;  # Only enabled for anycast nodes
     # nodeName will be set from node metadata
-    ipv4Address = "172.23.41.81";
-    ipv6Address = "fd32:3940:2738::1";
+    ipv4Address = nodeRegistry.anycast.ipv4;
+    ipv6Address = nodeRegistry.anycast.ipv6;
+  };
+
+  # FRP Server defaults (for all nodes)
+  frps = {
+    enable = lib.mkDefault true;
   };
 
   # System defaults

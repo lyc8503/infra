@@ -11,7 +11,6 @@ in
 
     limitGB = mkOption {
       type = types.int;
-      default = 180;
       description = "Monthly outbound traffic limit in GiB";
     };
 

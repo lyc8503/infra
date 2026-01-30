@@ -5,7 +5,7 @@
 let
   nodeRegistry = import ./nodes.nix;
   secrets = import ../secrets.nix;
-  defaults = import ./defaults.nix { inherit lib secrets; };
+  defaults = import ./defaults.nix { inherit lib secrets nodeRegistry; };
 
   # Generate complete DN42 network configuration from node metadata
   mkDn42Config = nodeName: let
@@ -41,6 +41,9 @@ let
         servers = lib.mapAttrsToList (name: n: n.logicalName) nodeRegistry.nodes;
       };
 
+      # FRP Server (enabled for all nodes by default)
+      frps = defaults.frps;
+
       # Xjbcast (only for anycast nodes)
       xjbcast = lib.mkIf (nodeServices.xjbcast.enable or false) (
         defaults.xjbcast // {
@@ -70,7 +73,7 @@ let
       # Traffic limit (only if enabled)
       traffic-limit = lib.mkIf (nodeServices.traffic-limit.enable or false) {
         enable = true;
-        limitGB = nodeServices.traffic-limit.limitGB or 180;
+        limitGB = nodeServices.traffic-limit.limitGB or null;
         dryRun = nodeServices.traffic-limit.dryRun or false;
         checkInterval = nodeServices.traffic-limit.checkInterval or "1min";
       };
@@ -81,26 +84,22 @@ let
       };
     };
 
-    # Optional proxy services
-    xrayService = lib.optionalAttrs ((nodeServices.xray or null) != null) {
-      my-xray = lib.recursiveUpdate defaults.proxy.xray {
-        registration.subId = nodeServices.xray.subId or node.hostname;
-        registration.traffic =
-          if nodeServices.xray.traffic or null != null
-          then nodeServices.xray.traffic
-          else defaults.proxy.xray.registration.traffic;
+    # Helper to generate proxy config
+    mkProxyConfig = serviceName: defaultParams: let
+      config = nodeServices.${serviceName} or null;
+    in
+      lib.optionalAttrs (config != null) {
+        "my-${serviceName}" = lib.recursiveUpdate defaultParams {
+          registration.subId = config.subId or node.hostname;
+          registration.ipv4 = config.ipv4 or defaultParams.registration.ipv4;
+          registration.ipv6 = config.ipv6 or defaultParams.registration.ipv6;
+          registration.traffic = config.traffic;
+        };
       };
-    };
 
-    hysteriaService = lib.optionalAttrs ((nodeServices.hysteria or null) != null) {
-      my-hysteria = lib.recursiveUpdate defaults.proxy.hysteria {
-        registration.subId = nodeServices.hysteria.subId or node.hostname;
-        registration.traffic =
-          if nodeServices.hysteria.traffic or null != null
-          then nodeServices.hysteria.traffic
-          else defaults.proxy.hysteria.registration.traffic;
-      };
-    };
+    # Optional proxy services
+    xrayService = mkProxyConfig "xray" defaults.proxy.xray;
+    hysteriaService = mkProxyConfig "hysteria" defaults.proxy.hysteria;
   in {
     services = baseServices // xrayService // hysteriaService;
   };
@@ -108,32 +107,13 @@ let
   # Generate system configuration
   mkSystemConfig = nodeName: let
     node = nodeRegistry.nodes.${nodeName};
-    nodeServices = node.services or {};
   in {
     system.stateVersion = defaults.system.stateVersion;
     networking = {
       hostName = node.hostname;
       usePredictableInterfaceNames = defaults.system.networking.usePredictableInterfaceNames;
-
-      # WARP configuration
-      wg-quick.interfaces = lib.mkIf (nodeServices.warp.enable or false) {
-        wg-warp = {
-          autostart = true;
-          address = nodeServices.warp.address or [ "172.16.0.2/32" ];
-          privateKey = secrets.warp.${node.logicalName}.privateKey;
-          mtu = 1280;
-          peers = [
-            {
-              publicKey = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
-              allowedIPs = nodeServices.warp.allowedIPs or [ "0.0.0.0/0" ];
-              endpoint = "engage.cloudflareclient.com:2408";
-              persistentKeepalive = 25;
-            }
-          ];
-        };
-      };
+      networkmanager.enable = defaults.system.networking.networkmanager.enable;
     };
-    networking.networkmanager.enable = defaults.system.networking.networkmanager.enable;
   };
 
   # Generate deployment configuration for Colmena
@@ -145,8 +125,7 @@ let
 
   # Generate complete profile by combining all configurations
   mkProfile = nodeName: let
-    node = nodeRegistry.nodes.${nodeName};
-    nodeServices = node.services or {};
+    nodeServices = nodeRegistry.nodes.${nodeName}.services or {};
   in {
     imports = [
       # Core modules for all nodes
@@ -155,6 +134,7 @@ let
       ../modules/core/ibgp-full-mesh.nix
       ../modules/services/looking-glass.nix
       ../modules/services/metrics.nix
+      ../modules/services/frps.nix
 
       # Optional modules
       ../modules/system/tcpdump.nix

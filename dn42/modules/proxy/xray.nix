@@ -39,8 +39,10 @@ in
       regPassword = mkOption { type = types.str; };
       subId = mkOption { type = types.str; };
       traffic = mkOption { type = types.int; default = 100; };
+      ipv4 = mkOption { type = types.bool; default = true; };
       ipv6 = mkOption { type = types.bool; default = false; };
       realityPublicKey = mkOption { type = types.str; };
+      shortId = mkOption { type = types.str; default = "ae"; };
     };
   };
 
@@ -101,18 +103,20 @@ in
           export PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnugrep pkgs.coreutils ]}:$PATH
           
           dest_host=$(echo "${cfg.realityDest}" | cut -d: -f1)
-          
+
+          ${optionalString cfg.registration.ipv4 ''
           SELF_PUBLIC_IP=$(curl -4 -s https://1.1.1.1/cdn-cgi/trace | grep 'ip=' | cut -c4-)
 
           if [ -n "$SELF_PUBLIC_IP" ]; then
-              curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_vision&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_vision_reality,type: vless,server: $SELF_PUBLIC_IP,port: ${toString cfg.visionPort},uuid: ${cfg.uuid},network: tcp,tls: true,udp: true,flow: xtls-rprx-vision,servername: $dest_host,reality-opts: {public-key: ${cfg.registration.realityPublicKey},short-id: ae},client-fingerprint: chrome}"
+              curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_vision&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_vision_reality,type: vless,server: $SELF_PUBLIC_IP,port: ${toString cfg.visionPort},uuid: ${cfg.uuid},network: tcp,tls: true,udp: true,flow: xtls-rprx-vision,servername: $dest_host,reality-opts: {public-key: ${cfg.registration.realityPublicKey},short-id: ${cfg.registration.shortId}},client-fingerprint: chrome}"
           fi
+          ''}
 
           ${optionalString cfg.registration.ipv6 ''
           SELF_PUBLIC_IPV6=$(curl -6 -s https://[2606:4700:4700::1111]/cdn-cgi/trace | grep 'ip=' | cut -c4-)
           
           if [ -n "$SELF_PUBLIC_IPV6" ]; then
-              curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_v6_vision&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_v6_vision_reality,type: vless,server: $SELF_PUBLIC_IPV6,port: ${toString cfg.visionPort},uuid: ${cfg.uuid},network: tcp,tls: true,udp: true,flow: xtls-rprx-vision,servername: $dest_host,reality-opts: {public-key: ${cfg.registration.realityPublicKey},short-id: ae},client-fingerprint: chrome}"
+              curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_v6_vision&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_v6_vision_reality,type: vless,server: $SELF_PUBLIC_IPV6,port: ${toString cfg.visionPort},uuid: ${cfg.uuid},network: tcp,tls: true,udp: true,flow: xtls-rprx-vision,servername: $dest_host,reality-opts: {public-key: ${cfg.registration.realityPublicKey},short-id: ${cfg.registration.shortId}},client-fingerprint: chrome}"
           fi
           ''}
         '';

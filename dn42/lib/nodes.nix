@@ -38,7 +38,6 @@
       };
 
       services = {
-        xjbcast = { enable = false; };
       };
 
       deployment = {
@@ -75,12 +74,8 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; };
-        hysteria = { traffic = 500; };
-        warp = {
-          enable = true;
-          allowedIPs = [ "1.1.1.1/32" ];
-        };
+        xray = { traffic = 1000; ipv4 = false; ipv6 = true; };
+        hysteria = { traffic = 1000; ipv4 = false; ipv6 = true; };
       };
 
       deployment = {
@@ -118,8 +113,8 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 300; };
-        hysteria = { traffic = 300; };
+        xray = { traffic = 500; };
+        hysteria = { traffic = 500; };
         tor-relay = {
           enable = true;
           anchorIPv4 = "10.48.0.5";
@@ -162,16 +157,12 @@
       };
 
       services = {
-        warp = {
-          enable = true;
-          address = [ "2606:4700:110:8eb4:6b54:7ffe:4c25:35fa/128" ];
-          allowedIPs = [ "::/0" ];
-        };
         traffic-limit = {
           enable = true;
           limitGB = 180;
-          dryRun = true;
         };
+        xray = { traffic = 150; };
+        hysteria = { traffic = 150; };
       };
 
       deployment = {
@@ -245,8 +236,8 @@
       };
 
       services = {
-        xray = { traffic = null; };
-        hysteria = { traffic = null; };
+        xray = { traffic = 200; };
+        hysteria = { traffic = 200; };
         tcpdump = { enable = true; };
       };
 

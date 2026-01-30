@@ -30,6 +30,7 @@ in
       regPassword = mkOption { type = types.str; };
       subId = mkOption { type = types.str; };
       traffic = mkOption { type = types.int; default = 100; };
+      ipv4 = mkOption { type = types.bool; default = true; };
       ipv6 = mkOption { type = types.bool; default = false; };
     };
   };
@@ -80,12 +81,14 @@ in
         Type = "oneshot";
         ExecStart = pkgs.writeShellScript "hysteria-register" ''
           export PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnugrep pkgs.coreutils ]}:$PATH
-          
+
+          ${optionalString cfg.registration.ipv4 ''
           SELF_PUBLIC_IP=$(curl -4 -s https://1.1.1.1/cdn-cgi/trace | grep 'ip=' | cut -c4-)
 
           if [ -n "$SELF_PUBLIC_IP" ]; then
               curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_hy2&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_hy2,type: hysteria2,server: $SELF_PUBLIC_IP,port: ${toString cfg.port},password: ${cfg.password},skip-cert-verify: true,client-fingerprint: chrome}"
           fi
+          ''}
 
           ${optionalString cfg.registration.ipv6 ''
           SELF_PUBLIC_IPV6=$(curl -6 -s https://[2606:4700:4700::1111]/cdn-cgi/trace | grep 'ip=' | cut -c4-)
