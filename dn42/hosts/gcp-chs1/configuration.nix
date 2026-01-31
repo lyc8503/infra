@@ -15,17 +15,26 @@ in
     {
       wg-quick.interfaces.wg-warp = {
         autostart = true;
-        address = [ "2606:4700:110:8eb4:6b54:7ffe:4c25:35fa/128" ];
+        address = [
+          "172.16.0.2/32"
+          "2606:4700:110:8eb4:6b54:7ffe:4c25:35fa/128"
+        ];
         privateKey = secrets.warp.chs1.privateKey;
         mtu = 1280;
         peers = [
           {
             publicKey = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
-            allowedIPs = [ "::/0" ];
+            allowedIPs = [ "0.0.0.0/0" "::/0" ];
             endpoint = "engage.cloudflareclient.com:2408";
             persistentKeepalive = 25;
           }
         ];
+        postUp = ''
+          ${pkgs.iproute2}/bin/ip -4 rule add from 10.142.15.217 lookup main
+        '';
+        postDown = ''
+          ${pkgs.iproute2}/bin/ip -4 rule delete from 10.142.15.217 lookup main
+        '';
       };
     }
   ];
