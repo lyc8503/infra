@@ -2,9 +2,9 @@
 
 let
   nodeBuilder = import ../../lib/node-builder.nix { inherit lib pkgs; };
-  autoConfig = nodeBuilder.mkProfile "do-sfo1";
+  autoConfig = nodeBuilder.mkProfile "do-tor1";
   nodeRegistry = nodeBuilder.nodeRegistry;
-  node = nodeRegistry.nodes.do-sfo1;
+  node = nodeRegistry.nodes.do-tor1;
 in
 {
   imports = [ ./hardware.nix ./peers.nix ] ++ autoConfig.imports;
@@ -24,11 +24,11 @@ in
         prefixLength = 64;
       }];
       defaultGateway = {
-        address = "64.227.96.1";
+        address = "142.93.144.1";
         interface = "eth0";
       };
       defaultGateway6 = {
-        address = "2604:a880:4:1d0::1";
+        address = "2604:a880:cad:d0::1";
         interface = "eth0";
       };
       nameservers = [ "1.1.1.1" "8.8.8.8" ];

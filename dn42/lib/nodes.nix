@@ -247,5 +247,97 @@
         tags = [ "azure" "vps" ];
       };
     };
+
+    do-fra1 = {
+      id = 7;
+      hostname = "do-fra1";
+      logicalName = "fra1";
+
+      publicIpv4 = "46.101.114.213";
+      publicIpv6 = "2a03:b0c0:3:f0:0:1:e6fe:8000";
+
+      dn42 = {
+        ipv4 = {
+          addresses = [ "172.20.42.230" "172.23.41.81" ];
+          dnetAddress = "172.20.42.246";
+          networks = [ "172.20.42.224/27" "172.23.41.80/28" ];
+        };
+        ipv6 = {
+          addresses = [ "fd00:1100:8503::7" "fd32:3940:2738::1" ];
+          networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
+        };
+      };
+
+      dnet = {
+        address = "172.20.42.246";
+        netmask = "255.255.255.255";
+        cidr = "172.20.42.246/32";
+      };
+
+      services = {
+        xjbcast = { enable = true; };
+        xray = { traffic = 500; };
+        hysteria = { traffic = 500; };
+        tor-relay = {
+          enable = true;
+          anchorIPv4 = "10.19.0.5";
+          ipv4Gateway = "10.19.0.1";
+          monthlyLimitGB = 2500;
+        };
+        tcpdump = { enable = true; };
+      };
+
+      deployment = {
+        targetHost = "46.101.114.213";
+        targetUser = "root";
+        tags = [ "digitalocean" "vps" ];
+      };
+    };
+
+    do-tor1 = {
+      id = 8;
+      hostname = "do-tor1";
+      logicalName = "tor1";
+
+      publicIpv4 = "142.93.144.86";
+      publicIpv6 = "2604:a880:cad:d0:0:1:4b58:b001";
+
+      dn42 = {
+        ipv4 = {
+          addresses = [ "172.20.42.231" "172.23.41.81" ];
+          dnetAddress = "172.20.42.247";
+          networks = [ "172.20.42.224/27" "172.23.41.80/28" ];
+        };
+        ipv6 = {
+          addresses = [ "fd00:1100:8503::8" "fd32:3940:2738::1" ];
+          networks = [ "fd00:1100:8503::/48" "fd32:3940:2738::/48" ];
+        };
+      };
+
+      dnet = {
+        address = "172.20.42.247";
+        netmask = "255.255.255.255";
+        cidr = "172.20.42.247/32";
+      };
+
+      services = {
+        xjbcast = { enable = true; };
+        xray = { traffic = 500; };
+        hysteria = { traffic = 500; };
+        tor-relay = {
+          enable = true;
+          anchorIPv4 = "10.20.0.5";
+          ipv4Gateway = "10.20.0.1";
+          monthlyLimitGB = 200;
+        };
+        tcpdump = { enable = true; };
+      };
+
+      deployment = {
+        targetHost = "142.93.144.86";
+        targetUser = "root";
+        tags = [ "digitalocean" "vps" ];
+      };
+    };
   };
 }
