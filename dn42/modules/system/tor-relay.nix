@@ -80,8 +80,8 @@ in
       };
       settings = {
         ORPort = [
-          { addr = cfg.anchorIPv4; port = 443; }
-          { addr = "[${cfg.ipv6}]"; port = 443; }
+          { addr = cfg.anchorIPv4; port = 7443; }
+          { addr = "[${cfg.ipv6}]"; port = 7443; }
         ];
         Address = cfg.publicIPv4;
         OutboundBindAddress = [ cfg.anchorIPv4 cfg.ipv6 ];
