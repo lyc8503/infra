@@ -6,9 +6,19 @@ let
   secrets = import ../../secrets.nix;
 in
 {
-  imports = [ ./hardware.nix ./peers.nix ] ++ autoConfig.imports;
+  imports = [ 
+    ./hardware.nix 
+    ./peers.nix
+  ] ++ autoConfig.imports;
 
-  inherit (autoConfig) deployment system services;
+  inherit (autoConfig) deployment system;
+
+  services = lib.mkMerge [
+    autoConfig.services
+    {
+      snowflake-proxy.enable = true;
+    }
+  ];
 
   networking = lib.mkMerge [
     autoConfig.networking
