@@ -15,6 +15,7 @@
   };
 
   services.scx_horoscope.enable = lib.mkDefault true;
+  services.vnstat.enable = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
     vim

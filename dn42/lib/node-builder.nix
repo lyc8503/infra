@@ -135,6 +135,7 @@ let
       ../modules/services/looking-glass.nix
       ../modules/services/metrics.nix
       ../modules/services/frps.nix
+      ../modules/services/smokeping.nix
 
       # Optional modules
       ../modules/system/tcpdump.nix

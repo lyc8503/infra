@@ -25,7 +25,7 @@ in
           {
             publicKey = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
             allowedIPs = [ "0.0.0.0/0" "::/0" ];
-            endpoint = "engage.cloudflareclient.com:2408";
+            endpoint = "162.159.192.1:2408";
             persistentKeepalive = 25;
           }
         ];
