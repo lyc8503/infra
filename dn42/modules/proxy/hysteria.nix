@@ -32,6 +32,16 @@ in
       traffic = mkOption { type = types.int; default = 100; };
       ipv4 = mkOption { type = types.bool; default = true; };
       ipv6 = mkOption { type = types.bool; default = false; };
+      srcIpv4 = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Source IPv4 to bind curl to when detecting public IP (e.g. anchor private IP so the sub server sees the Reserved/Floating IP).";
+      };
+      srcIpv6 = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Source IPv6 to bind curl to when detecting public IPv6 (e.g. anchor extra IPv6 so the sub server sees the correct address).";
+      };
     };
   };
 
@@ -83,7 +93,7 @@ in
           export PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnugrep pkgs.coreutils ]}:$PATH
 
           ${optionalString cfg.registration.ipv4 ''
-          SELF_PUBLIC_IP=$(curl -4 -s https://1.1.1.1/cdn-cgi/trace | grep 'ip=' | cut -c4-)
+          SELF_PUBLIC_IP=$(curl -4 -s ${optionalString (cfg.registration.srcIpv4 != null) "--interface ${cfg.registration.srcIpv4} "} https://1.1.1.1/cdn-cgi/trace | grep 'ip=' | cut -c4-)
 
           if [ -n "$SELF_PUBLIC_IP" ]; then
               curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_hy2&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_hy2,type: hysteria2,server: $SELF_PUBLIC_IP,port: ${toString cfg.port},password: ${cfg.password},skip-cert-verify: true,client-fingerprint: chrome}"
@@ -91,8 +101,8 @@ in
           ''}
 
           ${optionalString cfg.registration.ipv6 ''
-          SELF_PUBLIC_IPV6=$(curl -6 -s https://[2606:4700:4700::1111]/cdn-cgi/trace | grep 'ip=' | cut -c4-)
-          
+          SELF_PUBLIC_IPV6=$(curl -6 -s ${optionalString (cfg.registration.srcIpv6 != null) "--interface ${cfg.registration.srcIpv6} "}https://[2606:4700:4700::1111]/cdn-cgi/trace | grep 'ip=' | cut -c4-)
+
           if [ -n "$SELF_PUBLIC_IPV6" ]; then
               curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_v6_hy2&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_v6_hy2,type: hysteria2,server: $SELF_PUBLIC_IPV6,port: ${toString cfg.port},password: ${cfg.password},skip-cert-verify: true,client-fingerprint: chrome}"
           fi

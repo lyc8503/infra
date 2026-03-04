@@ -90,8 +90,8 @@
       hostname = "do-sfo1";
       logicalName = "sfo1";
 
-      publicIpv4 = "64.227.99.106";
-      publicIpv6 = "2604:a880:4:1d0:0:1:4500:1000";
+      publicIpv4 = "64.23.250.142";
+      publicIpv6 = "2604:a880:4:1d0:0:2:20ea:f000";
 
       dn42 = {
         ipv4 = {
@@ -113,19 +113,22 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; };
-        hysteria = { traffic = 500; };
-        tor-relay = {
-          enable = true;
+        xray = { traffic = 500; ipv6 = true; };
+        hysteria = { traffic = 500; ipv6 = true; };
+        anchor-routing = {
           anchorIPv4 = "10.48.0.5";
           ipv4Gateway = "10.48.0.1";
+          extraIpv6 = "2604:a880:4:1d0:0:1:5884:c000";
+        };
+        tor-relay = {
+          enable = true;
           monthlyLimitGB = 200;
         };
         tcpdump = { enable = true; };
       };
 
       deployment = {
-        targetHost = "64.227.99.106";
+        targetHost = "64.23.250.142";
         targetUser = "root";
         tags = [ "digitalocean" "vps" ];
       };
@@ -253,8 +256,8 @@
       hostname = "do-fra1";
       logicalName = "fra1";
 
-      publicIpv4 = "46.101.114.213";
-      publicIpv6 = "2a03:b0c0:3:f0:0:1:e6fe:8000";
+      publicIpv4 = "165.22.78.225";
+      publicIpv6 = "2a03:b0c0:3:f0:0:2:16cf:9000";
 
       dn42 = {
         ipv4 = {
@@ -278,17 +281,20 @@
         xjbcast = { enable = true; };
         xray = { traffic = 500; };
         hysteria = { traffic = 500; };
-        tor-relay = {
-          enable = true;
+        anchor-routing = {
           anchorIPv4 = "10.19.0.5";
           ipv4Gateway = "10.19.0.1";
+          extraIpv6 = "2a03:b0c0:3:f0:0:1:e700:2000";
+        };
+        tor-relay = {
+          enable = true;
           monthlyLimitGB = 2500;
         };
         tcpdump = { enable = true; };
       };
 
       deployment = {
-        targetHost = "46.101.114.213";
+        targetHost = "2a03:b0c0:3:f0:0:1:e700:2000";
         targetUser = "root";
         tags = [ "digitalocean" "vps" ];
       };
@@ -324,10 +330,12 @@
         xjbcast = { enable = true; };
         xray = { traffic = 500; };
         hysteria = { traffic = 500; };
-        tor-relay = {
-          enable = true;
+        anchor-routing = {
           anchorIPv4 = "10.20.0.5";
           ipv4Gateway = "10.20.0.1";
+        };
+        tor-relay = {
+          enable = true;
           monthlyLimitGB = 200;
         };
         tcpdump = { enable = true; };

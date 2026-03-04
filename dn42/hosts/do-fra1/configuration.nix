@@ -24,7 +24,7 @@ in
         prefixLength = 64;
       }];
       defaultGateway = {
-        address = "46.101.112.1";
+        address = "165.22.64.1";
         interface = "eth0";
       };
       defaultGateway6 = {

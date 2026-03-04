@@ -55,14 +55,20 @@ let
       # Tor Relay (only if enabled)
       tor-relay = lib.mkIf (nodeServices.tor-relay.enable or false) {
         enable = true;
-        ipv6 = secrets.tor.${node.logicalName}.ipv6;
         nickname = secrets.tor.${node.logicalName}.nickname;
         contactInfo = secrets.tor.contact;
-        publicIPv4 = secrets.tor.${node.logicalName}.ipv4;
-        # Optional overrides from node config
-        anchorIPv4 = nodeServices.tor-relay.anchorIPv4 or null;
-        ipv4Gateway = nodeServices.tor-relay.ipv4Gateway or null;
         monthlyLimitGB = nodeServices.tor-relay.monthlyLimitGB or 750;
+      };
+
+      # Anchor IP policy routing (independent of Tor)
+      # extraIPv6 is sourced from secrets when tor-relay is also active on this node.
+      anchor-routing = lib.mkIf (nodeServices.anchor-routing or null != null) {
+        enable = true;
+        anchorIPv4 = nodeServices.anchor-routing.anchorIPv4;
+        ipv4Gateway = nodeServices.anchor-routing.ipv4Gateway;
+        extraIPv6 = lib.optionalString
+          (nodeServices.tor-relay.enable or false)
+          secrets.tor.${node.logicalName}.ipv6;
       };
 
       # Tcpdump (only if enabled)
@@ -87,6 +93,10 @@ let
     # Helper to generate proxy config
     mkProxyConfig = serviceName: defaultParams: let
       config = nodeServices.${serviceName} or null;
+      # Anchor IPs for proxy registration source binding (decoupled from Tor).
+      # curl uses --interface so the sub server detects the Reserved/Floating IP.
+      anchorIPv4 = nodeServices.anchor-routing.anchorIPv4 or null;
+      anchorIPv6 = nodeServices.anchor-routing.extraIpv6 or null;
     in
       lib.optionalAttrs (config != null) {
         "my-${serviceName}" = lib.recursiveUpdate defaultParams {
@@ -94,6 +104,8 @@ let
           registration.ipv4 = config.ipv4 or defaultParams.registration.ipv4;
           registration.ipv6 = config.ipv6 or defaultParams.registration.ipv6;
           registration.traffic = config.traffic;
+          registration.srcIpv4 = anchorIPv4;
+          registration.srcIpv6 = anchorIPv6;
         };
       };
 
@@ -139,6 +151,7 @@ let
 
       # Optional modules
       ../modules/system/tcpdump.nix
+      ../modules/system/anchor-routing.nix
       ../modules/system/tor-relay.nix
       ../modules/system/traffic-limit.nix
     ] ++ lib.optionals (nodeServices.xray or null != null) [
