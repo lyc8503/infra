@@ -161,12 +161,20 @@ async def root(req: Request, resp: Response, admin: str = '', sign: str = '', is
 
 
 @app.get("/reg", response_class=PlainTextResponse)
-async def reg(req: Request, resp: Response, token, id, subscription: str = "", cf: bool = False, traffic: int = 500):
+async def reg(req: Request, resp: Response, token, id: str = "", subscription: str = "", cf: bool = False, traffic: int = 500, reset: bool = False):
     if token != os.environ['REG_PASSWORD']:
         resp.status_code = 403
         return 'WRONG TOKEN'
 
     global proxies
+
+    if reset:
+        proxies = {}
+        return 'RESET DONE'
+    
+    if not id:
+        resp.status_code = 400
+        return 'ID REQUIRED'
 
     if subscription == "":
         if id in proxies:

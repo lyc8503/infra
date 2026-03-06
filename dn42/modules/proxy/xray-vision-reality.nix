@@ -3,12 +3,46 @@
 with lib;
 
 let
-  cfg = config.services.my-xray;
+  cfg = config.services.my-xray-vision-reality;
+  configFile = pkgs.writeText "xray-vision-reality.json" (builtins.toJSON {
+    log.loglevel = "warning";
+    inbounds = [
+      {
+        port = cfg.visionPort;
+        protocol = "vless";
+        settings = {
+          clients = [
+            {
+              id = cfg.uuid;
+              flow = "xtls-rprx-vision";
+            }
+          ];
+          decryption = "none";
+        };
+        streamSettings = {
+          network = "tcp";
+          security = "reality";
+          realitySettings = {
+            dest = cfg.realityDest;
+            serverNames = [ (head (splitString ":" cfg.realityDest)) ];
+            privateKey = cfg.realityPrivateKey;
+            shortIds = cfg.realityShortIds;
+          };
+        };
+      }
+    ];
+    outbounds = [
+      {
+        protocol = "freedom";
+        settings = {};
+      }
+    ];
+  });
 in
 {
-  options.services.my-xray = {
-    enable = mkEnableOption "My Xray Service";
-    
+  options.services.my-xray-vision-reality = {
+    enable = mkEnableOption "My Xray Vision+Reality Service";
+
     uuid = mkOption {
       type = types.str;
       description = "UUID for VLESS";
@@ -27,7 +61,7 @@ in
     realityPrivateKey = mkOption {
       type = types.str;
     };
-    
+
     realityShortIds = mkOption {
       type = types.listOf types.str;
       default = [ "" "ae" ];
@@ -57,61 +91,28 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xray = {
-      enable = true;
-      settings = {
-        log = {
-          loglevel = "warning";
-        };
-        inbounds = [
-          {
-            port = cfg.visionPort;
-            protocol = "vless";
-            settings = {
-              clients = [
-                {
-                  id = cfg.uuid;
-                  flow = "xtls-rprx-vision";
-                }
-              ];
-              decryption = "none";
-            };
-            streamSettings = {
-              network = "tcp";
-              security = "reality";
-              realitySettings = {
-                dest = cfg.realityDest;
-                serverNames = [ (head (splitString ":" cfg.realityDest)) ];
-                privateKey = cfg.realityPrivateKey;
-                shortIds = cfg.realityShortIds;
-              };
-            };
-          }
-        ];
-        outbounds = [
-          {
-            protocol = "freedom";
-            settings = {};
-          }
-        ];
+    systemd.services.xray-vision-reality = {
+      description = "Xray Vision+Reality Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.xray}/bin/xray -config ${configFile}";
+        Restart = "on-failure";
+        AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
       };
     };
-    
+
     networking.firewall.allowedTCPPorts = [ cfg.visionPort ];
     networking.firewall.allowedUDPPorts = [ cfg.visionPort ];
 
-    systemd.services.xray.serviceConfig = {
-      AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
-      CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
-    };
-
-    systemd.services.xray-register = mkIf cfg.registration.enable {
-      description = "Xray Registration Service";
+    systemd.services.xray-vision-reality-register = mkIf cfg.registration.enable {
+      description = "Xray Vision+Reality Registration Service";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = pkgs.writeShellScript "xray-register" ''
+        ExecStart = pkgs.writeShellScript "xray-vision-reality-register" ''
           export PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnugrep pkgs.coreutils ]}:$PATH
-          
+
           dest_host=$(echo "${cfg.realityDest}" | cut -d: -f1)
 
           ${optionalString cfg.registration.ipv4 ''
@@ -133,7 +134,7 @@ in
       };
     };
 
-    systemd.timers.xray-register = mkIf cfg.registration.enable {
+    systemd.timers.xray-vision-reality-register = mkIf cfg.registration.enable {
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnBootSec = "1min";

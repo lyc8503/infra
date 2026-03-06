@@ -5,7 +5,7 @@
 {
   # Proxy service defaults (for edge nodes)
   proxy = {
-    xray = {
+    xray-vision-reality = {
       enable = lib.mkDefault true;
       uuid = secrets.proxy.uuid;
       visionPort = 23389;
@@ -18,6 +18,20 @@
         regPassword = secrets.proxy.reg_password;
         # subId should be overridden per-node
         realityPublicKey = secrets.proxy.reality_pk;
+        ipv4 = lib.mkDefault true;
+        ipv6 = lib.mkDefault false;
+      };
+    };
+
+    xray-vmess = {
+      enable = lib.mkDefault true;
+      uuid = secrets.proxy.uuid;
+      vmessPort = 23390;
+      registration = {
+        enable = lib.mkDefault true;
+        subServer = secrets.proxy.sub_server;
+        regPassword = secrets.proxy.reg_password;
+        # subId should be overridden per-node
         ipv4 = lib.mkDefault true;
         ipv6 = lib.mkDefault false;
       };

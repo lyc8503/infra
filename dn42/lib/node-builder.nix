@@ -88,15 +88,16 @@ let
     };
 
     # Helper to generate proxy config
-    mkProxyConfig = serviceName: defaultParams: let
-      config = nodeServices.${serviceName} or null;
+    # lookupName: key in nodeServices (nodes.nix); outputName: NixOS service option suffix (my-<outputName>)
+    mkProxyConfig = lookupName: outputName: defaultParams: let
+      config = nodeServices.${lookupName} or null;
       # Anchor IPs for proxy registration source binding (decoupled from Tor).
       # curl uses --interface so the sub server detects the Reserved/Floating IP.
       anchorIPv4 = nodeServices.anchor-routing.anchorIPv4 or null;
       anchorIPv6 = nodeServices.anchor-routing.extraIPv6 or null;
     in
       lib.optionalAttrs (config != null) {
-        "my-${serviceName}" = lib.recursiveUpdate defaultParams {
+        "my-${outputName}" = lib.recursiveUpdate defaultParams {
           registration.subId = config.subId or node.hostname;
           registration.ipv4 = config.ipv4 or defaultParams.registration.ipv4;
           registration.ipv6 = config.ipv6 or defaultParams.registration.ipv6;
@@ -107,10 +108,11 @@ let
       };
 
     # Optional proxy services
-    xrayService = mkProxyConfig "xray" defaults.proxy.xray;
-    hysteriaService = mkProxyConfig "hysteria" defaults.proxy.hysteria;
+    xrayService = mkProxyConfig "xray" "xray-vision-reality" defaults.proxy.xray-vision-reality;
+    xrayVmessService = mkProxyConfig "xray-vmess" "xray-vmess" defaults.proxy.xray-vmess;
+    hysteriaService = mkProxyConfig "hysteria" "hysteria" defaults.proxy.hysteria;
   in {
-    services = baseServices // xrayService // hysteriaService;
+    services = baseServices // xrayService // xrayVmessService // hysteriaService;
   };
 
   # Generate system configuration
@@ -152,7 +154,9 @@ let
       ../modules/system/tor-relay.nix
       ../modules/system/traffic-limit.nix
     ] ++ lib.optionals (nodeServices.xray or null != null) [
-      ../modules/proxy/xray.nix
+      ../modules/proxy/xray-vision-reality.nix
+    ] ++ lib.optionals (nodeServices.xray-vmess or null != null) [
+      ../modules/proxy/xray-vmess.nix
     ] ++ lib.optionals (nodeServices.hysteria or null != null) [
       ../modules/proxy/hysteria.nix
     ];

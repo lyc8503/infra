@@ -113,7 +113,7 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; ipv6 = true; };
+        xray-vmess = { traffic = 500; ipv6 = true; };
         hysteria = { traffic = 500; ipv6 = true; };
         anchor-routing = {
           anchorIPv4 = "10.48.0.5";
@@ -201,7 +201,7 @@
       };
 
       services = {
-        xray = { traffic = 200; };
+        xray-vmess = { traffic = 200; };
         hysteria = { traffic = 200; };
         scx_horoscope = { enable = false; };
       };
@@ -239,7 +239,7 @@
       };
 
       services = {
-        xray = { traffic = 200; };
+        xray-vmess = { traffic = 200; };
         hysteria = { traffic = 200; };
         tcpdump = { enable = true; };
       };
@@ -279,7 +279,7 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; ipv6 = true; };
+        xray-vmess = { traffic = 500; ipv6 = true; };
         hysteria = { traffic = 500; ipv6 = true; };
         anchor-routing = {
           anchorIPv4 = "10.19.0.5";
@@ -328,7 +328,7 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; ipv6 = true; };
+        xray-vmess = { traffic = 500; ipv6 = true; };
         hysteria = { traffic = 500; ipv6 = true; };
         anchor-routing = {
           anchorIPv4 = "10.20.0.5";
