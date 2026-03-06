@@ -4,6 +4,13 @@ with lib;
 
 let
   cfg = config.services.tor-relay;
+  eth0Ipv4Addrs = config.networking.interfaces.eth0.ipv4.addresses or [ ];
+  eth0Ipv6Addrs = config.networking.interfaces.eth0.ipv6.addresses or [ ];
+  publicIpv4 = if eth0Ipv4Addrs != [ ] then (head eth0Ipv4Addrs).address else null;
+  publicIpv6 = if eth0Ipv6Addrs != [ ] then (head eth0Ipv6Addrs).address else null;
+  orPorts =
+    (optional (publicIpv4 != null) { addr = publicIpv4; port = 7443; })
+    ++ (optional (publicIpv6 != null) { addr = "[${publicIpv6}]"; port = 7443; });
 in
 {
   options.services.tor-relay = {
@@ -34,9 +41,8 @@ in
         role = "relay";
       };
       settings = {
-        # Listen on all interfaces; IP address management is handled externally
-        # by the anchor-routing service (anchorIPv4 + extraIPv6).
-        ORPort = [
+        # Bind only to configured public addresses on eth0.
+        ORPort = if orPorts != [ ] then orPorts else [
           { addr = "0.0.0.0"; port = 7443; }
           { addr = "[::]"; port = 7443; }
         ];

@@ -118,7 +118,7 @@
         anchor-routing = {
           anchorIPv4 = "10.48.0.5";
           ipv4Gateway = "10.48.0.1";
-          extraIpv6 = "2604:a880:4:1d0:0:1:5884:c000";
+          extraIPv6 = "2604:a880:4:1d0:0:1:5884:c000";
         };
         tor-relay = {
           enable = true;
@@ -164,8 +164,8 @@
           enable = true;
           limitGB = 180;
         };
-        xray = { traffic = 150; };
-        hysteria = { traffic = 150; };
+        # xray = { traffic = 150; };
+        # hysteria = { traffic = 150; };
       };
 
       deployment = {
@@ -218,7 +218,7 @@
       hostname = "az-sg1";
       logicalName = "sgp2";
 
-      publicIpv4 = "13.76.30.153";
+      publicIpv4 = "20.212.82.105";
 
       dn42 = {
         ipv4 = {
@@ -245,7 +245,7 @@
       };
 
       deployment = {
-        targetHost = "13.76.30.153";
+        targetHost = "20.212.82.105";
         targetUser = "root";
         tags = [ "azure" "vps" ];
       };
@@ -256,8 +256,8 @@
       hostname = "do-fra1";
       logicalName = "fra1";
 
-      publicIpv4 = "165.22.78.225";
-      publicIpv6 = "2a03:b0c0:3:f0:0:2:16cf:9000";
+      publicIpv4 = "164.92.172.195";
+      publicIpv6 = "2a03:b0c0:3:f0:0:2:17a8:f000";
 
       dn42 = {
         ipv4 = {
@@ -279,12 +279,12 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; };
-        hysteria = { traffic = 500; };
+        xray = { traffic = 500; ipv6 = true; };
+        hysteria = { traffic = 500; ipv6 = true; };
         anchor-routing = {
           anchorIPv4 = "10.19.0.5";
           ipv4Gateway = "10.19.0.1";
-          extraIpv6 = "2a03:b0c0:3:f0:0:1:e700:2000";
+          extraIPv6 = "2a03:b0c0:3:f0:0:2:17a0:0";
         };
         tor-relay = {
           enable = true;
@@ -294,7 +294,7 @@
       };
 
       deployment = {
-        targetHost = "2a03:b0c0:3:f0:0:1:e700:2000";
+        targetHost = "164.92.172.195";
         targetUser = "root";
         tags = [ "digitalocean" "vps" ];
       };
@@ -305,8 +305,8 @@
       hostname = "do-tor1";
       logicalName = "tor1";
 
-      publicIpv4 = "142.93.144.86";
-      publicIpv6 = "2604:a880:cad:d0:0:1:4b58:b001";
+      publicIpv4 = "146.190.243.177";
+      publicIpv6 = "2604:a880:cad:d0:0:1:5fb6:a001";
 
       dn42 = {
         ipv4 = {
@@ -328,11 +328,12 @@
 
       services = {
         xjbcast = { enable = true; };
-        xray = { traffic = 500; };
-        hysteria = { traffic = 500; };
+        xray = { traffic = 500; ipv6 = true; };
+        hysteria = { traffic = 500; ipv6 = true; };
         anchor-routing = {
           anchorIPv4 = "10.20.0.5";
           ipv4Gateway = "10.20.0.1";
+          extraIPv6 = "2604:a880:cad:d0:0:1:5fb6:c001";
         };
         tor-relay = {
           enable = true;
@@ -342,7 +343,7 @@
       };
 
       deployment = {
-        targetHost = "142.93.144.86";
+        targetHost = "146.190.243.177";
         targetUser = "root";
         tags = [ "digitalocean" "vps" ];
       };

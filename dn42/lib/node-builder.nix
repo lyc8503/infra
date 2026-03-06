@@ -60,15 +60,12 @@ let
         monthlyLimitGB = nodeServices.tor-relay.monthlyLimitGB or 750;
       };
 
-      # Anchor IP policy routing (independent of Tor)
-      # extraIPv6 is sourced from secrets when tor-relay is also active on this node.
+      # Anchor IP policy routing
       anchor-routing = lib.mkIf (nodeServices.anchor-routing or null != null) {
         enable = true;
         anchorIPv4 = nodeServices.anchor-routing.anchorIPv4;
         ipv4Gateway = nodeServices.anchor-routing.ipv4Gateway;
-        extraIPv6 = lib.optionalString
-          (nodeServices.tor-relay.enable or false)
-          secrets.tor.${node.logicalName}.ipv6;
+        extraIPv6 = nodeServices.anchor-routing.extraIPv6 or null;
       };
 
       # Tcpdump (only if enabled)
@@ -96,7 +93,7 @@ let
       # Anchor IPs for proxy registration source binding (decoupled from Tor).
       # curl uses --interface so the sub server detects the Reserved/Floating IP.
       anchorIPv4 = nodeServices.anchor-routing.anchorIPv4 or null;
-      anchorIPv6 = nodeServices.anchor-routing.extraIpv6 or null;
+      anchorIPv6 = nodeServices.anchor-routing.extraIPv6 or null;
     in
       lib.optionalAttrs (config != null) {
         "my-${serviceName}" = lib.recursiveUpdate defaultParams {
