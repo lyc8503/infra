@@ -89,7 +89,7 @@ in
           export PATH=${lib.makeBinPath [ pkgs.curl pkgs.gnugrep pkgs.coreutils ]}:$PATH
 
           ${optionalString cfg.registration.ipv4 ''
-          SELF_PUBLIC_IP=$(curl -4 -s ${optionalString (cfg.registration.srcIpv4 != null) "--interface ${cfg.registration.srcIpv4} "} https://1.1.1.1/cdn-cgi/trace | grep 'ip=' | cut -c4-)
+          SELF_PUBLIC_IP=$(curl -4 -s ${optionalString (cfg.registration.srcIpv4 != null) "--interface ${cfg.registration.srcIpv4} "} https://ifconfig.me/ip)
 
           if [ -n "$SELF_PUBLIC_IP" ]; then
               curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_vmess&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_vmess,type: vmess,server: $SELF_PUBLIC_IP,port: ${toString cfg.vmessPort},uuid: ${cfg.uuid},alterId: 0,cipher: auto,network: tcp,udp: true}"
@@ -97,7 +97,7 @@ in
           ''}
 
           ${optionalString cfg.registration.ipv6 ''
-          SELF_PUBLIC_IPV6=$(curl -6 -s ${optionalString (cfg.registration.srcIpv6 != null) "--interface ${cfg.registration.srcIpv6} "}https://[2606:4700:4700::1111]/cdn-cgi/trace | grep 'ip=' | cut -c4-)
+          SELF_PUBLIC_IPV6=$(curl -6 -s ${optionalString (cfg.registration.srcIpv6 != null) "--interface ${cfg.registration.srcIpv6} "} https://ifconfig.me/ip)
 
           if [ -n "$SELF_PUBLIC_IPV6" ]; then
               curl -G '${cfg.registration.subServer}?token=${cfg.registration.regPassword}&id=${cfg.registration.subId}_v6_vmess&traffic=${toString cfg.registration.traffic}' --data-urlencode "subscription={name: ${cfg.registration.subId}_v6_vmess,type: vmess,server: $SELF_PUBLIC_IPV6,port: ${toString cfg.vmessPort},uuid: ${cfg.uuid},alterId: 0,cipher: auto,network: tcp,udp: true}"
