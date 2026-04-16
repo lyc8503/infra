@@ -1,0 +1,78 @@
+services:
+  waline:
+    image: lizheming/waline:1.39.3
+    restart: always
+    # ports:
+    #   - 8360:8360
+    volumes:
+      - ${PWD}/waline:/app/data
+    environment:
+      TZ: Asia/Shanghai
+      SQLITE_PATH: /app/data
+      JWT_TOKEN: ${WALINE_JWT_TOKEN}
+      SITE_NAME: lyc8503's Blog
+      SITE_URL: https://blog.lyc8503.net/
+      COMMENT_AUDIT: true
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_SECURE: ${SMTP_SECURE}
+      AUTHOR_EMAIL: ${WALINE_AUTHOR_EMAIL}
+      SENDER_NAME: lyc8503
+      SENDER_EMAIL: ${SMTP_SENDER}
+      DISABLE_USERAGENT: true
+      DISABLE_REGION: true
+      IPQPS: 30
+    networks:
+      - my-network
+
+  umami:
+    image: ghcr.io/umami-software/umami:3.0.3
+    # ports:
+    #   - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@umami-db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    init: true
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - my-network
+
+  umami-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - my-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:2026.3.0
+    restart: always
+    command: tunnel --no-autoupdate run --protocol http2 --token eyJhIjoiNTc3NDI1ZWI2M2FlOTFiY2FiZDBiN2ViMmZlNzNmYjAiLCJ0IjoiZGRkMTY4ZGUtNTJkNy00MmRmLWFkMWEtNDYzNDM2MzczNzY2IiwicyI6Ik1qQXhaREV3TXpNdE5EUXpZUzAwWmprMkxXRm1aVGN0WVdJelpUZGtPVE5rTXpSbCJ9
+    networks:
+      - my-network
+
+networks:
+  my-network:
+
+volumes:
+  umami-db-data:

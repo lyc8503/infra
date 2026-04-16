@@ -1,3 +1,4 @@
 proxy/inventory.yaml
 homelab/inventory.yaml
-test.sh
+deploy_public.sh
+public/.env
