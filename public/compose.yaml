@@ -63,6 +63,14 @@ services:
       retries: 5
     networks:
       - my-network
+  
+  analytics-proxy:
+    build: ./analytics-proxy
+    volumes:
+      - ${PWD}/analytics:/data
+    restart: always
+    networks:
+      - my-network
 
   cloudflared:
     image: cloudflare/cloudflared:2026.3.0
