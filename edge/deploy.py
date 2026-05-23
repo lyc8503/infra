@@ -6,7 +6,6 @@ if host.data.get("push_endpoint"):
     local.include("tasks/metrics.py")
 
 if host.data.get("proxy"):
-    local.include("tasks/hysteria2.py")
     local.include("tasks/xray.py")
 
 if host.data.get("misc"):
