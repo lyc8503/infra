@@ -129,7 +129,7 @@ files.put(
 )
 
 ipv4_register = (
-    f"SELF_PUBLIC_IP=$(curl -4 -s https://ifconfig.me/ip)\n"
+    f"SELF_PUBLIC_IP=$(dig @208.67.222.222 myip.opendns.com +short)\n"
     f'if [ -n "$SELF_PUBLIC_IP" ]; then\n'
     f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_vmess&traffic={d.proxy.traffic}' "
     f'--data-urlencode "subscription={{name: {host.name}_vmess, type: vmess, server: $SELF_PUBLIC_IP, port: {d.proxy.vmess_port}, uuid: {d.proxy.v2_uuid}, alterId: 0, cipher: auto, network: tcp, udp: true}}"\n'
@@ -141,7 +141,7 @@ ipv4_register = (
 ipv6_register = ""
 if d.proxy.ipv6_sub:
     ipv6_register = (
-        f"\n\nSELF_PUBLIC_IPV6=$(curl -6 -s https://ifconfig.me/ip)\n"
+        f"\n\nSELF_PUBLIC_IPV6=$(dig @2620:119:35::35 myip.opendns.com AAAA +short)\n"
         f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_v6_vmess&traffic={d.proxy.traffic}' "
         f'--data-urlencode "subscription={{name: {host.name}_v6_vmess, type: vmess, server: $SELF_PUBLIC_IPV6, port: {d.proxy.vmess_port}, uuid: {d.proxy.v2_uuid}, alterId: 0, cipher: auto, network: tcp, udp: true}}"\n'
         f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_v6_hy2&traffic={d.proxy.traffic}' "

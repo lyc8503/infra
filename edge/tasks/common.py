@@ -1,5 +1,7 @@
+from io import StringIO
+
 from pyinfra import host
-from pyinfra.operations import apt, server
+from pyinfra.operations import apt, server, files, systemd
 
 apt.packages(
     name="Install common apt packages",
@@ -15,4 +17,25 @@ apt.packages(
 server.hostname(
     name="Set hostname",
     hostname=host.name,
+)
+
+apt.packages(
+    name="Install zram tools",
+    packages=[
+        "zram-tools"
+    ],
+)
+
+zram_config = files.put(
+    name="Set zram config",
+    src=StringIO("ALGO=lz4\nPERCENT=150\nPRIORITY=100\n"),
+    dest="/etc/default/zramswap",
+)
+
+systemd.service(
+    name="Enable and start zram",
+    service="zramswap",
+    running=True,
+    enabled=True,
+    restarted=zram_config.changed,
 )
