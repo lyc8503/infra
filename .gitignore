@@ -2,3 +2,6 @@ proxy/inventory.yaml
 homelab/inventory.yaml
 deploy_public.sh
 public/.env
+backup.sh
+public_backup/
+public_backup_*

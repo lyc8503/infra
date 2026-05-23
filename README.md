@@ -1,8 +1,10 @@
 # infra
 
-My Infrastructure-as-Code ⚙️Ansible/❄️Nix code for HomeLab & VPS
+My Infrastructure-as-Code ⚙️Ansible/🐍PyInfra code for HomeLab & VPS
 
-Content Warning: I'm migrating ALL MY VPS INSTANCES from Ansible to Nix, since all of them are running non-critical tasks. The new experimental DN42 project is also using Nix. Most of the Nix code is AI-generated (vibe-coded) crap, but it works anyway. USE AT YOUR OWN RISK.
+~~Content Warning: I'm migrating ALL MY VPS INSTANCES from Ansible to Nix, since all of them are running non-critical tasks. The new experimental DN42 project is also using Nix. Most of the Nix code is AI-generated (vibe-coded) crap, but it works anyway. USE AT YOUR OWN RISK.~~
+
+The vibe-coded NixOS configuration gave me a lot of trouble, so I gave up on it. Let’s start over and return to the embrace of pyinfra!
 
 My HomeLab setup is still using Ansible and developed by me manually.
 
@@ -10,6 +12,6 @@ My HomeLab setup is still using Ansible and developed by me manually.
 
 See [README.md](https://github.com/lyc8503/infra/tree/master/homelab)
 
-## Nix
+## Edge
 
-WIP
+All my VPS config, including proxy & DN42 & some public services.
