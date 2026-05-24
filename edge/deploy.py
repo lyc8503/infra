@@ -19,8 +19,14 @@ if host.data.get("misc"):
     local.include("tasks/containers.py")
     local.include("tasks/caddy.py")
 
+# tor relay
+if host.data.get("tor_relay"):
+    local.include("tasks/tor.py")
+
+# frp server
+if host.data.get("frps_token"):
+    local.include("tasks/frps.py")
+
+# DN42 (bird / wireguard / dnet / looking glass / smokeping)
 # if host.data.get("dn42"):
-#     local.include("tasks/dn42/dn42_base.py")
-#     local.include("tasks/dn42/ibgp.py")
-#     if host.data.get("dn42", {}).get("dnet"):
-#         local.include("tasks/dn42/dnet.py")
+#     local.include("tasks/dn42.py")

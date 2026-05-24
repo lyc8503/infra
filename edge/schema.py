@@ -53,6 +53,16 @@ class DNetConfig:
 
 
 @dataclass
+class IBGPPeer:
+    name: str = ""
+    id: int = 0
+    endpoint: str = ""
+    ipv6: str = ""
+    private_key: str = ""
+    public_key: str = ""
+
+
+@dataclass
 class DN42Config:
     asn: int = 0
     ipv4_addresses: list[str] = field(default_factory=list)
@@ -63,6 +73,14 @@ class DN42Config:
     private_key: str = ""
     ebgp_peers: dict[str, DN42Peer] = field(default_factory=dict)
     dnet: DNetConfig | None = None
+    ibgp_peers: list[IBGPPeer] = field(default_factory=list)
+
+
+@dataclass
+class TorRelayConfig:
+    nickname: str = ""
+    contact_info: str = ""
+    monthly_limit_gb: int = 750
 
 
 @dataclass
@@ -77,3 +95,5 @@ class HostData:
     proxy: ProxyConfig | None = None
     misc: MiscConfig | None = None
     dn42: DN42Config | None = None
+    tor_relay: TorRelayConfig | None = None
+    frps_token: str | None = None
