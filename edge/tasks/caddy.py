@@ -11,13 +11,14 @@ m = d.misc
 
 files.put(
     name="Add Caddy APT repository",
-    src=StringIO("deb [trusted=yes] https://dl.cloudsmith.io/public/caddy/stable/debian bookworm main\n"),
+    src=StringIO("deb [trusted=yes] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main\n"),
     dest="/etc/apt/sources.list.d/caddy-stable.list",
 )
 
 apt.packages(
     name="Install Caddy",
     packages=["caddy"],
+    update=True
 )
 
 
