@@ -1,7 +1,10 @@
 proxy/inventory.yaml
 homelab/inventory.yaml
+edge/inventory.py
 deploy_public.sh
 public/.env
 backup.sh
 public_backup/
 public_backup_*
+dn42
+tmp

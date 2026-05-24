@@ -19,6 +19,20 @@ server.hostname(
     hostname=host.name,
 )
 
+server.sysctl(
+    name="Enable BBR congestion control",
+    key="net.ipv4.tcp_congestion_control",
+    value="bbr",
+    persist=True,
+)
+
+server.sysctl(
+    name="Enable FQ qdisc",
+    key="net.core.default_qdisc",
+    value="fq",
+    persist=True,
+)
+
 apt.packages(
     name="Install zram tools",
     packages=[
