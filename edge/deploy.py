@@ -1,32 +1,40 @@
+import os
 from pyinfra import host, local
 
-# common APT packages, hostname, zram config, BBR
-local.include("tasks/common.py")
+MODULE = os.environ.get("MODULE", "")
 
-# fancy shell tools
-local.include("tasks/fancy.py")
+# a fast path to only update DN42 related stuff
+if MODULE == "dn42":
+    if host.data.get("dn42"):
+        local.include("tasks/dn42.py")
+else:
+    # common APT packages, hostname, zram config, BBR
+    local.include("tasks/common.py")
 
-# metrics and logging
-if host.data.get("push_endpoint"):
-    local.include("tasks/metrics.py")
+    # fancy shell tools
+    local.include("tasks/fancy.py")
 
-# xray (vmess / hysteria2) and registration
-if host.data.get("proxy"):
-    local.include("tasks/xray.py")
+    # metrics and logging
+    if host.data.get("push_endpoint"):
+        local.include("tasks/metrics.py")
 
-# misc server (sub / tgbot / log)
-if host.data.get("misc"):
-    local.include("tasks/containers.py")
-    local.include("tasks/caddy.py")
+    # xray (vmess / hysteria2) and registration
+    if host.data.get("proxy"):
+        local.include("tasks/xray.py")
 
-# tor relay
-if host.data.get("tor_relay"):
-    local.include("tasks/tor.py")
+    # misc server (sub / tgbot / log)
+    if host.data.get("misc"):
+        local.include("tasks/containers.py")
+        local.include("tasks/caddy.py")
 
-# frp server
-if host.data.get("frps_token"):
-    local.include("tasks/frps.py")
+    # tor relay
+    if host.data.get("tor_relay"):
+        local.include("tasks/tor.py")
 
-# DN42 (bird / wireguard / dnet / looking glass / smokeping)
-# if host.data.get("dn42"):
-#     local.include("tasks/dn42.py")
+    # frp server
+    if host.data.get("frps_token"):
+        local.include("tasks/frps.py")
+
+    # DN42 (bird / wireguard / dnet / looking glass / smokeping)
+    if host.data.get("dn42"):
+        local.include("tasks/dn42.py")

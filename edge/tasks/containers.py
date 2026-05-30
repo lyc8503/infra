@@ -1,10 +1,11 @@
 from io import StringIO
 
 from pyinfra import host
-from pyinfra.operations import apt, files, server, systemd
+from pyinfra.operations import files, server
 
 from dacite import from_dict
 from schema import HostData
+from tasks._docker import ensure_docker
 
 d = from_dict(HostData, host.data.dict())
 m = d.misc
@@ -12,17 +13,7 @@ m = d.misc
 COMPOSE_DIR = "/opt/misc-docker"
 
 
-files.put(
-    name="Add Docker APT repository",
-    src=StringIO("deb [trusted=yes] https://download.docker.com/linux/debian bookworm stable\n"),
-    dest="/etc/apt/sources.list.d/docker.list",
-)
-
-apt.packages(
-    name="Install Docker and Compose",
-    packages=["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin"],
-    update=True
-)
+ensure_docker()
 
 # 2. Create compose directory and rsync source files
 files.directory(
