@@ -10,4 +10,9 @@ RUN chmod +x /entrypoint.sh && \
     mkdir -p /run/fcgiwrap /var/lib/smokeping && \
     chown -R www-data:www-data /var/lib/smokeping
 
+COPY Database /etc/smokeping/config.d/Database
+COPY Presentation /etc/smokeping/config.d/Presentation
+COPY Probes /etc/smokeping/config.d/Probes
+COPY Targets /etc/smokeping/config.d/Targets
+
 ENTRYPOINT ["/entrypoint.sh"]

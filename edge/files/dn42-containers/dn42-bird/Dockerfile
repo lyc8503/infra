@@ -7,4 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY bird.conf /etc/bird/bird.conf
+
 ENTRYPOINT ["/entrypoint.sh"]

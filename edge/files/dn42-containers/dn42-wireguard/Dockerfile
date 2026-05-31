@@ -7,4 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY wireguard/ /etc/wireguard/
+
 ENTRYPOINT ["/entrypoint.sh"]

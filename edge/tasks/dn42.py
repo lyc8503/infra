@@ -25,10 +25,22 @@ my_ipv6 = dn.ipv6_addresses[0] if dn.ipv6_addresses else ""
 ensure_docker()
 
 # ============================================================
+# Upload container source files (Dockerfile, entrypoint, etc.)
+# Must happen before config generation so generated configs
+# overwrite the uploaded placeholders.
+# ============================================================
+
+files.rsync(
+    name="Upload dn42 container source files",
+    src="files/dn42-containers/",
+    dest=f"{COMPOSE_DIR}/containers/",
+)
+
+# ============================================================
 # Generate WireGuard configs
 # ============================================================
 
-wireguard_dir = f"{COMPOSE_DIR}/wireguard"
+wireguard_dir = f"{COMPOSE_DIR}/containers/dn42-wireguard/wireguard"
 wg_ports = []
 
 # Clean up stale WG configs from removed peers
@@ -116,7 +128,7 @@ AllowedIPs = 10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64
 # Generate BIRD config
 # ============================================================
 
-bird_dir = f"{COMPOSE_DIR}/bird"
+bird_dir = f"{COMPOSE_DIR}/containers/dn42-bird"
 ownas = dn.asn
 ownip = dn.ipv4_addresses[0] if dn.ipv4_addresses else ""
 ownipv6 = dn.ipv6_addresses[0] if dn.ipv6_addresses else ""
@@ -440,7 +452,7 @@ void register_dns_records(std::unordered_multimap<record_key, record_value>& dns
 # Generate Smokeping config
 # ============================================================
 
-smokeping_dir = f"{COMPOSE_DIR}/smokeping"
+smokeping_dir = f"{COMPOSE_DIR}/containers/dn42-smokeping"
 
 targets = []
 for name, peer in dn.ebgp_peers.items():
@@ -672,8 +684,6 @@ services:
     depends_on:
       dn42-network:
         condition: service_completed_successfully
-    volumes:
-      - {wireguard_dir}:/etc/wireguard:ro
     restart: always
 
   dn42-bird:
@@ -684,7 +694,6 @@ services:
       dn42-wireguard:
         condition: service_started
     volumes:
-      - {bird_dir}/bird.conf:/etc/bird/bird.conf:ro
       - bird_run:/run/bird
     restart: always
 {dnet_service}
@@ -708,11 +717,6 @@ services:
     depends_on:
       dn42-sandbox:
         condition: service_started
-    volumes:
-      - {smokeping_dir}/Database:/etc/smokeping/config.d/Database:ro
-      - {smokeping_dir}/Presentation:/etc/smokeping/config.d/Presentation:ro
-      - {smokeping_dir}/Probes:/etc/smokeping/config.d/Probes:ro
-      - {smokeping_dir}/Targets:/etc/smokeping/config.d/Targets:ro
     restart: unless-stopped
 
 volumes:
@@ -723,16 +727,6 @@ files.put(
     name="Put compose.yaml",
     src=StringIO(compose_yaml),
     dest=f"{COMPOSE_DIR}/compose.yaml",
-)
-
-# ============================================================
-# Upload container source files
-# ============================================================
-
-files.rsync(
-    name="Upload dn42 container Dockerfiles",
-    src="files/dn42-containers/",
-    dest=f"{COMPOSE_DIR}/containers/",
 )
 
 # Copy generated DNSRecord.h into dnet build context for docker build
