@@ -63,7 +63,7 @@ services:
       retries: 5
     networks:
       - my-network
-  
+
   analytics-proxy:
     build: ./analytics-proxy
     volumes:
@@ -75,7 +75,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:2026.3.0
     restart: always
-    command: tunnel --no-autoupdate run --protocol http2 --token eyJhIjoiNTc3NDI1ZWI2M2FlOTFiY2FiZDBiN2ViMmZlNzNmYjAiLCJ0IjoiZGRkMTY4ZGUtNTJkNy00MmRmLWFkMWEtNDYzNDM2MzczNzY2IiwicyI6Ik1qQXhaREV3TXpNdE5EUXpZUzAwWmprMkxXRm1aVGN0WVdJelpUZGtPVE5rTXpSbCJ9
+    command: tunnel --no-autoupdate run --protocol http2 --token $CLOUDFLARE_TOKEN
     networks:
       - my-network
 

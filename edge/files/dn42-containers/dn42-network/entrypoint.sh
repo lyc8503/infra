@@ -38,6 +38,13 @@ if [ -n "$DN42_DNET_IP" ]; then
 
     iptables -C FORWARD -s "$DN42_DNET_IP" -p udp --sport 53 -j ACCEPT 2>/dev/null || \
         iptables -I FORWARD -s "$DN42_DNET_IP" -p udp --sport 53 -j ACCEPT
+
+    # DNAT incoming DNS traffic (arriving at eth0) to DNet's TAP IP
+    ETH0_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+    if [ -n "$ETH0_IP" ]; then
+        iptables -t nat -C PREROUTING -d "$ETH0_IP" -p udp --dport 53 -j DNAT --to-destination "$DN42_DNET_IP":53 2>/dev/null || \
+            iptables -t nat -I PREROUTING -d "$ETH0_IP" -p udp --dport 53 -j DNAT --to-destination "$DN42_DNET_IP":53
+    fi
 fi
 
 echo "dn42-network setup complete"

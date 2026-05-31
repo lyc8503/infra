@@ -10,7 +10,7 @@ d = from_dict(HostData, host.data.dict())
 
 files.put(
     name="Add Tor APT repo",
-    src=StringIO("deb [trusted=yes] https://deb.torproject.org/torproject.org noble main\n"),
+    src=StringIO("deb [trusted=yes] https://deb.torproject.org/torproject.org bookworm main\n"),
     dest="/etc/apt/sources.list.d/tor.list",
 )
 

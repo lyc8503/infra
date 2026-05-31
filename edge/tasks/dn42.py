@@ -645,7 +645,7 @@ services:
       - "5000:5000"
       - "5001:5001"
       - "8000:8000"
-      - "127.0.0.1:53:53/udp"
+      - "53:53/udp"
     sysctls:
       net.ipv4.ip_forward: 1
       net.ipv4.conf.all.rp_filter: 0
