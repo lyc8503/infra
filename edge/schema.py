@@ -13,6 +13,7 @@ class ProxyConfig:
     ipv6_sub: bool = False
     v2_uuid: str = ""
     v2_warp_uuid: str = ""
+    v2_tor_uuid: str = ""
     sub_server: str = ""
     reg_password: str = ""
     warp_sk: str = ""
