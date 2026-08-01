@@ -28,6 +28,7 @@ class MiscConfig:
     tgrss_token: str = ""
     tgrss_manager: str = ""
     log_forward_loki_token: str = ""
+    extra_proxies: str = ""
 
 
 @dataclass

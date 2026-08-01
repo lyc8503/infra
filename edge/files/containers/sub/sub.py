@@ -5,6 +5,7 @@ import hashlib
 import time
 import yaml
 import copy
+import json
 
 app = FastAPI()
 
@@ -63,7 +64,11 @@ def get_sub(min_traffic, hysteria_up = 0, hysteria_down = 0):
                 payload['proxies'].append(sub_opt)
                 payload['use_proxies']['proxies'].append(sub_opt['name'])
 
-    
+    if os.environ.get('EXTRA_PROXIES'):
+        for p in json.loads(os.environ.get('EXTRA_PROXIES')):
+            payload['proxies'].append(p)
+            payload['use_proxies']['proxies'].append(p['name'])
+
     payload = yaml.dump(payload, allow_unicode=True).replace("use_proxies:", "use_proxies: &use_proxies")
     
     return """mixed-port: 7890
@@ -89,11 +94,19 @@ proxy-groups:
   - name: 海外网站
     type: select
     proxies:
-      - DIRECT
       - 代理选择
+      - DIRECT
 
   - name: 漏网之鱼
     type: select
+    proxies:
+      - 代理选择
+      - DIRECT
+  
+  - name: 南大校内
+    type: select
+    include-all-proxies: true
+    filter: "(?i)(NJU)"
     proxies:
       - DIRECT
       - 代理选择
@@ -122,6 +135,22 @@ rule-providers:
 
 
 rules:
+  - DOMAIN-SUFFIX,nju.edu.cn,南大校内
+  - IP-CIDR,114.212.0.0/16,南大校内
+  - IP-CIDR,180.209.0.0/20,南大校内
+  - IP-CIDR,202.38.2.0/23,南大校内
+  - IP-CIDR,202.119.32.0/19,南大校内
+  - IP-CIDR,202.127.247.0/24,南大校内
+  - IP-CIDR,210.28.128.0/20,南大校内
+  - IP-CIDR,210.29.240.0/20,南大校内
+  - IP-CIDR,218.94.142.0/24,南大校内
+  - IP-CIDR,219.219.112.0/20,南大校内
+  - IP-CIDR,58.192.32.0/20,南大校内
+  - IP-CIDR,58.192.48.0/21,南大校内
+  - IP-CIDR,58.193.224.0/19,南大校内
+  - IP-CIDR,10.0.0.0/8,南大校内
+  - IP-CIDR,172.16.0.0/12,南大校内
+
   - RULE-SET,direct,国内直连
   - RULE-SET,proxy,海外网站
   - RULE-SET,gfw,海外网站

@@ -38,6 +38,7 @@ SECRET_TOKEN={m.tgbot_secret_token}
 TOKEN={m.tgrss_token}
 MANAGER={m.tgrss_manager}
 LOKI_TOKEN={m.log_forward_loki_token}
+EXTRA_PROXIES={m.extra_proxies}
 """
 
 files.put(
@@ -56,6 +57,7 @@ compose_content = """services:
     environment:
       - ADMIN_PASSWORD
       - REG_PASSWORD
+      - EXTRA_PROXIES
 
   tgbot:
     build: ./TGBot
