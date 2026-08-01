@@ -116,23 +116,11 @@ update-initramfs -u
 ```
 ---
 
-**[Optional] Intel GVT-g**  
+**[Optional] Intel vGPU (i915 SRIOV)**  
 
-Edit `/etc/default/grub`:  `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on i915.enable_gvt=1"`  
-Run `update-grub` (or `proxmox-boot-tool refresh`)
+https://github.com/strongtz/i915-sriov-dkms/blob/master/docs/install-pve-host.md
 
-*GVT-g+Windows guest doesn't work on kernel 6.8.12 SMH, [downgrade](https://forum.proxmox.com/threads/downgrade-kernel-from-6-8-to-6-7.156205/) to 6.8.8 if needed*
-
-Run:
-```
-echo vfio >> /etc/modules
-echo vfio_iommu_type1 >> /etc/modules
-echo vfio_pci >> /etc/modules
-echo vfio_virqfd >> /etc/modules
-echo kvmgt >> /etc/modules
-```
-
-Reboot and use `ls /sys/bus/pci/devices/0000:00:02.0/mdev_supported_types/` to validate  
+Tested on `Linux pve 7.0.14-4-pve` host and `Windows 11 24H2` guest, 270K Plus vGPU works
 
 ---
 
