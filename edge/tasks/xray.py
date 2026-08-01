@@ -51,22 +51,33 @@ config_json = {
     "log": {"loglevel": "warning"},
     "inbounds": [
         {
-            "port": d.proxy.vmess_port,
-            "protocol": "vmess",
+            "port": d.proxy.v2_reality_port,
+            "protocol": "vless",
             "settings": {
                 "clients": [
                     {
-                        "id": d.proxy.v2_uuid
+                        "id": d.proxy.v2_uuid,
+                        "flow": "xtls-rprx-vision"
                     },
                     {
                         "id": d.proxy.v2_warp_uuid,
+                        "flow": "xtls-rprx-vision",
                         "email": "warp@local.lan"
                     }
                 ],
+                "decryption": "none",
             },
             "streamSettings": {
                 "network": "tcp",
-                "security": "none",
+                "security": "reality",
+                "realitySettings": {
+                    "dest": d.proxy.v2_reality_dest,
+                    "serverNames": [
+                        "download.fedoraproject.org"
+                    ],
+                    "privateKey": d.proxy.v2_reality_sk,
+                    "shortIds": ["", d.proxy.v2_reality_short_id],
+                },
             },
         },
         {
@@ -171,10 +182,10 @@ files.put(
 ipv4_register = (
     f"SELF_PUBLIC_IP=$(dig @208.67.222.222 myip.opendns.com +short)\n"
     f'if [ -n "$SELF_PUBLIC_IP" ]; then\n'
-    f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_vmess&traffic={d.proxy.traffic}' "
-    f'--data-urlencode "subscription={{name: {host.name}_vmess, type: vmess, server: $SELF_PUBLIC_IP, port: {d.proxy.vmess_port}, uuid: {d.proxy.v2_uuid}, alterId: 0, cipher: auto, network: tcp, udp: true}}"\n'
-    f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_vmess_warp&traffic={d.proxy.traffic}' "
-    f'--data-urlencode "subscription={{name: {host.name}_vmess_warp, type: vmess, server: $SELF_PUBLIC_IP, port: {d.proxy.vmess_port}, uuid: {d.proxy.v2_warp_uuid}, alterId: 0, cipher: auto, network: tcp, udp: true}}"\n'
+    f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_reality&traffic={d.proxy.traffic}' "
+    f'--data-urlencode "subscription={{name: {host.name}_reality, type: vless, server: $SELF_PUBLIC_IP, port: {d.proxy.v2_reality_port}, uuid: {d.proxy.v2_uuid}, network: tcp, tls: true, udp: true, flow: xtls-rprx-vision, servername: download.fedoraproject.org, reality-opts: {{public-key: {d.proxy.v2_reality_pk}, short-id: {d.proxy.v2_reality_short_id}}}, client-fingerprint: chrome}}"\n'
+    f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_reality_warp&traffic={d.proxy.traffic}' "
+    f'--data-urlencode "subscription={{name: {host.name}_reality_warp, type: vless, server: $SELF_PUBLIC_IP, port: {d.proxy.v2_reality_port}, uuid: {d.proxy.v2_warp_uuid}, network: tcp, tls: true, udp: true, flow: xtls-rprx-vision, servername: download.fedoraproject.org, reality-opts: {{public-key: {d.proxy.v2_reality_pk}, short-id: {d.proxy.v2_reality_short_id}}}, client-fingerprint: chrome}}"\n'
     f"  curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_hy2&traffic={d.proxy.traffic}' "
     f'--data-urlencode "subscription={{name: {host.name}_hy2, type: hysteria2, server: $SELF_PUBLIC_IP, port: {d.proxy.hysteria2_port}, password: {d.proxy.v2_uuid}, skip-cert-verify: true, client-fingerprint: chrome}}"\n'
     f"fi"
@@ -184,8 +195,8 @@ ipv6_register = ""
 if d.proxy.ipv6_sub:
     ipv6_register = (
         f"\n\nSELF_PUBLIC_IPV6=$(dig @2620:119:35::35 myip.opendns.com AAAA +short)\n"
-        f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_v6_vmess&traffic={d.proxy.traffic}' "
-        f'--data-urlencode "subscription={{name: {host.name}_v6_vmess, type: vmess, server: $SELF_PUBLIC_IPV6, port: {d.proxy.vmess_port}, uuid: {d.proxy.v2_uuid}, alterId: 0, cipher: auto, network: tcp, udp: true}}"\n'
+        f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_v6_reality&traffic={d.proxy.traffic}' "
+        f'--data-urlencode "subscription={{name: {host.name}_v6_reality, type: vless, server: $SELF_PUBLIC_IPV6, port: {d.proxy.v2_reality_port}, uuid: {d.proxy.v2_uuid}, network: tcp, tls: true, udp: true, flow: xtls-rprx-vision, servername: download.fedoraproject.org, reality-opts: {{public-key: {d.proxy.v2_reality_pk}, short-id: {d.proxy.v2_reality_short_id}}}, client-fingerprint: chrome}}"\n'
         f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_v6_hy2&traffic={d.proxy.traffic}' "
         f'--data-urlencode "subscription={{name: {host.name}_v6_hy2, type: hysteria2, server: $SELF_PUBLIC_IPV6, port: {d.proxy.hysteria2_port}, password: {d.proxy.v2_uuid}, skip-cert-verify: true, client-fingerprint: chrome}}"\n'
     )

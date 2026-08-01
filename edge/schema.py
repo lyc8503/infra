@@ -4,7 +4,11 @@ from dataclasses import dataclass, field
 @dataclass
 class ProxyConfig:
     hysteria2_port: int = 61145
-    vmess_port: int = 23390
+    v2_reality_port: int = 443
+    v2_reality_dest: str = "download.fedoraproject.org:443"
+    v2_reality_sk: str = ""
+    v2_reality_pk: str = ""
+    v2_reality_short_id: str = "ae"
     traffic: int = 100
     ipv6_sub: bool = False
     v2_uuid: str = ""
