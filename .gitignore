@@ -8,3 +8,4 @@ public_backup/
 public_backup_*
 dn42
 tmp
+*.pyc

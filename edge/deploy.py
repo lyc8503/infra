@@ -18,8 +18,9 @@ else:
     if host.data.get("push_endpoint"):
         local.include("tasks/metrics.py")
 
-    # xray (vmess / hysteria2) and registration
+    # usque (WARP MASQUE) then xray (vless / hysteria2) and registration
     if host.data.get("proxy"):
+        local.include("tasks/usque.py")
         local.include("tasks/xray.py")
 
     # misc server (sub / tgbot / log)
