@@ -13,11 +13,10 @@ proxies = {}
 
 def get_expire():
     return """mixed-port: 7890
-ipv6: true
-allow-lan: false
-mode: Rule
+allow-lan: true
+mode: rule
 log-level: info
-external-controller: :9090
+ipv6: true
 
 proxies:
   - {name: 订阅过期，请更新订阅链接, server: invalid.com, port: 443, type: vmess, uuid: 12345678-abcd-1234-1234-abcdabcdabcd, alterId: 0, cipher: auto, tls: false, skip-cert-verify: false}
@@ -72,13 +71,21 @@ def get_sub(min_traffic, hysteria_up = 0, hysteria_down = 0):
     payload = yaml.dump(payload, allow_unicode=True).replace("use_proxies:", "use_proxies: &use_proxies")
     
     return """mixed-port: 7890
-ipv6: true
-allow-lan: false
-mode: Rule
+allow-lan: true
+mode: rule
 log-level: info
-external-controller: :9090
+ipv6: true
 
 ###PAYLOAD###
+
+geodata-mode: true
+geox-url:
+  geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb"
+
+geo-auto-update: true
+geo-update-interval: 240  # 10 days
 
 proxy-groups:
   - name: 代理选择
@@ -111,29 +118,6 @@ proxy-groups:
       - DIRECT
       - 代理选择
 
-rule-providers:
-  direct:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-    path: ./ruleset/direct.yaml
-    interval: 86400
-
-  proxy:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
-    path: ./ruleset/proxy.yaml
-    interval: 86400
-
-  gfw:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
-    path: ./ruleset/gfw.yaml
-    interval: 86400
-
-
 rules:
   - DOMAIN-SUFFIX,nju.edu.cn,南大校内
   - IP-CIDR,114.212.0.0/16,南大校内
@@ -151,10 +135,10 @@ rules:
   - IP-CIDR,10.0.0.0/8,南大校内
   - IP-CIDR,172.16.0.0/12,南大校内
 
-  - RULE-SET,direct,国内直连
-  - RULE-SET,proxy,海外网站
-  - RULE-SET,gfw,海外网站
-  - GEOIP,LAN,DIRECT
+  - GEOSITE,win-spy,REJECT
+  - GEOSITE,gfw,海外网站
+  - GEOSITE,CN,国内直连
+  - GEOIP,private,DIRECT
   - GEOIP,CN,国内直连
   - MATCH,漏网之鱼
 """.replace("###PAYLOAD###", payload)
