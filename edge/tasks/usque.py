@@ -49,12 +49,12 @@ server.shell(
 )
 
 service_content = """[Unit]
-Description=Usque MASQUE WARP proxy (L4 SOCKS5)
+Description=Usque MASQUE WARP proxy (HTTP/2)
 After=network.target
 
 [Service]
 WorkingDirectory=/opt/usque
-ExecStart=/opt/usque/usque l4-socks -b 127.0.0.1 -p 10800 -c /opt/usque/config.json
+ExecStart=/opt/usque/usque socks --http2 -b 127.0.0.1 -p 10800 --http2 -c /opt/usque/config.json
 Restart=on-failure
 RestartSec=5
 
