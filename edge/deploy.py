@@ -7,6 +7,10 @@ MODULE = os.environ.get("MODULE", "")
 if MODULE == "dn42":
     if host.data.get("dn42"):
         local.include("tasks/dn42.py")
+elif MODULE == "xray":
+    # a fast path to only update xray related stuff
+    if host.data.get("proxy"):
+        local.include("tasks/xray.py")
 else:
     # common APT packages, hostname, zram config, BBR
     local.include("tasks/common.py")

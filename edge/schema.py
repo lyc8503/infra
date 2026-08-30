@@ -11,6 +11,10 @@ class ProxyConfig:
     v2_reality_short_id: str = "ae"
     traffic: int = 100
     ipv6_sub: bool = False
+    # bare ws (no TLS) inbound, typically fronted by Cloudflare; 0 = disabled
+    ws_port: int = 0
+    ws_path: str = "ws"
+    ws_domain: str = ""  # public domain (CF-fronted) for subscription
     v2_uuid: str = ""
     warp_uuid: str = ""
     sub_server: str = ""

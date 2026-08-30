@@ -144,6 +144,31 @@ config_json = {
     }
 }
 
+if d.proxy.ws_port:
+    config_json["inbounds"].append({
+        "port": d.proxy.ws_port,
+        "protocol": "vmess",
+        "settings": {
+            "clients": [
+                {
+                    "id": d.proxy.v2_uuid,
+                    "alterId": 0,
+                }
+            ] + ([{
+                "id": d.proxy.warp_uuid,
+                "alterId": 0,
+                "email": "warp@local.lan",
+            }] if d.proxy.warp_uuid else []),
+        },
+        "streamSettings": {
+            "network": "ws",
+            "security": "none",
+            "wsSettings": {
+                "path": d.proxy.ws_path,
+            },
+        },
+    })
+
 
 config = files.put(
     name="Put xray config",
@@ -204,7 +229,17 @@ if d.proxy.ipv6_sub:
         f'--data-urlencode "subscription={{name: {host.name}_v6_hy2_warp, type: hysteria2, server: $SELF_PUBLIC_IPV6, port: {d.proxy.hysteria2_port}, password: {d.proxy.warp_uuid}, skip-cert-verify: true, client-fingerprint: chrome}}"\n'
     ) if d.proxy.warp_uuid else "")
 
-register_content = f"#!/bin/bash\n{ipv4_register}{ipv6_register}\n"
+ws_register = ""
+if d.proxy.ws_port and d.proxy.ws_domain:
+    ws_register = (
+        f"\n\ncurl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_ws&traffic={d.proxy.traffic}' "
+        f'--data-urlencode "subscription={{name: {host.name}_ws, type: vmess, server: {d.proxy.ws_domain}, port: 443, uuid: {d.proxy.v2_uuid}, alterId: 0, cipher: auto, udp: true, tls: true, servername: {d.proxy.ws_domain}, network: ws, ws-opts: {{path: /{d.proxy.ws_path}}}}}"\n'
+    ) + ((
+        f"curl -G '{d.proxy.sub_server}?token={d.proxy.reg_password}&id={host.name}_ws_warp&traffic={d.proxy.traffic}' "
+        f'--data-urlencode "subscription={{name: {host.name}_ws_warp, type: vmess, server: {d.proxy.ws_domain}, port: 443, uuid: {d.proxy.warp_uuid}, alterId: 0, cipher: auto, udp: true, tls: true, servername: {d.proxy.ws_domain}, network: ws, ws-opts: {{path: /{d.proxy.ws_path}}}}}"\n'
+    ) if d.proxy.warp_uuid else "")
+
+register_content = f"#!/bin/bash\n{ipv4_register}{ipv6_register}{ws_register}\n"
 
 files.put(
     name="Put xray register script",
