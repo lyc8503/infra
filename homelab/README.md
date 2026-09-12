@@ -122,6 +122,12 @@ https://github.com/strongtz/i915-sriov-dkms/blob/master/docs/install-pve-host.md
 
 Tested on `Linux pve 7.0.14-4-pve` host and `Windows 11 24H2` guest, 270K Plus vGPU works
 
+**[Optional] Intel GPU passthrough with HDMI output**  
+
+https://github.com/LongQT-sea/intel-igpu-passthru
+
+Tested on `Linux pve 7.0.14-4-pve` host and `Windows 10 21H2` guest
+
 ---
 
 ## Ansible
