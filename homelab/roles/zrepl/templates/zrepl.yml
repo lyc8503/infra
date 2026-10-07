@@ -9,7 +9,6 @@
 
 # cloud backup: hdd0/storage & hdd0/pbs_datastore & rpool/data
 
-
 jobs:
   # this job takes care of snapshot creation + pruning
   - type: snap
@@ -24,10 +23,11 @@ jobs:
         # fade-out scheme for snapshots starting with `zrepl_`
         # - keep all created in the last day (6 per day)
         # - then destroy snapshots such that we keep 7 each 1 day apart
-        # - then destroy snapshots such that we keep 12 each 1 month apart
+        # - then destroy snapshots such that we keep 4 each 1 week apart
+        # - then destroy snapshots such that we keep 5 each 1 month apart
         # ...More snapshots at restic snapshots
         - type: grid
-          grid: 6x4h(keep=all) | 7x1d | 12x30d
+          grid: 6x4h(keep=all) | 7x1d | 4x7d | 5x30d
           regex: "^zrepl_.*"
         # keep all snapshots that don't have the `zrepl_` prefix
         - type: regex
