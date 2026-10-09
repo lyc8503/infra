@@ -1,19 +1,21 @@
 # This file is managed by ansible, do not modify manually.
 
 # rpool/ROOT  -> snapshots, backup to hdd1/rpool_backup
-# rpool/data  -> snapshots, backup to hdd1/rpool_backup
 # rpool/pve   -> snapshots, backup to hdd0/pbs_datastore using PBS
 
 # hdd0/storage -> snapshots, backup to hdd1/hdd0_backup/storage
 # hdd0/other -> backup to hdd1/hdd0_backup/other
+# hdd0/data -> snapshots, backup to hdd1/hdd0_backup/data
 
-# cloud backup: hdd0/storage & hdd0/pbs_datastore & rpool/data
+# cloud backup: hdd0/storage & hdd0/pbs_datastore & hdd0/data
+
+# TODO: delete hdd1/rpool_backup/rpool/data/app oneday
 
 jobs:
   # this job takes care of snapshot creation + pruning
   - type: snap
     name: snapshot_all
-    filesystems: { "rpool<": true, "hdd0/storage<": true }
+    filesystems: { "rpool<": true, "hdd0/storage<": true, "hdd0/data<": true }
     snapshotting:
       type: periodic
       interval: 4h
@@ -34,14 +36,15 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup hdd0/storage & hdd0/other to hdd1
+  # backup hdd0/{storage,other,data} to hdd1
   - type: push
     name: backup_hdd0
     connect:
       type: local
       listener_name: hdd1_sink
       client_identity: hdd0_backup
-    filesystems: { "hdd0/storage<": true, "hdd0/other<": true }
+    filesystems:
+      { "hdd0/storage<": true, "hdd0/other<": true, "hdd0/data<": true }
     send:
       encrypted: true
     replication:
