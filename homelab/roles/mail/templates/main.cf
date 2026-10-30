@@ -21,8 +21,11 @@ recipient_delimiter = +
 
 compatibility_level = 2
 
+# SMTP relay rewrite
+smtp_header_checks = regexp:/etc/postfix/header_check
+
 # SMTP relay config
-relayhost = [smtp.larksuite.com]:465
+relayhost = [mail.smtp2go.com]:465
 smtp_sasl_auth_enable = yes
 smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
@@ -31,3 +34,4 @@ smtp_tls_wrappermode = yes
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 smtp_tls_security_level = encrypt
 smtputf8_enable = no
+cyrus_sasl_config_path = /etc/postfix/sasl

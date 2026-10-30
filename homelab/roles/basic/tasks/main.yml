@@ -1,4 +1,4 @@
-- name: Use tsinghua mirror
+- name: Use USTC mirror
   ansible.builtin.template:
     src: sources.list
     dest: /etc/apt/sources.list
@@ -52,8 +52,8 @@
     name: linux-cpupower
     state: present
 
-- name: Set CPU frequency governor to conservative on reboot
+- name: Set CPU frequency governor to schedutil on reboot
   ansible.builtin.cron:
-    name: cpupower_conservative
+    name: cpupower_schedutil
     special_time: reboot
-    job: "cpupower frequency-set -g conservative"
+    job: "cpupower frequency-set -g schedutil"

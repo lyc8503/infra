@@ -51,7 +51,7 @@ After reboot, you should be prompted to enter your password set just now.
 
 Login into dashboard, remove `local-zfs` in `Datacenter-Storage`, create a new `ZFS` storage with `rpool/pve`
 
-*If you use ZFS-as-root without secure boot, systemd-boot will be selected. Make sure you switch to GRUB before continuing (format boot partition and re-init): [https://pve.proxmox.com/wiki/Host_Bootloader](https://pve.proxmox.com/wiki/Host_Bootloader)*
+_If you use ZFS-as-root without secure boot, systemd-boot will be selected. Make sure you switch to GRUB before continuing (format boot partition and re-init): [https://pve.proxmox.com/wiki/Host_Bootloader](https://pve.proxmox.com/wiki/Host_Bootloader)_
 
 Setup remote SSH unlock:
 
@@ -114,15 +114,16 @@ echo 'DROPBEAR_OPTIONS="-p 2222 -j -k -s -c zfsunlockall"' >> /etc/dropbear/init
 
 update-initramfs -u
 ```
+
 ---
 
-**[Optional] Intel vGPU (i915 SRIOV)**  
+**[Optional] Intel vGPU (i915 SRIOV)**
 
 https://github.com/strongtz/i915-sriov-dkms/blob/master/docs/install-pve-host.md
 
 Tested on `Linux pve 7.0.14-4-pve` host and `Windows 11 24H2` guest, 270K Plus vGPU works
 
-**[Optional] Intel GPU passthrough with HDMI output**  
+**[Optional] Intel GPU passthrough with HDMI output**
 
 https://github.com/LongQT-sea/intel-igpu-passthru
 
@@ -135,14 +136,15 @@ Tested on `Linux pve 7.0.14-4-pve` host and `Windows 10 21H2` guest
 Now you can deploy the playbook on the fresh-installed PVE system:
 
 ```
-ansible-playbook -i inventory.yaml main.yaml
+ansible-playbook local.yaml --check --diff
+ansible-playbook local.yaml
 ```
 
 Some other manual steps:
 
 - [ ] Restore VM from backup (and make sure they're running correctly)
 - [ ] Setup Let's Encrypt SSL & 2FA
-- [ ] Setup backup jobs & pigz conf & script
+- [ ] Setup backup jobs & script
 - [ ] Setup SSH Key & Disable password login
 - [ ] ~~CT Template source: https://mirrors.tuna.tsinghua.edu.cn/help/proxmox/~~
 - [ ] Restore /var/lib/vz isos & /root
@@ -152,17 +154,20 @@ Some other manual steps:
 Maybe reboot before test
 
 - [ ] Test Netdata dashboard
-   - Maybe hardware sensors need manual tweaks
+  - Maybe hardware sensors need manual tweaks
 - [ ] Test mailing system (TODO: generic map rewrite FROM)
-   - Setup `sasl_password`
-   ```
-   # write "smtp.larksuite.com username:password"
-   postmap /etc/postfix/sasl_passwd
-   rm /etc/postfix/sasl_passwd
-   chmod 600 /etc/postfix/sasl_passwd.db
-   ```
-   - Test using `mail -s "Test Subject" user@example.com < /dev/null`
-   - Test using `mail -s "Test Subject" root < /dev/null`
+  - Setup `sasl_password`
+
+  ```
+  # write "smtp.larksuite.com username:password"
+  postmap /etc/postfix/sasl_passwd
+  rm /etc/postfix/sasl_passwd
+  chmod 600 /etc/postfix/sasl_passwd.db
+  ```
+
+  - Test using `mail -s "Test Subject" user@example.com < /dev/null`
+  - Test using `mail -s "Test Subject" root < /dev/null`
+
 - [ ] Test smartd mail
       https://wiki.archlinux.org/title/S.M.A.R.T.
 - [ ] Test ZED mail

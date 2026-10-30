@@ -6,6 +6,12 @@
 
 - name: Postfix configuration
   ansible.builtin.template:
+    src: header_check
+    dest: /etc/postfix/header_check
+  notify: Restart postfix
+
+- name: Postfix configuration
+  ansible.builtin.template:
     src: main.cf
     dest: /etc/postfix/main.cf
   notify: Restart postfix
