@@ -1,0 +1,3 @@
+prom_server: https://instance_id:api_key@prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push
+loki_server: https://instance_id:api_key@logs-prod-020.grafana.net/api/prom/push
+loki_label: homelab-pve

@@ -1,0 +1,32 @@
+- name: Add grafana GPG key
+  ansible.builtin.get_url:
+    url: https://apt.grafana.com/gpg-full.key
+    dest: /etc/apt/keyrings/grafana.asc
+    mode: "0644"
+
+- name: Add grafana repo
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/etc/apt/keyrings/grafana.asc] https://apt.grafana.com stable main
+    state: present
+    filename: grafana
+
+- name: Install alloy
+  ansible.builtin.apt:
+    name: alloy
+    state: present
+    update_cache: yes
+
+- name: Template configuration
+  template:
+    src: config.j2
+    dest: /etc/alloy/config.alloy
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart alloy
+
+- name: Enable alloy
+  ansible.builtin.systemd:
+    name: alloy
+    enabled: yes
+    state: started

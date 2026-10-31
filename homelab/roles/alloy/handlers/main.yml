@@ -1,0 +1,4 @@
+- name: Restart alloy
+  service:
+    name: alloy
+    state: restarted

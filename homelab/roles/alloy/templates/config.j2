@@ -1,0 +1,30 @@
+// This file is managed by ansible, do not modify manually.
+
+prometheus.exporter.unix "local_system" {
+}
+
+prometheus.scrape "scrape_metrics" {
+  targets = prometheus.exporter.unix.local_system.targets
+  forward_to = [prometheus.relabel.filter_metrics.receiver]
+}
+
+prometheus.relabel "filter_metrics" {
+  forward_to = [prometheus.remote_write.prom.receiver]
+}
+
+prometheus.remote_write "prom" {
+  endpoint {
+    url = "{{ prom_server }}"
+  }
+}
+
+loki.source.journal "read"  {
+  forward_to    = [loki.write.endpoint.receiver]
+  labels        = {component = "{{ loki_label }}"}
+}
+
+loki.write "endpoint" {
+  endpoint {
+    url = "{{ loki_server }}"
+  }
+}
