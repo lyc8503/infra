@@ -30,3 +30,8 @@
     name: alloy
     enabled: yes
     state: started
+
+- name: Setup PVE alloy
+  ansible.builtin.command:
+    cmd: pvesh create /cluster/metrics/server/local-alloy --type opentelemetry --server 127.0.0.1 --port 4318 --otel-protocol http --otel-path /v1/metrics --otel-compression gzip --otel-timeout 5
+    creates: /etc/pve/status.cfg

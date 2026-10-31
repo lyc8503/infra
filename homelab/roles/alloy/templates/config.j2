@@ -8,6 +8,20 @@ prometheus.scrape "scrape_metrics" {
   forward_to = [prometheus.relabel.filter_metrics.receiver]
 }
 
+otelcol.receiver.otlp "pve_otel" {
+  http {
+    endpoint = "127.0.0.1:4318"
+  }
+  output {
+    metrics = [otelcol.exporter.prometheus.pve_to_prom.input]
+  }
+}
+
+otelcol.exporter.prometheus "pve_to_prom" {
+  resource_to_telemetry_conversion = true
+  forward_to = [prometheus.relabel.filter_metrics.receiver]
+}
+
 prometheus.relabel "filter_metrics" {
   forward_to = [prometheus.remote_write.prom.receiver]
 }
