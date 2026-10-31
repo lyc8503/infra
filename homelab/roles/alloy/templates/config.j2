@@ -1,6 +1,12 @@
 // This file is managed by ansible, do not modify manually.
 
 prometheus.exporter.unix "local_system" {
+  netdev {
+    device_exclude = "^(veth|fw|tap).*"
+  }
+  netclass {
+    ignored_devices = "^(veth|fw|tap).*"
+  }
 }
 
 prometheus.scrape "scrape_metrics" {
