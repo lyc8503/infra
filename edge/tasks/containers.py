@@ -37,7 +37,6 @@ SELF_URL={m.tgbot_self_url}
 SECRET_TOKEN={m.tgbot_secret_token}
 TOKEN={m.tgrss_token}
 MANAGER={m.tgrss_manager}
-LOKI_TOKEN={m.log_forward_loki_token}
 EXTRA_PROXIES={m.extra_proxies}
 """
 
@@ -81,13 +80,6 @@ compose_content = """services:
     environment:
       - TOKEN
       - MANAGER
-
-  log_forward:
-    build: ./log_forward
-    restart: unless-stopped
-    environment:
-      - LOKI_TOKEN
-      - PUSH_KEY
 """
 
 files.put(
