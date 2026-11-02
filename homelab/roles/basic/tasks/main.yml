@@ -57,3 +57,18 @@
     name: cpupower_schedutil
     special_time: reboot
     job: "cpupower frequency-set -g schedutil"
+
+- name: Enable BBR
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-bbr.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      net.core.default_qdisc = fq
+      net.ipv4.tcp_congestion_control = bbr
+  register: bbr_conf
+
+- name: Apply BBR settings
+  ansible.builtin.command: sysctl --system
+  when: bbr_conf.changed

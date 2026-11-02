@@ -36,6 +36,7 @@ prometheus.relabel "filter_metrics" {
 prometheus.remote_write "prom" {
   endpoint {
     url = "{{ prom_server }}"
+    remote_timeout = "5s"
   }
 }
 
