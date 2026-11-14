@@ -4,18 +4,22 @@
 # rpool/pve   -> snapshots, backup to hdd0/pbs_datastore using PBS
 
 # hdd0/storage -> snapshots, backup to hdd1/hdd0_backup/storage
-# hdd0/other -> backup to hdd1/hdd0_backup/other
+# hdd0/other -> snapshots, backup to hdd1/hdd0_backup/other
 # hdd0/data -> snapshots, backup to hdd1/hdd0_backup/data
 
 # cloud backup: hdd0/storage & hdd0/pbs_datastore & hdd0/data
-
-# TODO: delete hdd1/rpool_backup/rpool/data/app oneday
 
 jobs:
   # this job takes care of snapshot creation + pruning
   - type: snap
     name: snapshot_all
-    filesystems: { "rpool<": true, "hdd0/storage<": true, "hdd0/data<": true }
+    filesystems:
+      {
+        "rpool<": true,
+        "hdd0/storage<": true,
+        "hdd0/other": true,
+        "hdd0/data<": true,
+      }
     snapshotting:
       type: periodic
       interval: 4h
@@ -36,7 +40,7 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup hdd0/{storage,other,data} to hdd1
+  # backup hdd0/{storage,data,other} to hdd1
   - type: push
     name: backup_hdd0
     connect:
@@ -44,7 +48,7 @@ jobs:
       listener_name: hdd1_sink
       client_identity: hdd0_backup
     filesystems:
-      { "hdd0/storage<": true, "hdd0/other<": true, "hdd0/data<": true }
+      { "hdd0/storage<": true, "hdd0/data<": true, "hdd0/other": true }
     send:
       encrypted: true
     replication:
@@ -54,7 +58,7 @@ jobs:
     snapshotting:
       type: manual
     pruning:
-      # no-op prune rule on sender (keep all snapshots), job `rpool_and_hdd_snapshot` takes care of this
+      # no-op prune rule on sender (keep all snapshots), job `snapshot_all` takes care of this
       keep_sender:
         - type: regex
           regex: ".*"
@@ -68,14 +72,14 @@ jobs:
           negate: true
           regex: "^zrepl_.*"
 
-  # backup rpool/data & ROOT to hdd1
+  # backup rpool/ROOT to hdd1
   - type: push
     name: backup_rpool
     connect:
       type: local
       listener_name: hdd1_sink
       client_identity: rpool_backup
-    filesystems: { "rpool/data<": true, "rpool/ROOT<": true }
+    filesystems: { "rpool/ROOT<": true }
     send:
       encrypted: true
     replication:
